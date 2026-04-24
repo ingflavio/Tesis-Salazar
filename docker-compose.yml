@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: gym-mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: tesis_gym
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_USER: gym_user
+      MYSQL_PASSWORD: gym_password
+    ports:
+      - "3307:3306"
+
+  backend:
+    build: 
+      context: ./Back-end/tesis-gym 
+    container_name: gym-backend
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/tesis_gym?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root_password
