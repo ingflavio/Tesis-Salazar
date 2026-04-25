@@ -1,0 +1,91 @@
+@use './variables.scss' as vars;
+
+$gap-distance: clamp(10px, 2dvh, 20px);
+$img-size: 80px;
+
+.chatHeader {
+  width: 100dvw;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: $gap-distance;
+  padding: $gap-distance;
+  background-color: vars.$neutral-800;
+}
+
+.chatHeader h3 {
+  font-size: vars.$title-size;
+}
+
+.chatHeader_imgContainer {
+  width: $img-size;
+  height: $img-size;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.chatHeader_imgContainer img {
+  height: 100%;
+  object-fit: contain;
+}
+
+.chat {
+  height: calc(100dvh - vars.$navigation-bar--height - calc(2 * $gap-distance + $img-size));
+  padding-bottom: 1.5dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  gap: 1dvh;
+}
+
+.chat .msgContainer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: calc(.9 * vars.$text-size);
+  padding: 0 calc(.9 * vars.$text-size);
+  font-size: calc(.8 * vars.$text-size);
+  overflow-y: scroll; 
+}
+
+.msg {
+  background-color: vars.$neutral-800;
+  color: vars.$neutral-100;
+  padding: .5em;
+  border-radius: .7em;
+  width: 70%;
+}
+
+.user {
+  align-self: end;
+  background-color: vars.$primary-700;
+}
+
+.chat form{
+  flex-direction: row;
+  gap: $gap-distance;
+  width: 100%;
+  padding: 0 2dvw;
+  background-color: transparent;
+}
+
+.chat_sendButton {
+  border-radius: 50%;
+  width: calc(2.2 * vars.$text-size);
+  // aspect-ratio: 1;
+  height: calc(2.2 * vars.$text-size);
+  padding:calc(.3 * vars.$text-size);
+  cursor: pointer;
+}
+
+.chat_sendButton svg {
+  position: relative;
+  left: .1em;
+  width: 100%;
+  stroke: vars.$neutral-100;
+}
+
+.chat form input {
+  flex-grow: 1;
+}

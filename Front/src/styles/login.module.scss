@@ -1,0 +1,11 @@
+@use './variables.scss' as vars;
+
+
+.loginPage {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(10px, 5dvh, 30px) ;
+}

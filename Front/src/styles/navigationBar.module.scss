@@ -1,0 +1,45 @@
+@use './variables.scss' as vars;
+
+.navigationBar {
+  width: 100dvw;
+  height: vars.$navigation-bar--height;
+  padding: 0 1dvw;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: vars.$primary-500;
+}
+
+.navigationBar a{
+  width: fit-content;
+}
+
+.navigationBar svg {
+  width: 100%;
+  max-height: 95%;
+}
+
+.navigationBar path {
+  fill: vars.$neutral-100;
+  stroke: vars.$primary-500;
+}
+
+// DESKTOP
+@media (min-width: 751px) {
+  .navigationBar a {
+    display: flex;
+    align-items: center;
+    font-size: vars.$text-size;
+    text-decoration: none;
+  }
+
+  .navigationBar a > svg {
+    width: 2.5em;
+  }
+
+  .navigationBar a > span {
+    color: vars.$neutral-100;
+    font-weight: bold;
+  }
+
+}

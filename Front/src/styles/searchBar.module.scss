@@ -1,0 +1,44 @@
+@use './variables.scss' as vars;
+
+.searchBar {
+  width: clamp(300px, calc(75% + 6em), 600px);
+  height: 2em;
+  display: grid;
+  font-size: vars.$text-size;
+  background-color: vars.$neutral-100;
+  border: 2px solid vars.$neutral-900;
+  padding:
+  calc(0.2 * vars.$text-size)
+  calc(0.8 * vars.$text-size);
+  margin: 1dvw;
+  border-radius: calc(vars.$text-size * 2);
+  grid-template-columns: 1.5em 1fr 4em;
+  gap: 0;
+  align-content: center;
+}
+
+.searchBar button {
+  background-color: transparent;
+  width: 100%;
+}
+
+.searchBar button {
+  background-color: transparent;
+  padding: 0;
+}
+
+.searchBar input{
+  background: transparent;
+  border: none;
+}
+
+.searchBar select {
+  background-color: transparent;
+  border: 0;
+  outline: none;
+}
+
+.searchBar select:focus {
+  border: 0;
+  outline: none;
+}

@@ -1,0 +1,90 @@
+@use './variables.scss' as vars;
+
+$gap-distance: clamp(2px, 6dvh, 40px);
+
+.adminPage {
+  width: 100dvw;
+  overflow-x: scroll;
+}
+
+.userTable_container {
+  width: 100dvw;
+  overflow-x: scroll;
+}
+
+.userTable {
+  background-color: vars.$neutral-100;
+  grid-template-columns: repeat(12, 1fr); 
+  border: 2px solid vars.$neutral-100;
+  margin: 2dvw;
+}
+
+.userTable tbody {
+  grid-template-rows: 1fr;
+}
+
+.userTable, .userTable tbody {
+  gap: 2px;
+}
+
+.userTable td, .userTable th { 
+  background-color: vars.$neutral-700;
+  color: vars.$neutral-100;
+}
+
+.userTable tbody tr > td:last-child {
+  min-width: calc( 6 * vars.$text-size);
+}
+
+.userTable button {
+  margin: 0 .2em;
+  padding: .1em calc(vars.$text-size / 4);
+  cursor: pointer;
+}
+
+.userTable button svg{
+  stroke: vars.$neutral-100;
+  width: vars.$text-size;
+}
+
+.userTable tfoot td {
+  grid-column: 1/-1;
+}
+
+.userTable tfoot button {
+  padding: .2em .6em;
+}
+
+.footerButton {
+  color: vars.$neutral-100;
+  padding: 1em;
+}
+
+.dialogWraper {
+  position: relative;
+}
+
+.dialogWraper > button {
+  position: absolute;
+  top: .5%;
+  right: 2%;
+  background-color: transparent;
+}
+
+.profileForm h2 {
+  font-size: 2em
+}
+
+td, th {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.greenText {
+  color: #2e886d !important;
+}
+
+.redText {
+  color:  vars.$warn-500 !important;
+}

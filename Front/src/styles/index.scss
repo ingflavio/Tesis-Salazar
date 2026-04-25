@@ -1,0 +1,190 @@
+@use './variables.scss' as vars;
+@import url('./fonts.css');
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  scroll-behavior: smooth;
+  font-family: 'Montserrat';
+}
+
+html {
+  overflow: hidden;
+}
+
+body {
+  background-color: vars.$neutral-700;
+}
+
+#root {
+  display: grid;
+  min-height: 100dvh;
+  grid-template-rows: 1fr auto;
+}
+
+h1 {
+  font-size: calc(2 * vars.$title-size);
+}
+
+h3 {
+  font-size: calc(1.8 * vars.$title-size)
+}
+
+h1,h2,h3,h4,h5,h6 {
+  color: vars.$primary-500;
+}
+
+p, label, input {
+  font-size: vars.$text-size;
+  color: vars.$neutral-900;
+}
+
+ul, ol {
+  list-style: none;
+  padding-left: 0;
+}
+
+input {
+  font-size: vars.$text-size;
+  background-color: vars.$neutral-100;
+  border: 2px solid vars.$neutral-900;
+  padding:
+  calc(0.2 * vars.$text-size)
+  calc(0.8 * vars.$text-size);
+  border-radius: vars.$text-size;
+}
+
+button {
+  background-color: vars.$primary-500;
+  border: 0;
+  padding: calc(0.5 * vars.$text-size);
+  border-radius: vars.$text-size;
+  font-size: vars.$text-size; 
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:focus {
+  outline: none;
+}
+
+table {
+  width: fit-content;
+  font-size: calc( .8 * vars.$text-size);
+  display: grid;
+}
+
+tbody, thead, tfoot, tr {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-template-rows: subgrid;
+  grid-column: 1 / -1;
+}
+
+tbody {
+  grid-template-rows: 1fr;
+}
+
+td, th  {
+  padding: .25em;
+  text-align: center;
+}
+
+input:focus {
+  outline: none;
+}
+
+form {
+  width: vars.$form-width; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: vars.$form-gap-distance;
+  padding: vars.$form-gap-distance;
+  border-radius: calc(.08 * vars.$form-width);
+  background-color: vars.$neutral-100;
+}
+
+.form-field {
+  position:relative;
+  border: 2px solid vars.$neutral-900;
+  font-size: vars.$text-size;
+  border-radius: vars.$text-size;
+}
+
+.form-field input {
+  padding: calc(0.9 * vars.$text-size)
+  calc(0.5 * vars.$text-size)
+  calc(0.2 * vars.$text-size);
+  border: 0;
+}
+
+.form-field label {
+  font-size: 1.3em;
+  position:absolute; 
+  top: .3em;
+  left: .3em;
+  transition: all .5s;
+  background-color: vars.$neutral-100;
+  padding: 0 .3em;
+  border-radius: 1em;
+}
+
+label.up {
+  font-size: 1.2em;
+  top: -.55em;
+  left: .6em;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: vars.$neutral-800;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: vars.$neutral-900;
+}
+
+.debuger {
+  background-color: #000a;
+  color: antiquewhite;
+  position: absolute;
+  top: 400px;
+  right: 10px;
+  z-index: 10;
+}
+
+.error-msg {
+  color: vars.$warn-500;
+}
+
+dialog {
+  position: absolute;
+  top: 50%;
+  margin:0 auto;
+  transform: translateY(-50%);
+  border-radius: 4dvw;
+  overflow: hidden;
+}
+
+button[disabled] {
+  color: vars.$neutral-900;
+  opacity: 1;
+  filter: contrast(.5);
+}
+
+// DESKTOP
+@media (min-width: 650px) {
+  #root {grid-template-rows: auto 1fr}
+}

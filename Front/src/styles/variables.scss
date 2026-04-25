@@ -1,0 +1,26 @@
+// COLORES 
+$primary-500: #ffab45;
+$primary-700: #775122;
+
+$secondary-500: #45c2ff;
+//9efdbd
+
+$warn-500: #ff554d;
+
+$info-500: #aa66ff;
+
+$neutral-900: #000205;
+$neutral-800: #01050a;
+$neutral-700: #020a12;
+$neutral-500: #718574;
+$neutral-300: #f5f3eb;
+$neutral-100:#fdfaf7;
+
+// medidas 
+$title-size: clamp(1rem, 5dvw, 1.7rem);
+$text-size: clamp(1rem, 3.8dvw, 1.3rem);
+
+// Zonas de la pagina
+$navigation-bar--height: clamp(5dvh, 16dvw, 9dvh);
+$form-width: clamp(300px, 60dvw, 600px);
+$form-gap-distance: clamp(2px, 2.5dvh, 40px);
