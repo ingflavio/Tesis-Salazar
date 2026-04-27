@@ -14,9 +14,11 @@ function ProfileForm({ fieldsToRender = [], title, sumbitText, initialValues }) 
   return (
     <form className={classes.profileForm}>
       <h2>{title}</h2>
-      {
-        fields
-      }
+      <div className={classes.fieldWrapper}>
+        {
+          fields
+        }
+      </div>
       <button type="submit">
         {sumbitText}
       </button>
@@ -91,9 +93,10 @@ export function AdminPage() {
   const deleteProfile = (profile) => {
     console.log(profile)
   }
-
   const fields = Object.entries(profileColumns).map(([key, value]) => { return { name: key, label: value }})
-
+  const fieldsForForm = fields
+  fieldsForForm[fieldsForForm.length - 1] = {name:'password', label: 'Contraseña'}
+  
   return (
     <>
       <main className={classes.adminPage}>
@@ -118,7 +121,7 @@ export function AdminPage() {
             <ProfileForm 
               title={formText.title} 
               sumbitText={formText.submit}
-              fieldsToRender={fields} 
+              fieldsToRender={fieldsForForm} 
               initialValues={formValues} 
             />
           }

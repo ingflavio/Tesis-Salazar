@@ -71,6 +71,16 @@ $gap-distance: clamp(2px, 6dvh, 40px);
   background-color: transparent;
 }
 
+.profileForm {
+  width: clamp(300px, 90dvw, 700px);;
+}
+
+.fieldWrapper {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  gap: 1em 2%;
+}
+
 .profileForm h2 {
   font-size: 2em
 }
