@@ -1,4 +1,3 @@
-
 import { Outlet, Navigate } from 'react-router';
 import { NavigationBar } from '../components/NavigationBar.jsx';
 import { useUser } from '../hooks/useUser.js';
