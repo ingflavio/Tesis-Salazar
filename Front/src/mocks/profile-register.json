@@ -1,0 +1,14 @@
+{
+  "id": "cedula",
+  "name": "nombre",
+  "lastName": "apellido",
+  "age": "edad",
+  "sex": "sexo",
+  "phone": "telefono",
+  "height": "altura",
+  "weight": "peso",
+  "fat": "porcentaje de grasa",
+  "condition": "condición médica",
+  "solvency": "solvencia",
+  "password": "contraseña"
+}
