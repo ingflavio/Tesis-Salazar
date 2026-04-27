@@ -4,6 +4,7 @@ import FormField from '../components/FormField'
 import classes from "../styles/admin.module.scss";
 import useProfile from "../hooks/useProfile";
 import { SearchBar } from "../components/SearchBar";
+import { useSearch } from '../hooks/useSearch'
 
 function ProfileForm({ fieldsToRender = [], title, sumbitText, initialValues }) {
   const fields = initialValues
@@ -23,7 +24,8 @@ function ProfileForm({ fieldsToRender = [], title, sumbitText, initialValues }) 
   );
 }
 
-function ProfileTable({ profileData, profiles, editCallback, deleteCallback,tfooterCallback }) {
+function ProfileTable({ profileData, profiles, filter, editCallback, deleteCallback,tfooterCallback }) {
+  const filteredProfiles = filter(profiles)
   return (
     <table className={classes.userTable}>
       <thead>
@@ -35,7 +37,7 @@ function ProfileTable({ profileData, profiles, editCallback, deleteCallback,tfoo
         </tr>
       </thead>
       <tbody>
-        {profiles.map((profile, index) => {
+        {filteredProfiles.map((profile, index) => {
           return <tr key={index}>{
             Object.entries(profile).map(([key, value]) => {
 
@@ -84,6 +86,7 @@ export function AdminPage() {
   const {getProfiles, getProfileColumns} = useProfile()
   const profiles = getProfiles()
   const profileColumns = getProfileColumns()
+  const { filterFunc, filter, changeFilterParams } = useSearch()
 
   const deleteProfile = (profile) => {
     console.log(profile)
@@ -95,11 +98,12 @@ export function AdminPage() {
     <>
       <main className={classes.adminPage}>
         <h1>Admin</h1>
-        <SearchBar />
+        <SearchBar filter={filter} changeFilter={changeFilterParams}/>
         <div className={classes.userTable_container}>
           <ProfileTable 
             profiles = {profiles} 
             profileData = {fields} 
+            filter = {filterFunc}
             editCallback = {(profile)=> showModalForm('Editar datos de un cliente','Guardar cambios', profile)}
             deleteCallback = {(profile) => deleteProfile(profile)}
             tfooterCallback = {() => showModalForm('Registrar cliente','Registrar')}

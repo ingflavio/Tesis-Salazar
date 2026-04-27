@@ -14,7 +14,7 @@ const profileColumns = {
 
 const profiles = [
   {
-    id: 30281014,
+    id: "30281014",
     name: "Jose",
     lastName: "Olival",
     age: 22,
@@ -27,7 +27,7 @@ const profiles = [
     solvency: true
   },
   {
-    id: 25117107,
+    id: "25117107",
     name: "Stallin",
     lastName: "Salazar",
     age: 43,
@@ -40,7 +40,7 @@ const profiles = [
     solvency: true
   },
   {
-    id: 30123456,
+    id: "30123456",
     name: "Flavio",
     lastName: "Franchich",
     age: 22,
@@ -53,7 +53,7 @@ const profiles = [
     solvency: false
   },
   {
-    id: 30123456,
+    id: "30123456",
     name: "Patty",
     lastName: "Ramirez",
     age: 22,
@@ -66,7 +66,7 @@ const profiles = [
     solvency: false
   },
   {
-    id: 30123456,
+    id: "30123456",
     name: "Barbara",
     lastName: "Garcia",
     age: 20,

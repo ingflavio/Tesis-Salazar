@@ -4,7 +4,7 @@ $gap-distance: clamp(2px, 6dvh, 40px);
 
 .adminPage {
   width: 100dvw;
-  overflow-x: scroll;
+  overflow-x: hidden;
 }
 
 .userTable_container {
