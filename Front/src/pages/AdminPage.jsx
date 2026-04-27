@@ -40,8 +40,10 @@ function ProfileTable({ profileData, profiles, filter, editCallback, deleteCallb
       </thead>
       <tbody>
         {filteredProfiles.map((profile, index) => {
+          const profileToShow = {...profile}
+          delete profileToShow['password']
           return <tr key={index}>{
-            Object.entries(profile).map(([key, value]) => {
+            Object.entries(profileToShow).map(([key, value]) => {
 
               let content 
               let className = ''
@@ -57,8 +59,8 @@ function ProfileTable({ profileData, profiles, filter, editCallback, deleteCallb
               }
 
               return <td className={className} key={key}>{content}</td>
-            })
-          }
+              })
+            }
             <td>
               <button onClick={() => editCallback(profile)}>
                 <Icons icon="edit" />
@@ -94,8 +96,6 @@ export function AdminPage() {
     console.log(profile)
   }
   const fields = Object.entries(profileColumns).map(([key, value]) => { return { name: key, label: value }})
-  const fieldsForForm = fields
-  fieldsForForm[fieldsForForm.length - 1] = {name:'password', label: 'Contraseña'}
   
   return (
     <>
@@ -105,7 +105,7 @@ export function AdminPage() {
         <div className={classes.userTable_container}>
           <ProfileTable 
             profiles = {profiles} 
-            profileData = {fields} 
+            profileData = {fields.filter((field) => field.name !== 'password')} 
             filter = {filterFunc}
             editCallback = {(profile)=> showModalForm('Editar datos de un cliente','Guardar cambios', profile)}
             deleteCallback = {(profile) => deleteProfile(profile)}
@@ -121,7 +121,7 @@ export function AdminPage() {
             <ProfileForm 
               title={formText.title} 
               sumbitText={formText.submit}
-              fieldsToRender={fieldsForForm} 
+              fieldsToRender={fields.filter((field) => field.name !== 'solvency')} 
               initialValues={formValues} 
             />
           }

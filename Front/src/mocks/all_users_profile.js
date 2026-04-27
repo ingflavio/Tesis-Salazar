@@ -1,18 +1,3 @@
-const profileColumns = {
-  id: "cedula",
-  name: "nombre",
-  lastName: "apellido",
-  age: "edad",
-  sex: "sexo",
-  phone: "telefono",
-  height: "altura",
-  weight: "peso",
-  fat: "porcentaje de grasa",
-  condition: 'condición médica',
-  solvency: 'solvencia',
-  password: 'contraseña'
-};
-
 export const profiles = [
   {
     id: "30281014",
@@ -85,18 +70,3 @@ export const profiles = [
     password: '1234'
   },
 ];
-
-export const searchProfiles = () => {
-  //fetch
-  return profiles
-}
-
-export const searchProfile = (id) => {
-  //fetch
-  return profiles.filter((item) => item.id === id)[0]
-}
-
-export const searchProfileColumns = () => {
-  //fetch
-  return profileColumns;
-}
