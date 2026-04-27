@@ -4,7 +4,7 @@ import FormField from '../components/FormField'
 import classes from "../styles/admin.module.scss";
 import useProfile from "../hooks/useProfile";
 import { SearchBar } from "../components/SearchBar";
-import { useSearch } from '../hooks/useSearch'
+import { useSearch } from '../hooks/useSearch';
 
 function ProfileForm({ fieldsToRender = [], title, sumbitText, initialValues }) {
   const fields = initialValues
