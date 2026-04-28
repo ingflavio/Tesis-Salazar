@@ -1,17 +1,12 @@
 package com.tesis_gym.Entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.validation.Valid;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 
 import java.util.Date;
 
@@ -20,11 +15,16 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClientUser {
+public class UserDetails {
 
     @Id
     @NotNull(message = "La cedula no puede ser nula")
     private Long cedula;
+
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "cedula")
+    private UserAccount account;
 
     @NotBlank(message = "La Nombre no puede estar vacio")
     private String firstName;
@@ -47,9 +47,8 @@ public class ClientUser {
 
     @Positive(message = "El peso actual debe ser positivo")
     private Float last_weight_kg;
-
-    @NotBlank(message = "La contraseña no puede estar vacía")
-    private String password;
+    @Column(name = "medical_condition")
+    private String condition;
 
     private Boolean solvent;
     @NotNull

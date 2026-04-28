@@ -1,4 +1,7 @@
 package com.tesis_gym.Controllers;
+
+
+import com.tesis_gym.Controllers.Dto.ClientMachineDto;
 import com.tesis_gym.Entities.ClientMachine;
 import com.tesis_gym.Services.ClientMachineService;
 import jakarta.validation.Valid;
@@ -18,8 +21,8 @@ public class ClientMachineController {
     }
 
     @PostMapping
-    public ResponseEntity<ClientMachine> create(@Valid @RequestBody ClientMachine machine) {
-        return ResponseEntity.ok(machineService.createMachine(machine));
+    public ResponseEntity<ClientMachine> create(@Valid @RequestBody ClientMachineDto machineDto) {
+        return ResponseEntity.ok(machineService.createMachine(machineDto));
     }
 
     @GetMapping("/{id}")
@@ -33,8 +36,8 @@ public class ClientMachineController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClientMachine> update(@PathVariable Long id, @Valid @RequestBody ClientMachine machine) {
-        return ResponseEntity.ok(machineService.updateMachine(id, machine));
+    public ResponseEntity<ClientMachine> update(@PathVariable Long id, @Valid @RequestBody ClientMachineDto machineDto) {
+        return ResponseEntity.ok(machineService.updateMachine(id, machineDto));
     }
 
     @DeleteMapping("/{id}")

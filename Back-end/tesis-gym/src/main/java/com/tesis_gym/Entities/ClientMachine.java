@@ -22,14 +22,13 @@ public class ClientMachine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @NotNull(message = "La Nombre no puede estar vacio")
-    @JsonProperty("Name_Machine")
-    private String Name_Machine;
+
+    private String nameMachine;
     @JsonProperty("Status")
-    private Boolean Status;
+    private Boolean status;
 
-
-
-
+    private String manufacturer;
+    private Byte qr;
+    private Byte photos;
 }

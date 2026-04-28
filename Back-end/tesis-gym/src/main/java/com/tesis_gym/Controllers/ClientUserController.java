@@ -1,6 +1,11 @@
 package com.tesis_gym.Controllers;
 
-import com.tesis_gym.Entities.ClientUser;
+
+import com.tesis_gym.Controllers.Dto.UserDetailsDto;
+import com.tesis_gym.Controllers.Dto.UserDetailsUpdate;
+import com.tesis_gym.Controllers.Dto.UserRegistrationDto;
+import com.tesis_gym.Entities.UserAccount;
+import com.tesis_gym.Entities.UserDetails;
 import com.tesis_gym.Services.ClientUserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -18,24 +23,29 @@ public class ClientUserController {
         this.userService = userService;
     }
 
-    @PostMapping
-    public ResponseEntity<ClientUser> create(@Valid @RequestBody ClientUser user) {
-        return ResponseEntity.ok(userService.createUser(user));
+    @PostMapping("/register")
+    public ResponseEntity<UserAccount> registerAccount(@Valid @RequestBody UserRegistrationDto dto) {
+        return ResponseEntity.ok(userService.registerAccount(dto));
+    }
+
+    @PostMapping("/{cedula}/details")
+    public ResponseEntity<UserDetails> completeDetails(@PathVariable Long cedula, @Valid @RequestBody UserDetailsDto dto) {
+        return ResponseEntity.ok(userService.completeDetails(cedula, dto));
     }
 
     @GetMapping("/{cedula}")
-    public ResponseEntity<ClientUser> getById(@PathVariable Long cedula) {
+    public ResponseEntity<UserDetails> getById(@PathVariable Long cedula) {
         return ResponseEntity.ok(userService.getUserByCedula(cedula));
     }
 
     @GetMapping
-    public ResponseEntity<List<ClientUser>> getAll() {
+    public ResponseEntity<List<UserDetails>> getAll() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @PutMapping("/{cedula}")
-    public ResponseEntity<ClientUser> update(@PathVariable Long cedula, @Valid @RequestBody ClientUser user) {
-        return ResponseEntity.ok(userService.updateUser(cedula, user));
+    public ResponseEntity<UserDetails> update(@PathVariable Long cedula, @Valid @RequestBody UserDetailsUpdate dto) {
+        return ResponseEntity.ok(userService.updateUser(cedula, dto));
     }
 
     @DeleteMapping("/{cedula}")
@@ -45,7 +55,7 @@ public class ClientUserController {
     }
 
     @PostMapping("/{cedula}/pay")
-    public ResponseEntity<ClientUser> pay(@PathVariable Long cedula) {
+    public ResponseEntity<UserDetails> pay(@PathVariable Long cedula) {
         return ResponseEntity.ok(userService.paySubscription(cedula));
     }
 }

@@ -1,9 +1,9 @@
 package com.tesis_gym.Repository;
 
-import com.tesis_gym.Entities.ClientUser;
+import com.tesis_gym.Entities.UserDetails;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ClientUserRespotory  extends CrudRepository<ClientUser,Long> {
+public interface UserDetailsRepository extends CrudRepository<UserDetails,Long> {
 }
