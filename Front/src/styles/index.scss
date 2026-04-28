@@ -31,13 +31,17 @@ h3 {
   font-size: calc(1.8 * vars.$title-size)
 }
 
+h4 {
+  font-size: calc(1 * vars.$title-size)
+}
+
 h1,h2,h3,h4,h5,h6 {
   color: vars.$primary-500;
 }
 
 p, label, input {
   font-size: vars.$text-size;
-  color: vars.$neutral-900;
+  color: vars.$neutral-100;
 }
 
 ul, ol {
@@ -137,10 +141,59 @@ label.up {
   left: .6em;
 }
 
+label.toDo {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
+label.toDo  input[type='checkbox'] {
+  visibility: hidden;
+  width: 0;
+  position: relative;
+}
+
+label.toDo  input[type='checkbox']::before {
+  visibility: visible;
+  content: '';
+  display: block;
+  width: 1.5em;
+  height: 1.5em;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: .3em;
+  background-color: vars.$neutral-100;
+}
+
+label.toDo  input[type='checkbox']:checked::before {
+  background-color: vars.$primary-500 ;
+}
+
+label.toDo span {
+  position: relative;
+  width: 2em;
+}
+
+label.toDo  svg {
+  width: 1.3em;
+  position: absolute;
+  visibility: hidden;
+  color: vars.$neutral-100;
+}
+
+label.toDo:has(input[type='checkbox']:checked)  svg {
+  visibility: visible;
+}
+
+label.toDo:has(input[type='checkbox']:checked) > h3 {
+  text-decoration: line-through;
+  color: vars.$primary-700;
+}
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
-
 }
 
 ::-webkit-scrollbar-track {

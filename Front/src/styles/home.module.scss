@@ -1,0 +1,63 @@
+@use './variables.scss' as vars;
+
+.recomendation {
+  position: relative;
+}
+
+.recomendation__header {
+  justify-items: center;
+  display: flex;
+  gap: 1em;
+  background-color: vars.$neutral-800;
+  font-size: vars.$title-size;
+}
+
+.unfold_checkbox {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.unfold_label {
+  display: flex;
+  align-items: center;
+  font-size: 1em;
+  color: vars.$primary-500;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.unfold_label svg{
+  width: 1.5em;
+  transition: transform .3s ease-out;
+}
+
+.unfolded > svg{
+  transform: rotate(90deg);
+}
+
+.recomendation__body {
+  position: relative;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.5s ease-out; 
+  background-color: vars.$neutral-800;
+  font-size: vars.$text-size;
+  padding-left: calc(2 * vars.$title-size);
+}
+
+.recomendation__body.expanded {
+  max-height: 500px;
+}
+
+.recomendation__body::after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 1em;
+  width: 5px;
+  height: 95%;
+  background-color: vars.$primary-700;
+  transition: max-height 0.5s ease-out; 
+}
