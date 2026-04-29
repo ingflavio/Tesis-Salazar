@@ -257,58 +257,58 @@ function getRecomendation(days){
   }
 }
 
-function getNutritionFact(){
-  const facts = [
+function getNutritionTip(){
+  const tips = [
     {
-      title: 'Proteína después del entrenamiento',
-      content: 'Consumir proteína en los 30-60 minutos posteriores al entrenamiento (ventana anabólica) optimiza la síntesis de proteína muscular. El consumo de 20-40 gramos de proteína de alta calidad como suero de leche (whey), claras de huevo o proteína vegetal combinada ayuda a reparar el tejido muscular dañado durante el ejercicio. La ventana anabólica es especialmente crítica después de entrenamientos de fuerza intensos donde se han generado microdesgarros musculares, y combinarla con carbohidratos simples puede mejorar aún más la recuperación al reponer el glucógeno muscular.'
+      title: 'No saltarse el desayuno antes de entrenar',
+      content: 'Saltarte el desayuno antes de entrenar por la mañana puede hacer que te sientas débil y sin energía durante el ejercicio. Come algo ligero como un plátano o una tostada con mermelada 30-45 minutos antes de entrenar. Esto te dará la glucosa necesaria para rendir mejor y evitar mareos o fatiga temprana.'
     },
     {
-      title: 'Hidratación y rendimiento físico',
-      content: 'La deshidratación de solo el 2% del peso corporal puede disminuir el rendimiento físico hasta en un 20-30%, afectando la fuerza, resistencia y coordinación motora. Los signos tempranos de deshidratación incluyen orina oscura, boca seca, fatiga, dolor de cabeza y disminución del enfoque mental. Se recomienda consumir entre 30-50 ml de agua por kilo de peso corporal al día, aumentando en climas cálidos o durante entrenamientos intensos de más de 60 minutos.'
+      title: 'Bebe agua antes de tener sed',
+      content: 'La sed es un signo tardío de deshidratación, cuando ya perdiste entre 1-2% de agua corporal. Lleva siempre una botella de agua y toma pequeños sorbos cada 15-20 minutos durante tu entrenamiento. Una buena señal es que tu orina sea de color amarillo claro o transparente durante el día.'
     },
     {
-      title: 'Carbohidratos como combustible principal',
-      content: 'Los carbohidratos son la principal fuente de energía para entrenamientos de alta intensidad y ejercicios explosivos como sprints, levantamiento de pesas o artes marciales. Se almacenan en músculos e hígado como glucógeno, proporcionando aproximadamente 1,800-2,000 calorías de energía disponible. Para entrenamientos de más de 90 minutos, consumir 30-60 gramos de carbohidratos por hora previene el agotamiento de glucógeno y retrasa la fatiga muscular significativamente.'
+      title: 'No elimines todos los carbohidratos',
+      content: 'Muchos principiantes creen que los carbohidratos engordan y los eliminan por completo, pero esto es un grave error. Los carbohidratos son tu principal fuente de energía para entrenar con intensidad y recuperarte después. Elige carbohidratos complejos como avena, arroz integral, batata o quinoa en lugar de azúcares refinados.'
     },
     {
-      title: 'Grasas saludables y producción hormonal',
-      content: 'Las grasas saludables (monoinsaturadas y poliinsaturadas) son esenciales para la producción de hormonas anabólicas como testosterona, hormona del crecimiento y factor de crecimiento similar a la insulina (IGF-1). Fuentes óptimas incluyen aguacate, aceite de oliva virgen extra, nueces, almendras, semillas de chía y pescados grasos como salmón y sardinas. Los omega-3 específicamente reducen la inflamación muscular post-entreno, mejorando significativamente la recuperación y reduciendo el dolor muscular de aparición tardía.'
+      title: 'Come proteína en cada comida',
+      content: 'Distribuir tu consumo de proteína en 4-5 comidas al día es más efectivo que comer toda la proteína en una sola comida. Cada comida debe tener al menos 20-30 gramos de proteína de fuentes como huevos, pollo, pescado, legumbres o lácteos. Esto mantiene activa la síntesis de proteína muscular durante todo el día.'
     },
     {
-      title: 'Vitaminas y minerales esenciales',
-      content: 'La vitamina D es crucial para la absorción de calcio, salud ósea y función inmunológica, siendo deficiente en aproximadamente el 40% de la población mundial. El magnesio participa en más de 300 reacciones enzimáticas, incluyendo la producción de ATP (energía celular) y la relajación muscular. El zinc es fundamental para la síntesis de proteínas, división celular y función inmunológica, siendo especialmente importante para atletas que pierden estos minerales a través del sudor. Las principales fuentes incluyen carnes magras, mariscos, legumbres, semillas de calabaza, espinacas y frutos secos.'
+      title: 'No tengas miedo a las grasas saludables',
+      content: 'Las grasas no son las enemigas, las grasas malas (trans y saturadas en exceso) sí lo son. Incorpora grasas saludables como aguacate, aceite de oliva, frutos secos o semillas de chía en tus comidas diarias. Estas grasas son esenciales para producir hormonas, absorber vitaminas y mantener tus articulaciones sanas.'
     },
     {
-      title: 'Frecuencia de comidas y metabolismo',
-      content: 'Comer cada 3-4 horas (5-6 comidas pequeñas al día) puede ayudar a mantener niveles estables de glucosa en sangre, reducir los picos de insulina y controlar mejor el apetito. Estudios recientes muestran que el total de calorías diarias es más importante que la frecuencia de comidas para la pérdida o ganancia de peso corporal. El ayuno intermitente (16:8) ha demostrado beneficios para la sensibilidad a la insulina, autofagia celular y pérdida de grasa, pero no es superior a la restricción calórica tradicional para la composición corporal.'
+      title: 'Planifica tus comidas con anticipación',
+      content: 'Si no planificas qué vas a comer, es muy probable que termines recurriendo a opciones poco saludables por falta de tiempo o hambre. Dedica una hora los domingos para preparar tus comidas de la semana o al menos tener los ingredientes listos. Esto te ahorrará decisiones de último momento y evitará que compres comida chatarra.'
     },
     {
-      title: 'Suplementos con evidencia científica',
-      content: 'La creatina monohidrato es el suplemento con mayor evidencia científica, aumentando la fuerza en un 5-15% y la masa muscular magra en 1-2 kg en 4-12 semanas. La cafeína (3-6 mg por kg de peso) mejora el rendimiento en ejercicios de resistencia y alta intensidad al reducir la percepción del esfuerzo. La beta-alanina retrasa la fatiga muscular en ejercicios de 1-4 minutos al bufferizar el ácido láctico. La proteína en polvo es conveniente pero no superior a fuentes alimenticias para la ganancia muscular cuando se alcanza el requerimiento proteico diario (1.6-2.2 g/kg de peso corporal).'
+      title: 'No obsesionarte con las calorías al principio',
+      content: 'Contar cada caloría desde el día uno puede ser abrumador y generar ansiedad innecesaria. Enfócate primero en mejorar la calidad de lo que comes: más vegetales, proteínas magras y alimentos enteros. Una vez que tengas el hábito de comer sano, entonces puedes ajustar las cantidades según tus objetivos.'
     },
     {
-      title: 'Errores comunes en la alimentación deportiva',
-      content: 'Saltarse el desayuno antes del entrenamiento matutino puede reducir el rendimiento hasta en un 15% debido a bajos niveles de glucógeno hepático. Depender exclusivamente de batidos de proteína descuidando alimentos enteros limita la ingesta de micronutrientes y fibra esencial. Consumir demasiada fibra justo antes del ejercicio puede causar molestias gastrointestinales por desviación del flujo sanguíneo al sistema digestivo. No ajustar la ingesta calórica en días de descanso lleva a ganancia de grasa no deseada, manteniendo el superávit calórico sin el estímulo del entrenamiento.'
+      title: 'Incluye vegetales en todas tus comidas',
+      content: 'Los vegetales son tus mejores aliados porque tienen pocas calorías pero muchos nutrientes y fibra que te mantienen saciado. Intenta llenar la mitad de tu plato con vegetales de colores variados como brócoli, espinacas, zanahoria o pimientos. La fibra también mejora tu digestión y controla los picos de azúcar en sangre.'
     },
     {
-      title: 'Alimentación pre-entrenamiento',
-      content: 'La comida pre-entreno debe consumirse 2-3 horas antes del ejercicio, combinando carbohidratos complejos (50-100g) con proteínas moderadas (15-25g) y bajas en grasas y fibra para evitar molestias digestivas. Ejemplos ideales incluyen avena con proteína y fruta, arroz con pollo y verduras cocidas, o batido de plátano con proteína de suero. Una comida pequeña 30-60 minutos antes puede incluir carbohidratos simples como una fruta o barra energética. Evitar alimentos grasos o fritos que retrasan el vaciamiento gástrico y causan pesadez durante el entrenamiento intenso.'
+      title: 'No necesitas suplementos caros al empezar',
+      content: 'Como principiante, tu prioridad debe ser mejorar tu alimentación con comida real, no gastar dinero en suplementos costosos. La proteína en polvo puede ser útil si te cuesta llegar a tus requerimientos diarios, pero no es mágica. Enfócate en dominar la proteína de fuentes naturales como huevos, carnes magras y legumbres primero.'
     },
     {
-      title: 'Alimentación post-entrenamiento para recuperación',
-      content: 'La ventana de recuperación óptima es dentro de los 45-60 minutos post-entreno, consumiendo una proporción de 3:1 o 4:1 de carbohidratos a proteínas. Esta combinación maximiza la resíntesis de glucógeno muscular y repara el tejido dañado, especialmente después de entrenamientos agotadores de más de 90 minutos. Ejemplos prácticos incluyen batido de proteína con plátano y miel, yogur griego con granola y frutos rojos, o sándwich de pavo con pan integral y jugo de naranja. La hidratación post-entreno debe reponer 1.5 litros por cada kilo de peso perdido durante el ejercicio, preferiblemente con bebidas que contengan sodio para mejorar la retención de líquidos.'
+      title: 'Permítete comidas trampa sin culpa',
+      content: 'Restringirte demasiado te llevará a atracones y a abandonar tu plan nutricional por completo. Permítete una o dos comidas libres a la semana donde disfrutes tus antojos sin culpa ni remordimiento. La clave está en el 80-90% de consistencia con buenos hábitos, no en la perfección absoluta cada día.'
     }
   ];
 
-  const randomIndex = Math.floor(Math.random() * (facts.length + 1));
-  return facts[randomIndex]
+  const randomIndex = Math.floor(Math.random() * (tips.length + 1));
+  return tips[randomIndex]
 }
 
 export function MainPage() {
   const [recomendations, setRecomendations] = useState(null)
 
-  const nutritionFact = getNutritionFact()
+  const nutritionFact = getNutritionTip()
 
   const handleChange = (event) => {
     const newRecomendations = getRecomendation(Number(event.target.value))
@@ -320,6 +320,8 @@ export function MainPage() {
     <main className={classes.homePage}>
       <div className={classes.excersices}>
         <h2>Ejercicios</h2>
+        <p>¿No tienes una rutina de ejercicio en mente?, no hay problema si, selecciona la cantidad de dias que entranas a la semana y te recomendamos una rutina de ejercicio para cada dia.</p>
+        <p>Recuerda que esto solo una recomendacion general, para rutinas mas efecientes o ayudas de como realizar los ejercicios busca a un profesional, el gimnasio no se hacer responsable de cualquier problema siguiendo las rutinas recomendadas</p>
         <label> ¿Cuantos dias entrenas por semana?
           <select defaultValue='0' onChange={handleChange}>
             <option value="0" disabled></option>
@@ -338,12 +340,12 @@ export function MainPage() {
           }
         </div>
       </div>
-        <div>
-          <h2>Nutricion</h2>
-          <section className={`${classes.recomendation__body} ${classes.recomendation_nonFolded}`}>
-            <h4>{nutritionFact.title}</h4>
-            <p>{nutritionFact.content}</p>
-          </section>
+      <div className={classes.tips}>
+        <section className={`${classes.recomendation__body} ${classes.recomendation_nonFolded}`}>
+          <h4>Consejo: {nutritionFact.title}</h4>
+          <p>{nutritionFact.content}</p>
+          <p>Este consejo no es de un profesional, son recomendaciones generales, para mas informacion consulte con un netricionista. El gimnasio no se hacer responsabel de cualquier problema surgir a la hora de aplicar los consejos</p>
+        </section>
         </div>
     </main>
   )

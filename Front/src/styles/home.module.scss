@@ -10,12 +10,20 @@ div .homePage {
   padding: 0 1dvw;
 }
 
-.excersices > label {
-  font-size: calc(.8 * vars.$title-size);
+.homePage div:first-child > h2 {
+  margin-top: 0;
 }
 
-.homePage h2:first-child {
-  margin-top: .0;
+.homePage h2 {
+  margin-top: .8em;
+}
+
+.homePage p {
+  padding: .5em 1em;
+}
+
+.excersices > label {
+  font-size: calc(.8 * vars.$title-size);
 }
 
 .excersices select {
@@ -115,6 +123,10 @@ div .homePage {
   font-size: 1.5em;
 }
 
+.recomendation__body p {
+  padding: 0;
+}
+
 .recomendation__body ul {
   display: flex;
   flex-direction: column;
@@ -131,3 +143,7 @@ div .homePage {
 .recomendation_nonFolded::after {
   content: none;
 } 
+
+.tips {
+  margin-top: 2em;
+}
