@@ -1,6 +1,9 @@
 @use './variables.scss' as vars;
 
 .navigationBar {
+  position: absolute;
+  z-index: 1;
+  bottom: 0;
   width: 100dvw;
   height: vars.$navigation-bar--height;
   padding: 0 1dvw;
@@ -26,6 +29,9 @@
 
 // DESKTOP
 @media (min-width: 751px) {
+  .navigationBar {
+    position: static;
+  }
   .navigationBar a {
     display: flex;
     align-items: center;

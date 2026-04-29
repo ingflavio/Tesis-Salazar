@@ -1,7 +1,42 @@
 @use './variables.scss' as vars;
 
+div .homePage {
+  height: 90dvh;
+  overflow-y: auto;
+}
+
+.homePage {
+  overflow-y: scroll;
+  padding: 0 1dvw;
+}
+
+.excersices > label {
+  font-size: calc(.8 * vars.$title-size);
+}
+
+.homePage h2:first-child {
+  margin-top: .0;
+}
+
+.excersices select {
+  font-size: calc(.8 * vars.$title-size);
+  padding: 0 .5em;
+  margin: .5em .5em;
+}
+
+
+.recomendation_wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1em;
+}
+
 .recomendation {
   position: relative;
+  width: 95%;
+  border-radius: 1em;
+  overflow: hidden;
 }
 
 .recomendation__header {
@@ -10,6 +45,10 @@
   gap: 1em;
   background-color: vars.$neutral-800;
   font-size: vars.$title-size;
+}
+
+.recomendation__header h3 {
+  font-size: 1em;
 }
 
 .unfold_checkbox {
@@ -38,16 +77,26 @@
 
 .recomendation__body {
   position: relative;
+  max-height: 1500px;
   overflow: hidden;
-  max-height: 0;
-  transition: max-height 0.5s ease-out; 
+  transition: 
+    max-height 0.5s ease-out,
+    padding 0.01s; 
   background-color: vars.$neutral-800;
   font-size: vars.$text-size;
+  padding: 1em;
   padding-left: calc(2 * vars.$title-size);
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
 }
 
-.recomendation__body.expanded {
-  max-height: 500px;
+.recomendation__body.hidden {
+  max-height: 0;
+  padding: 0;
+  transition: 
+    max-height 0.5s ease-out,
+    padding 0.1s 0.5s; 
 }
 
 .recomendation__body::after {
@@ -57,7 +106,28 @@
   top: 0;
   left: 1em;
   width: 5px;
-  height: 95%;
+  height: 99%;
   background-color: vars.$primary-700;
   transition: max-height 0.5s ease-out; 
 }
+
+.recomendation__body h4 {
+  font-size: 1.5em;
+}
+
+.recomendation__body ul {
+  display: flex;
+  flex-direction: column;
+  gap: .8em;
+  padding-top: .8em;
+  padding-left: .8em ;
+}
+
+.recomendation_nonFolded {
+  padding: 1em;
+  border-radius: 1em;
+}
+
+.recomendation_nonFolded::after {
+  content: none;
+} 
