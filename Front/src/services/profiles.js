@@ -93,7 +93,7 @@ export const searchProfiles = () => {
 
 export const searchProfile = (id) => {
   //fetch
-  return profiles.filter((item) => item.id === id)[0]
+  return profiles.filter((item) => item.id == id)[0]
 }
 
 export const searchProfileColumns = () => {

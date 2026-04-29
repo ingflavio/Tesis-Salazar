@@ -26,7 +26,7 @@ export function UserLayout() {
           <NavigationBar admin={admin}/>
         </header>
       }
-      <div>
+      <div className='route'>
         <Outlet />
       </div>
       {

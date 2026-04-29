@@ -27,17 +27,28 @@ h1 {
   font-size: calc(2 * vars.$title-size);
 }
 
+h2 {
+  font-size: calc(1.5 * vars.$title-size)
+}
+
 h3 {
-  font-size: calc(1.8 * vars.$title-size)
+  font-size: calc(1.2 * vars.$title-size)
+}
+
+h4 {
+  font-size: calc(1 * vars.$title-size)
 }
 
 h1,h2,h3,h4,h5,h6 {
   color: vars.$primary-500;
 }
 
-p, label, input {
+p  {
   font-size: vars.$text-size;
-  color: vars.$neutral-900;
+}
+
+p, li, label, input {
+  color: vars.$neutral-100;
 }
 
 ul, ol {
@@ -46,7 +57,6 @@ ul, ol {
 }
 
 input {
-  font-size: vars.$text-size;
   background-color: vars.$neutral-100;
   border: 2px solid vars.$neutral-900;
   padding:
@@ -91,8 +101,16 @@ td, th  {
   text-align: center;
 }
 
-input:focus {
+input:focus, select:focus {
   outline: none;
+}
+
+select {
+  background-color: vars.$primary-500;
+  font-size: vars.$text-size;
+  padding: 0 .2em;
+  border: none;
+  border-radius: 1em;
 }
 
 form {
@@ -104,6 +122,10 @@ form {
   padding: vars.$form-gap-distance;
   border-radius: calc(.08 * vars.$form-width);
   background-color: vars.$neutral-100;
+}
+
+form label, form input  {
+  font-size: vars.$text-size;
 }
 
 .form-field {
@@ -137,10 +159,70 @@ label.up {
   left: .6em;
 }
 
+label.toDo {
+  display: flex;
+  align-items: start;
+  gap: .5em;
+}
+
+label.toDo  input[type='checkbox'] {
+  visibility: hidden;
+  width: 0;
+  position: relative;
+  font-size: 1em;
+}
+
+label.toDo  input[type='checkbox']::before {
+  visibility: visible;
+  content: '';
+  display: block;
+  width: 1em;
+  height: 1em;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: .3em;
+  background-color: vars.$neutral-100;
+}
+
+label.toDo  input[type='checkbox']:checked::before {
+  background-color: vars.$primary-500 ;
+}
+
+label.toDo span {
+  position: relative;
+  width: 1em;
+}
+
+label.toDo  svg {
+  width: 1em;
+  position: absolute;
+  visibility: hidden;
+  color: vars.$neutral-100;
+  transform: translateY(25%);
+}
+
+label.toDo:has(input[type='checkbox']:checked)  svg {
+  visibility: visible;
+}
+
+label.toDo:has(input[type='checkbox']:checked) > h3 {
+  text-decoration: line-through;
+  color: vars.$primary-700;
+}
+
+li > label.toDo:has(input[type='checkbox']) {
+  gap: .1em;
+}
+
+li > label.toDo:has(input[type='checkbox']:checked) {
+  text-decoration: line-through;
+  color: vars.$neutral-500;
+}
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
-
 }
 
 ::-webkit-scrollbar-track {
