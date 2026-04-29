@@ -12,7 +12,7 @@ export function UserLayout() {
 
   const admin = checkAdmin(user)
 
-  const isDesktop = screen.width > 650 
+  const isDesktop = screen.width > 750 
 
   return (
     <>
