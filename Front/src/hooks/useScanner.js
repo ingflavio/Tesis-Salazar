@@ -23,13 +23,11 @@ export function useScanner(videoPlayer, onScanSuccess) {
     }
 
     try {
-      console.log('Escaneando...');
       
       // Actualizar dimensiones del canvas si es necesario
       if (canvas.width !== video.videoWidth || canvas.height !== video.videoHeight) {
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
-        console.log(`Canvas redimensionado a: ${canvas.width}x${canvas.height}`);
       }
 
       const context = canvas.getContext('2d');
@@ -44,8 +42,6 @@ export function useScanner(videoPlayer, onScanSuccess) {
       
       // Obtener los datos de la imagen
       const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-      
-      console.log('Decodificando QR...');
       
       // Intentar decodificar el código QR
       const code = jsQR(imageData.data, imageData.width, imageData.height, {
@@ -79,16 +75,10 @@ export function useScanner(videoPlayer, onScanSuccess) {
         audio: false
       });
       
-      console.log("Webcam iniciada correctamente");
       videoPlayer.current.srcObject = stream;
 
       // Esperar a que el video esté listo antes de empezar a escanear
-      videoPlayer.current.onloadedmetadata = () => {
-        console.log("Video cargado, dimensiones:", {
-          width: videoPlayer.current.videoWidth,
-          height: videoPlayer.current.videoHeight
-        });
-        
+      videoPlayer.current.onloadedmetadata = () => {        
         // Inicializar canvas después de que el video tenga dimensiones
         canvas = document.createElement('canvas');
         canvas.width = videoPlayer.current.videoWidth;
@@ -113,7 +103,6 @@ export function useScanner(videoPlayer, onScanSuccess) {
     if (scanInterval) {
       clearInterval(scanInterval);
       scanInterval = null;
-      console.log("Intervalo de escaneo detenido");
     }
     
     // Detener los tracks de la cámara
@@ -123,7 +112,6 @@ export function useScanner(videoPlayer, onScanSuccess) {
         videoPlayer.current.srcObject = null;
       }
       stream = null;
-      console.log("Webcam detenida");
     }
     
     // Limpiar canvas

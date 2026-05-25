@@ -11,15 +11,24 @@ export function ScanPage(){
    console.log(data)
   }
 
-  const {startWebcam, stopsCanner} = useScanner(video, handleScanSuccess)
+  const { startWebcam } = useScanner(video, handleScanSuccess)
 
   startWebcam()
 
   return(
-    <main className=''>
+    <main className={classes.scanPage}>
       <video ref={video} autoPlay muted playsInline></video>
-      <button onChange={stopsCanner}>stop</button>
-      <p></p>
+      <div>
+        { 
+          Array.from(Array(25).keys()).map((number) => {
+            console.log('uwu')
+            const filledCells = [0,1,3,4,5,9,15,19,20,21,23, 24] 
+            const className = filledCells.includes(number) 
+              ? classes.filled : ''
+            return <span className={className}></span>
+          }) 
+        }
+      </div>
     </main>
   )
 }
