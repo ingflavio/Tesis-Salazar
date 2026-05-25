@@ -1,14 +1,16 @@
 import { useRef } from 'react'
+import { useNavigate } from 'react-router'
 import classes from '../styles/scan.module.scss'
 import useScanner from '../hooks/useScanner'
-// import useScanner from '../hooks/useScanner'
 
 export function ScanPage(){
   const video = useRef()
+  const navigate = useNavigate()
 
   const handleScanSuccess = (data) => {
-   alert(data)
-   console.log(data)
+    const [prefix, id] = data.split(':')
+    if (prefix == 'ss25')
+    navigate("/chat", { state: { machine: id } });
   }
 
   const { startWebcam } = useScanner(video, handleScanSuccess)
@@ -21,7 +23,6 @@ export function ScanPage(){
       <div>
         { 
           Array.from(Array(25).keys()).map((number) => {
-            console.log('uwu')
             const filledCells = [0,1,3,4,5,9,15,19,20,21,23, 24] 
             const className = filledCells.includes(number) 
               ? classes.filled : ''

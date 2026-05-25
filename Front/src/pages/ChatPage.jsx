@@ -1,4 +1,5 @@
 import { useRef, useEffect } from 'react'
+import { useLocation } from 'react-router'
 import { useChat } from '../hooks/useChat'
 import { Icons } from '../components/Icons'
 import bot from '../images/bot.jpg'
@@ -8,6 +9,10 @@ export function ChatPage() {
   const textInput = useRef()
   const lastMsgRef = useRef()
   const { messages, addMessage } = useChat() 
+  const location = useLocation()
+
+  const machine = location.state.machine
+  console.log("estado: " + JSON.stringify(machine))
 
   const handleSubmit = (event) => {
     event.preventDefault()

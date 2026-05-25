@@ -50,7 +50,6 @@ export function useScanner(videoPlayer, onScanSuccess) {
       
       if (code) {
         // QR detectado exitosamente
-        console.log('¡QR detectado!');
         if (onScanSuccess) {
           onScanSuccess(code.data);
         }
