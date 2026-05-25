@@ -17,7 +17,7 @@ export function NavigationBar({admin = false}) {
         </Link>
       }
 
-      <Link to={'/camera'}>
+      <Link to={'/scan'}>
           <Icons icon='qr'/>
           {isDesktop && <span>escanear QR</span>}
       </Link>

@@ -266,6 +266,10 @@ button[disabled] {
   filter: contrast(.5);
 }
 
+.route {
+  height: 100%;
+}
+
 // DESKTOP
 @media (min-width: 701px) {
   #root {grid-template-rows: auto 1fr}

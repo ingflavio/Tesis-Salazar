@@ -1,0 +1,18 @@
+@use './variables.scss' as vars;
+
+.scanPage {
+  position: relative;
+  height: calc(100dvh - vars.$navigation-bar--height);
+}
+
+.scanPage div {
+  width: 100%;
+  height: 100%;
+  background-color: #011;
+}
+
+.scanPage button {
+  position: absolute;
+  bottom: 5%;
+  left: 45%;
+}
