@@ -27,11 +27,6 @@ export function NavigationBar({admin = false}) {
           {isDesktop && <span>Inicio</span>}
       </Link>
 
-      <Link to={'/chat'}>
-        <Icons icon='chat'/>
-          {isDesktop && <span>Chat con bot</span>}
-      </Link>
-
       <Link to={'/profile'}>
         <Icons icon='profile'/>
           {isDesktop && <span>Perfil</span>}
