@@ -1,7 +1,13 @@
 @use './variables.scss' as vars;
 
 $gap-distance: clamp(10px, 2dvh, 20px);
-$img-size: 80px;
+$header-units: clamp(24px, 5dvw, 48px);
+
+.chatLayout {
+  height: calc(100dvh - vars.$navigation-bar--height);
+  display: grid;
+  grid-template-rows: 10dvh 1fr;
+}
 
 .chatHeader {
   width: 100dvw;
@@ -14,24 +20,23 @@ $img-size: 80px;
 }
 
 .chatHeader h3 {
-  font-size: vars.$title-size;
+  font-size: $header-units;
 }
 
 .chatHeader_imgContainer {
-  width: $img-size;
-  height: $img-size;
+  width: clamp(30px, 15dvw, 80px);
+  aspect-ratio: 1;
   border-radius: 50%;
   overflow: hidden;
 }
 
 .chatHeader_imgContainer img {
-  height: 100%;
-  object-fit: contain;
+  width: 100%;
+  object-fit: cover;
 }
 
 .chat {
-  height: calc(100dvh - vars.$navigation-bar--height - calc(2 * $gap-distance + $img-size));
-  padding-bottom: 1.5dvh;
+  padding-bottom: 1dvh;
   display: flex;
   flex-direction: column;
   justify-content: end;

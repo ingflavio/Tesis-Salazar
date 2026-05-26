@@ -30,7 +30,7 @@ export function ChatPage() {
   }, [messages])
 
   return (
-    <>
+    <div className={classes.chatLayout}>
       <header className={classes.chatHeader}>
         <div className={classes.chatHeader_imgContainer}>
           <img src={bot} alt="Asistente bot" />
@@ -67,6 +67,6 @@ export function ChatPage() {
           </button>
         </form>
       </main>
-    </>
+    </div>
   )
 }
