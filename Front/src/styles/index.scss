@@ -62,6 +62,7 @@ input {
   padding:
   calc(0.2 * vars.$text-size)
   calc(0.8 * vars.$text-size);
+  color: vars.$neutral-900;
   border-radius: vars.$text-size;
 }
 

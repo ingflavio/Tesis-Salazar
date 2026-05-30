@@ -9,8 +9,7 @@ export function ScanPage(){
 
   const handleScanSuccess = (data) => {
     const [prefix, id] = data.split(':')
-    if (prefix == 'ss25')
-    navigate("/chat", { state: { machine: id } });
+    if (prefix == 'ss25') navigate("/chat", { state: { machine: id } });
   }
 
   const { startWebcam } = useScanner(video, handleScanSuccess)
