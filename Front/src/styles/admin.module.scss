@@ -36,15 +36,6 @@ th {
   text-transform: capitalize;
 }
 
-.sortButton {
-  background-color: transparent;
-  border: 0;
-}
-
-.sortButton svg {
-  transform: rotate(90deg);
-}
-
 .userTable tbody tr > td:last-child {
   min-width: calc( 6 * vars.$text-size);
 }

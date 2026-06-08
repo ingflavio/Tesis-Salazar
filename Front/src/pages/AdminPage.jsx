@@ -7,6 +7,7 @@ import useProfile from "../hooks/useProfile";
 import { useUser } from "../hooks/useUser";
 import { SearchBar } from "../components/SearchBar";
 import { useSearch } from '../hooks/useSearch';
+import ChevronButton from "../components/ChevronButton";
 
 function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initialValues }) {
   const fields = initialValues
@@ -40,6 +41,11 @@ function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initial
 
 function ProfileTable({ profileData, profiles, filter, editCallback, deleteCallback,tfooterCallback }) {
   const filteredProfiles = filter(profiles)
+
+  const handleClick = () => {
+    console.log('uwu')
+  }
+
   return (
     <table className={classes.userTable}>
       <thead>
@@ -47,9 +53,7 @@ function ProfileTable({ profileData, profiles, filter, editCallback, deleteCallb
           {Object.values(profileData).map((value) => {
             return <th key={value.name}>
               {value.label}
-              <button className={classes.sortButton}>
-                <Icons icon='chevron' />
-              </button>
+              <ChevronButton onClick={handleClick}/>
               </th>
           })}
           <th>Acciones</th>

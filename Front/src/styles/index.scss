@@ -268,6 +268,19 @@ button[disabled] {
   filter: contrast(.5);
 }
 
+.sortButton {
+  background-color: transparent;
+  border: 0;
+}
+
+.sortButton svg {
+  transform: rotate(90deg);
+}
+
+.sortButton--fliped svg {
+  transform: rotate(270deg);
+}
+
 .route {
   height: 100%;
 }
