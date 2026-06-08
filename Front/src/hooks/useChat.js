@@ -1,7 +1,7 @@
 import { useState } from "react"
 
-export function useChat(){
-  const [messages, setMessages] = useState([])
+export function useChat(initialMessage){
+  const [messages, setMessages] = useState([initialMessage])
   
   const addMessage = (autor, content) => {
     const msg = { autor, content }

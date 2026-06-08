@@ -26,11 +26,13 @@ export function NavigationBar({admin = false}) {
         <Icons icon='home'/>
           {isDesktop && <span>Inicio</span>}
       </Link>
-
-      <Link to={'/profile'}>
-        <Icons icon='profile'/>
-          {isDesktop && <span>Perfil</span>}
-      </Link>
+      {
+        !admin &&
+        <Link to={'/profile'}>
+          <Icons icon='profile'/>
+            {isDesktop && <span>Perfil</span>}
+        </Link>
+      }
     </nav>
   )
 }

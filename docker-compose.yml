@@ -12,6 +12,8 @@ services:
       MYSQL_PASSWORD: gym_password
     ports:
       - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
 
   backend:
     build: 
@@ -26,3 +28,22 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/tesis_gym?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root_password
+
+  front:
+    image: node:22-alpine  # Usa imagen oficial de Node.js
+    container_name: gym-frontend
+    restart: always
+    working_dir: /app
+    volumes:
+      - ./Front:/app  # Monta tu código local
+      - /app/node_modules  # Evita conflictos
+    ports:
+      - "5173:5173"
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    depends_on:
+      - backend
+    environment:
+      - VITE_API_URL=http://backend:8080
+
+volumes:
+  mysql-data:

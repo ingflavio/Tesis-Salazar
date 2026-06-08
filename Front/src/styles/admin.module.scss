@@ -98,3 +98,17 @@ td, th {
 .redText {
   color:  vars.$warn-500 !important;
 }
+
+.adminPage > button{
+  margin-top: 2.5dvh;
+  margin-left: 2.5dvw;
+}
+
+@media screen and (max-width:560px) {
+  .fieldWrapper {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1em 2%;
+  }
+
+}

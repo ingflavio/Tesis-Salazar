@@ -5,10 +5,11 @@ import { useScreen } from '../hooks/useScreen.js';
 import { useUsers } from '../hooks/useUsers.js';
 
 export function UserLayout() {
-  const { checkAdmin } = useUsers()
+  const { checkAdmin, getUser } = useUsers()
   const { user } = useUser()
   const screen = useScreen()  
   if (!user) return <Navigate to='/login' replace />
+  if (!getUser(user)) return <Navigate to='/login' replace />
 
   const admin = checkAdmin(user)
 

@@ -51,6 +51,7 @@ export function useScanner(videoPlayer, onScanSuccess) {
       if (code) {
         // QR detectado exitosamente
         if (onScanSuccess) {
+          stopWebcam();
           onScanSuccess(code.data);
         }
         stopWebcam();

@@ -56,7 +56,7 @@ div .homePage {
 }
 
 .recomendation__header h3 {
-  font-size: 1em;
+  font-size: clamp(1.5rem, 5dvw, 3rem);
 }
 
 .unfold_checkbox {

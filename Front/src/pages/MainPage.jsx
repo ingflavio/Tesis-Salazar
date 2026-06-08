@@ -28,7 +28,7 @@ function Recomendation({paragraphs, title}){
           <input type="checkbox" />
           <Icons icon='check' />
         </span>
-        <h3>{title}</h3>
+        <h3 className={classes.recomendation__subtitle}>{title}</h3>
       </label>
     </div>
     <div className={`${classes.recomendation__body} ${isChecked ? '' : classes.hidden}`}>
@@ -236,7 +236,6 @@ function getRecomendation(days){
   }
 
   const randomItems = (array, amount) => {
-    console.log(amount)
     const items = []
     for (let i = 0; i < amount; i++){
       const index = Math.floor(Math.random() * (array.length))
@@ -312,7 +311,6 @@ export function MainPage() {
 
   const handleChange = (event) => {
     const newRecomendations = getRecomendation(Number(event.target.value))
-    console.log(newRecomendations) 
     setRecomendations(newRecomendations)
   }
 
