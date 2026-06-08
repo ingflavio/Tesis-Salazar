@@ -32,6 +32,10 @@ $gap-distance: clamp(2px, 6dvh, 40px);
   color: vars.$neutral-100;
 }
 
+th {
+  text-transform: capitalize;
+}
+
 .userTable tbody tr > td:last-child {
   min-width: calc( 6 * vars.$text-size);
 }
