@@ -45,7 +45,12 @@ function ProfileTable({ profileData, profiles, filter, editCallback, deleteCallb
       <thead>
         <tr>
           {Object.values(profileData).map((value) => {
-            return <th key={value.name}>{value.label}</th>
+            return <th key={value.name}>
+              {value.label}
+              <button className={classes.sortButton}>
+                <Icons icon='chevron' />
+              </button>
+              </th>
           })}
           <th>Acciones</th>
         </tr>
