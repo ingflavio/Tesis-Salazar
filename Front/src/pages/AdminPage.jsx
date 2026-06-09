@@ -7,7 +7,7 @@ import useProfile from "../hooks/useProfile";
 import { useUser } from "../hooks/useUser";
 import { SearchBar } from "../components/SearchBar";
 import { useSearch } from '../hooks/useSearch';
-import ChevronButton from "../components/ChevronButton";
+import SortingButton from "../components/SortingButton";
 
 function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initialValues }) {
   const fields = initialValues
@@ -41,7 +41,14 @@ function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initial
 
 function ProfileTable({ profileData, profiles, filter, editCallback, deleteCallback,tfooterCallback }) {
   const filteredProfiles = filter(profiles)
+  
+  const sorter = () => {
+    //Hacemos un objeto con las funciones de sorteo y aplicamos la que dependa segun el estado que marca el ultimo boton presionado,
+    // Si no devulve el mismo array
+  }
 
+  const sortedProfiles = sorter(filteredProfiles)
+  
   const handleClick = () => {
     console.log('uwu')
   }
@@ -53,7 +60,7 @@ function ProfileTable({ profileData, profiles, filter, editCallback, deleteCallb
           {Object.values(profileData).map((value) => {
             return <th key={value.name}>
               {value.label}
-              <ChevronButton onClick={handleClick}/>
+              <SortingButton onClick={handleClick}/>
               </th>
           })}
           <th>Acciones</th>

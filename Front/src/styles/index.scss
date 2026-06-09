@@ -273,12 +273,18 @@ button[disabled] {
   border: 0;
 }
 
-.sortButton svg {
-  transform: rotate(90deg);
+.sortButton > .icon {
+  stroke: vars.$neutral-600;
+  fill: vars.$neutral-600;
 }
 
-.sortButton--fliped svg {
-  transform: rotate(270deg);
+.sortButton > .icon:last-child {
+  transform: rotate(180deg);
+}
+
+.sortButton--up > .icon:first-child, .sortButton--down > .icon:last-child{
+  stroke: vars.$neutral-100;
+  fill: vars.$neutral-100;
 }
 
 .route {
