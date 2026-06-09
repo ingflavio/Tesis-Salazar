@@ -269,7 +269,8 @@ button[disabled] {
 }
 
 .sortButtons-wrapper {
-  font-size: .8em;
+  display: flex;
+  flex-direction: column;
   height: 2em;
 }
 
@@ -279,11 +280,6 @@ div.sortButtons-wrapper > button {
   height: 1em;
   border: 0;
   padding: 0;
-}
-
-div.sortButtons-wrapper > button:last-child {
-  position: relative;
-  bottom: .4em;
 }
 
 .sortButtons-wrapper .icon {

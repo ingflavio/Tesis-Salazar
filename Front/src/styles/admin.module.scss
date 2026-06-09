@@ -14,9 +14,10 @@ $gap-distance: clamp(2px, 6dvh, 40px);
 
 .userTable {
   background-color: vars.$neutral-100;
-  grid-template-columns: repeat(12, 1fr); 
+  grid-template-columns: repeat(5, 1fr); 
   border: 2px solid vars.$neutral-100;
   margin: 2dvw;
+  font-size: clamp(1em, 3dvw, 2em);
 }
 
 .userTable tbody {

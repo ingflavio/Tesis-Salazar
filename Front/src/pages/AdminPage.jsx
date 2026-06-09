@@ -124,12 +124,24 @@ export function AdminPage() {
   const { logOut } = useUser()
   const {formText, formValues, modalOpen, modal, showModalForm, closeModalForm} = useModalForm()
   const {getProfiles, getProfileColumns} = useProfile()
-  const [profiles, setProfiles] = useState(getProfiles())
+
+  const fieldsToShow = ['id', 'name', 'lastName', 'solvency']
+
+  const [profiles, setProfiles] = useState(getProfiles().map((profile) => {
+    return {
+      'id': profile.id, 
+      'name':profile.name, 
+      'lastName':profile.lastName, 
+      'solvency':profile.solvency
+    }
+  }))
+  profiles.map((profile) => console.log(profile))
 
   const profileColumns = getProfileColumns()
   const { filterFunc, filter, changeFilterParams } = useSearch()
 
   const modeRef = useRef(null)
+
 
   const deleteProfile = (profile) => {
     const newProfiles = [...profiles].filter((item) => item.id !== profile.id)
@@ -172,7 +184,11 @@ export function AdminPage() {
     modeRef.value = null
   }
 
-  const fields = Object.entries(profileColumns).map(([key, value]) => { return { name: key, label: value }})
+  const fields = Object.entries(profileColumns)
+  .filter(([key,]) => fieldsToShow.includes(key))
+  .map(([key, value]) => { return { name: key, label: value }})
+
+  console.log(fields)
 
   return (
     <>
@@ -182,7 +198,7 @@ export function AdminPage() {
         <div className={classes.userTable_container}>
           <ProfileTable 
             profiles = {profiles} 
-            profileData = {fields.filter((field) => field.name !== 'password')} 
+            profileData = {fields} 
             filter = {filterFunc}
             editCallback = {(profile)=> OpenModal('editar', profile)}
             deleteCallback = {(profile) => deleteProfile(profile)}
