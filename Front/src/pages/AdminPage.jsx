@@ -7,7 +7,8 @@ import useProfile from "../hooks/useProfile";
 import { useUser } from "../hooks/useUser";
 import { SearchBar } from "../components/SearchBar";
 import { useSearch } from '../hooks/useSearch';
-import SortingButton from "../components/SortingButton";
+import SortingButton from "../components/SortingButtons";
+import useSorter from "../hooks/useSorter";
 
 function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initialValues }) {
   const fields = initialValues
@@ -40,17 +41,20 @@ function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initial
 }
 
 function ProfileTable({ profileData, profiles, filter, editCallback, deleteCallback,tfooterCallback }) {
+  const [sortParams, setSortParams] = useState({})
+  const { sorter } = useSorter(sortParams)
   const filteredProfiles = filter(profiles)
-  
-  const sorter = () => {
-    //Hacemos un objeto con las funciones de sorteo y aplicamos la que dependa segun el estado que marca el ultimo boton presionado,
-    // Si no devulve el mismo array
-  }
-
   const sortedProfiles = sorter(filteredProfiles)
   
-  const handleClick = () => {
-    console.log('uwu')
+  const handleClick = (field, direction) => {
+    setSortParams({ field: direction !== null ? field : null, direction })
+  }
+
+  const getActiveDirection = (field) => {
+    if (sortParams.field === field) {
+      return sortParams.direction
+    }
+    return null
   }
 
   return (
@@ -60,14 +64,17 @@ function ProfileTable({ profileData, profiles, filter, editCallback, deleteCallb
           {Object.values(profileData).map((value) => {
             return <th key={value.name}>
               {value.label}
-              <SortingButton onClick={handleClick}/>
+              <SortingButton 
+                onClick={(direction) => handleClick(value.label, direction)}
+                isActiveDirection={getActiveDirection(value.label)}
+              />
               </th>
           })}
           <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
-        {filteredProfiles.map((profile, index) => {
+        {sortedProfiles.map((profile, index) => {
           const profileToShow = {...profile}
           delete profileToShow['password']
           return <tr key={index}>{

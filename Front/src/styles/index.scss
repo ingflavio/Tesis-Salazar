@@ -268,21 +268,35 @@ button[disabled] {
   filter: contrast(.5);
 }
 
-.sortButton {
-  background-color: transparent;
-  border: 0;
+.sortButtons-wrapper {
+  font-size: .8em;
+  height: 2em;
 }
 
-.sortButton > .icon {
+div.sortButtons-wrapper > button {
+  font-size: 1em;
+  background-color: transparent;
+  height: 1em;
+  border: 0;
+  padding: 0;
+}
+
+div.sortButtons-wrapper > button:last-child {
+  position: relative;
+  bottom: .4em;
+}
+
+.sortButtons-wrapper .icon {
+  width: 1em;
   stroke: vars.$neutral-600;
   fill: vars.$neutral-600;
 }
 
-.sortButton > .icon:last-child {
+.sortButtons-wrapper button:last-child > .icon {
   transform: rotate(180deg);
 }
 
-.sortButton--up > .icon:first-child, .sortButton--down > .icon:last-child{
+.sortButtons-wrapper .highlight svg{
   stroke: vars.$neutral-100;
   fill: vars.$neutral-100;
 }

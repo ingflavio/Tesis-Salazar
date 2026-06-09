@@ -34,6 +34,8 @@ $gap-distance: clamp(2px, 6dvh, 40px);
 
 th {
   text-transform: capitalize;
+  display: flex;
+  align-items: center;
 }
 
 .userTable tbody tr > td:last-child {
