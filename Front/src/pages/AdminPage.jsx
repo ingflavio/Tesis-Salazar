@@ -103,6 +103,9 @@ function ProfileTable({ profileData, profiles, filter, editCallback, deleteCallb
               <button onClick={() => deleteCallback(profile)}>
                 <Icons icon="delete" />
               </button>
+              <button>
+                <Icons icon="eye" />
+              </button>
             </td>
           </tr>
         })}
