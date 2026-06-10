@@ -41,18 +41,18 @@ function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initial
 }
 
 function ProfileTable({ profileData, profiles, filter, editCallback, deleteCallback,tfooterCallback }) {
-  const [sortParams, setSortParams] = useState({})
+  const [sortParams, setSortParams] = useState({ field: null, direction: null })  
   const { sorter } = useSorter(sortParams)
   const filteredProfiles = filter(profiles)
   const sortedProfiles = sorter(filteredProfiles)
   
   const handleClick = (field, direction) => {
-    setSortParams({ field: direction !== null ? field : null, direction })
+    setSortParams({ field: direction !== null ? field : null, direction: direction })
   }
 
   const getActiveDirection = (field) => {
     if (sortParams.field === field) {
-      return sortParams.direction
+      return sortParams.direction 
     }
     return null
   }
@@ -65,8 +65,8 @@ function ProfileTable({ profileData, profiles, filter, editCallback, deleteCallb
             return <th key={value.name}>
               {value.label}
               <SortingButton 
-                onClick={(direction) => handleClick(value.label, direction)}
-                isActiveDirection={getActiveDirection(value.label)}
+                onClick={(direction) => handleClick(value.name, direction)}
+                isActiveDirection={getActiveDirection(value.name)}
               />
               </th>
           })}
@@ -138,7 +138,6 @@ export function AdminPage() {
       'solvency':profile.solvency
     }
   }))
-  profiles.map((profile) => console.log(profile))
 
   const profileColumns = getProfileColumns()
   const { filterFunc, filter, changeFilterParams } = useSearch()
@@ -178,7 +177,6 @@ export function AdminPage() {
   }
 
   const handleSubmit = (profile) => {
-    console.log(modeRef.current)
     if (modeRef.current === 'registrar'){
       addProfile(profile)
     }else if (modeRef.current === 'editar'){
@@ -190,8 +188,6 @@ export function AdminPage() {
   const fields = Object.entries(profileColumns)
   .filter(([key,]) => fieldsToShow.includes(key))
   .map(([key, value]) => { return { name: key, label: value }})
-
-  console.log(fields)
 
   return (
     <>

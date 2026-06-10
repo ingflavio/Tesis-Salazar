@@ -17,7 +17,7 @@ $gap-distance: clamp(2px, 6dvh, 40px);
   grid-template-columns: repeat(5, 1fr); 
   border: 2px solid vars.$neutral-100;
   margin: 2dvw;
-  font-size: clamp(1em, 3dvw, 2em);
+  font-size: clamp(10px, 2.8dvw, 20px);
 }
 
 .userTable tbody {
@@ -49,9 +49,14 @@ th {
   cursor: pointer;
 }
 
+.userTable > tbody td button{
+  box-sizing: border-box;
+  padding-top: .25em;
+}
+
 .userTable button svg{
   stroke: vars.$neutral-100;
-  width: vars.$text-size;
+  width: 1em;
 }
 
 .userTable tfoot td {
