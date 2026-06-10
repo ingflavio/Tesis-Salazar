@@ -33,14 +33,16 @@ function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initial
           fields
         }
       </div>
-      <button type="submit">
-        {sumbitText}
-      </button>
+      { sumbitText &&
+        <button type="submit">
+          {sumbitText}
+        </button>
+      }
     </form>
   );
 }
 
-function ProfileTable({ fieldsToShow, profileData, profiles, filter, editCallback, deleteCallback,tfooterCallback }) {
+function ProfileTable({ fieldsToShow, profileData, profiles, filter, editCallback, deleteCallback, showCallback,tfooterCallback }) {
   const reducedProfiles = profiles.map((profile) => {
     const reducedProfile = {}
     for (const field of fieldsToShow){
@@ -114,8 +116,8 @@ function ProfileTable({ fieldsToShow, profileData, profiles, filter, editCallbac
               <button onClick={() => deleteCallback(getFullPofile(profile))}>
                 <Icons icon="delete" />
               </button>
-              <button>
-                <Icons icon="eye" />
+              <button onClick={() => showCallback(getFullPofile(profile))}>
+                <Icons icon="eye"/>
               </button>
             </td>
           </tr>
@@ -176,8 +178,9 @@ export function AdminPage() {
       showModalForm('Registrar cliente','Registrar')
     }else if (mode === 'editar'){
       showModalForm('Editar datos de un cliente','Guardar cambios', profile)
+    }else if (mode === 'mostrar'){
+      showModalForm('Perfil completo del cliente',false, profile)
     }
-    console.log(modeRef.current)
   }
 
   const handleSubmit = (profile) => {
@@ -204,6 +207,7 @@ export function AdminPage() {
             filter = {filterFunc}
             editCallback = {(profile)=> OpenModal('editar', profile)}
             deleteCallback = {(profile) => deleteProfile(profile)}
+            showCallback = {(profile) => OpenModal('mostrar', profile)}
             tfooterCallback = {() => OpenModal('registrar')}
           />
         </div>
