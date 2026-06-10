@@ -40,11 +40,22 @@ function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initial
   );
 }
 
-function ProfileTable({ profileData, profiles, filter, editCallback, deleteCallback,tfooterCallback }) {
+function ProfileTable({ fieldsToShow, profileData, profiles, filter, editCallback, deleteCallback,tfooterCallback }) {
+  const reducedProfiles = profiles.map((profile) => {
+    const reducedProfile = {}
+    for (const field of fieldsToShow){
+      reducedProfile[field] = profile[field]
+    }
+    return reducedProfile
+  })
+  const reducedFields = profileData.filter((item) => fieldsToShow.includes(item.name))
+
   const [sortParams, setSortParams] = useState({ field: null, direction: null })  
   const { sorter } = useSorter(sortParams)
-  const filteredProfiles = filter(profiles)
+  const filteredProfiles = filter(reducedProfiles)
   const sortedProfiles = sorter(filteredProfiles)
+
+  const getFullPofile = (reducedProfile) => profiles.find((profile) => profile.id === reducedProfile.id)
   
   const handleClick = (field, direction) => {
     setSortParams({ field: direction !== null ? field : null, direction: direction })
@@ -61,7 +72,7 @@ function ProfileTable({ profileData, profiles, filter, editCallback, deleteCallb
     <table className={classes.userTable}>
       <thead>
         <tr>
-          {Object.values(profileData).map((value) => {
+          {Object.values(reducedFields).map((value) => {
             return <th key={value.name}>
               {value.label}
               <SortingButton 
@@ -97,10 +108,10 @@ function ProfileTable({ profileData, profiles, filter, editCallback, deleteCallb
               })
             }
             <td>
-              <button onClick={() => editCallback(profile)}>
+              <button onClick={() => editCallback(getFullPofile(profile))}>
                 <Icons icon="edit" />
               </button>
-              <button onClick={() => deleteCallback(profile)}>
+              <button onClick={() => deleteCallback(getFullPofile(profile))}>
                 <Icons icon="delete" />
               </button>
               <button>
@@ -130,14 +141,7 @@ export function AdminPage() {
 
   const fieldsToShow = ['id', 'name', 'lastName', 'solvency']
 
-  const [profiles, setProfiles] = useState(getProfiles().map((profile) => {
-    return {
-      'id': profile.id, 
-      'name':profile.name, 
-      'lastName':profile.lastName, 
-      'solvency':profile.solvency
-    }
-  }))
+  const [profiles, setProfiles] = useState(getProfiles())
 
   const profileColumns = getProfileColumns()
   const { filterFunc, filter, changeFilterParams } = useSearch()
@@ -185,9 +189,7 @@ export function AdminPage() {
     modeRef.value = null
   }
 
-  const fields = Object.entries(profileColumns)
-  .filter(([key,]) => fieldsToShow.includes(key))
-  .map(([key, value]) => { return { name: key, label: value }})
+  const fields = Object.entries(profileColumns).map(([key, value]) => { return { name: key, label: value }})
 
   return (
     <>
@@ -196,6 +198,7 @@ export function AdminPage() {
         <SearchBar filter={filter} changeFilter={changeFilterParams}/>
         <div className={classes.userTable_container}>
           <ProfileTable 
+            fieldsToShow = {fieldsToShow}
             profiles = {profiles} 
             profileData = {fields} 
             filter = {filterFunc}
