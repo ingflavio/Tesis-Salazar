@@ -1,7 +1,7 @@
 @use './variables.scss' as vars;
 
 .searchBar {
-  width: clamp(300px, calc(75% + 6em), 600px);
+  width: 97%;
   height: 2em;
   display: grid;
   font-size: vars.$text-size;
