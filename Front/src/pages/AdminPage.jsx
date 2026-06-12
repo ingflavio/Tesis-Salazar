@@ -13,9 +13,16 @@ import useSorter from "../hooks/useSorter";
 function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initialValues }) {
   const fields = initialValues
   ? fieldsToRender.map((field) => {
-    const initialValue = typeof initialValues[field.name] !== 'boolean' ? 
-      initialValues[field.name] : 
-      initialValues[field.name] ? 'Solvente' : 'Insolvente'
+    const rawValue = initialValues[field.name]
+    let initialValue
+    if (field.name === 'solvency'){
+      initialValue = rawValue ? 'Solvente' : 'No solvente'
+    } else if (field.name === 'sex'){
+      initialValue = rawValue === 'm' ? 'Masculino' : 'Femenino'
+    } else {
+      initialValue = rawValue
+    }
+
     return <FormField name={field.name} label={field.label} key={field.name} initialValue={initialValue} />
   })
   : fieldsToRender.map((field) => <FormField name={field.name} label={field.label} key={field.name} />)
@@ -51,6 +58,7 @@ function ProfileTable({ fieldsToShow, profileData, profiles, filter, editCallbac
   const reducedProfiles = profiles.map((profile) => {
     const reducedProfile = {}
     for (const field of fieldsToShow){
+
       reducedProfile[field] = profile[field]
     }
     return reducedProfile
@@ -191,12 +199,17 @@ export function AdminPage() {
     closeModalForm()
   }
 
-  let fields = Object.entries(profileColumns).map(([key, value]) => { return { name: key, label: value }})
-  if (formInfo.mode !== 'mostrar'){
-    fields = fields.filter((field) => field.name !== 'solvency')
-  }
-  if (formInfo.mode !== 'registrar'){
-    fields = fields.filter((field) => field.name !== 'password')
+  const fields = Object.entries(profileColumns).map(([key, value]) => { return { name: key, label: value }})
+
+  const getFormFields = () => {
+    let FormFields = fields
+    if (formInfo.mode !== 'mostrar'){
+      FormFields = FormFields.filter((field) => field.name !== 'solvency')
+    }
+    if (formInfo.mode !== 'registrar'){
+      FormFields = FormFields.filter((field) => field.name !== 'password')
+    }
+    return FormFields
   }
 
   return (
@@ -226,7 +239,7 @@ export function AdminPage() {
             <ProfileForm 
               title={formInfo.title} 
               sumbitText={formInfo.submit}
-              fieldsToRender={fields} 
+              fieldsToRender={getFormFields()} 
               initialValues={formValues} 
               onSubmit={handleSubmit}
             />
