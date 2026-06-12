@@ -149,7 +149,7 @@ function ProfileTable({ fieldsToShow, profileData, profiles, filter, editCallbac
   );
 }
 
-export function AdminPage() { 
+export default function TablePage() { 
   const { logOut } = useUser()
   const {formInfo, formValues, modalOpen, modal, showModalForm, closeModalForm} = useModalForm()
   const {getProfiles, getProfileColumns} = useProfile()
