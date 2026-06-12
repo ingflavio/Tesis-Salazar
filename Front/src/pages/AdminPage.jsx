@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useModalForm } from "../hooks/useModalForm";
 import Icons from "../components/Icons";
 import FormField from '../components/FormField'
@@ -12,7 +12,12 @@ import useSorter from "../hooks/useSorter";
 
 function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initialValues }) {
   const fields = initialValues
-  ? fieldsToRender.map((field) => <FormField name={field.name} label={field.label} key={field.name} initialValue={initialValues[field.name]} />)
+  ? fieldsToRender.map((field) => {
+    const initialValue = typeof initialValues[field.name] !== 'boolean' ? 
+      initialValues[field.name] : 
+      initialValues[field.name] ? 'Solvente' : 'Insolvente'
+    return <FormField name={field.name} label={field.label} key={field.name} initialValue={initialValue} />
+  })
   : fieldsToRender.map((field) => <FormField name={field.name} label={field.label} key={field.name} />)
 
   const SubmitFunc = (event) => {
@@ -138,7 +143,7 @@ function ProfileTable({ fieldsToShow, profileData, profiles, filter, editCallbac
 
 export function AdminPage() { 
   const { logOut } = useUser()
-  const {formText, formValues, modalOpen, modal, showModalForm, closeModalForm} = useModalForm()
+  const {formInfo, formValues, modalOpen, modal, showModalForm, closeModalForm} = useModalForm()
   const {getProfiles, getProfileColumns} = useProfile()
 
   const fieldsToShow = ['id', 'name', 'lastName', 'solvency']
@@ -147,9 +152,6 @@ export function AdminPage() {
 
   const profileColumns = getProfileColumns()
   const { filterFunc, filter, changeFilterParams } = useSearch()
-
-  const modeRef = useRef(null)
-
 
   const deleteProfile = (profile) => {
     const newProfiles = [...profiles].filter((item) => item.id !== profile.id)
@@ -161,7 +163,6 @@ export function AdminPage() {
     const index = newProfiles.findIndex((item) => item.id === profile.id)
     newProfiles[index] = profile
     setProfiles(newProfiles)
-    closeModalForm()
   }
 
   const addProfile = (profile) => {
@@ -169,30 +170,34 @@ export function AdminPage() {
     profile['solvency'] = true
     newProfiles.push(profile)
     setProfiles(newProfiles)
-    closeModalForm()
   }
 
   const OpenModal = (mode, profile = null) => {
-    modeRef.current = mode
     if (mode === 'registrar'){
-      showModalForm('Registrar cliente','Registrar')
+      showModalForm('Registrar cliente','Registrar', mode)
     }else if (mode === 'editar'){
-      showModalForm('Editar datos de un cliente','Guardar cambios', profile)
+      showModalForm('Editar datos de un cliente','Guardar cambios', mode, profile)
     }else if (mode === 'mostrar'){
-      showModalForm('Perfil completo del cliente',false, profile)
+      showModalForm('Perfil completo del cliente',false, mode, profile)
     }
   }
 
   const handleSubmit = (profile) => {
-    if (modeRef.current === 'registrar'){
+    if (formInfo.mode === 'registrar'){
       addProfile(profile)
-    }else if (modeRef.current === 'editar'){
+    }else if (formInfo.mode === 'editar'){
       editProfile(profile)
     }
-    modeRef.value = null
+    closeModalForm()
   }
 
-  const fields = Object.entries(profileColumns).map(([key, value]) => { return { name: key, label: value }})
+  let fields = Object.entries(profileColumns).map(([key, value]) => { return { name: key, label: value }})
+  if (formInfo.mode !== 'mostrar'){
+    fields = fields.filter((field) => field.name !== 'solvency')
+  }
+  if (formInfo.mode !== 'registrar'){
+    fields = fields.filter((field) => field.name !== 'password')
+  }
 
   return (
     <>
@@ -219,9 +224,9 @@ export function AdminPage() {
           {
             modalOpen &&
             <ProfileForm 
-              title={formText.title} 
-              sumbitText={formText.submit}
-              fieldsToRender={fields.filter((field) => field.name !== 'solvency')} 
+              title={formInfo.title} 
+              sumbitText={formInfo.submit}
+              fieldsToRender={fields} 
               initialValues={formValues} 
               onSubmit={handleSubmit}
             />
