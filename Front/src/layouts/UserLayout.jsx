@@ -17,10 +17,6 @@ export function UserLayout() {
 
   return (
     <>
-      {/* <span className='debuger'>
-        {JSON.stringify(user)}
-        <button onClick={handleClick}>salir</button> 
-      </span> */}
       {
         isDesktop && 
         <header>
