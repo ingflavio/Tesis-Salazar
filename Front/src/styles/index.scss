@@ -284,8 +284,9 @@ div.sortButtons-wrapper > button {
 
 .sortButtons-wrapper .icon {
   width: 1em;
-  stroke: vars.$neutral-600;
-  fill: vars.$neutral-600;
+  stroke: vars.$neutral-300;
+  fill: vars.$neutral-300;
+  opacity: 0.85;
 }
 
 .sortButtons-wrapper button:last-child > .icon {
@@ -293,8 +294,9 @@ div.sortButtons-wrapper > button {
 }
 
 .sortButtons-wrapper .highlight svg{
-  stroke: vars.$neutral-100;
-  fill: vars.$neutral-100;
+  stroke: vars.$primary-500;
+  fill: vars.$primary-500;
+  opacity: 1;
 }
 
 .route {

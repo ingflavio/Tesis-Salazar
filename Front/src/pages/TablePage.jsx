@@ -98,6 +98,14 @@ function ProfileTable({ fieldsToShow, profileData, profiles, filter, editCallbac
           })}
           <th>Acciones</th>
         </tr>
+        <tr>
+          {Object.values(reducedFields).map((value) => {
+            return <th key={value.name}>
+              <input type="text" placeholder='Buscar'/>
+              </th>
+          })}
+          <th></th>
+        </tr>
       </thead>
       <tbody>
         {sortedProfiles.map((profile, index) => {
