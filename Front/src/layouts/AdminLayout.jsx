@@ -19,7 +19,7 @@ export default function AdminLayout() {
       {
         isDesktop && 
       <header className={classes.adminHeader}>
-        admin
+        <h4>Administracion</h4>
       </header>
       }
       <div className={classes.route}>
@@ -27,8 +27,8 @@ export default function AdminLayout() {
       </div>
       {
         !isDesktop && 
-      <footer className={classes.adminHeader}>
-        admin
+      <footer className={classes.adminFooter}>
+        <h4>Administracion</h4>
       </footer>
       }
     </>

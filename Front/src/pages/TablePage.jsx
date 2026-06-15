@@ -215,8 +215,6 @@ export default function TablePage() {
   return (
     <>
       <main className={classes.adminPage}>
-        <h1>Admin</h1>
-        <SearchBar filter={filter} changeFilter={changeFilterParams}/>
         <div className={classes.userTable_container}>
           <ProfileTable 
             fieldsToShow = {fieldsToShow}
@@ -229,7 +227,7 @@ export default function TablePage() {
             tfooterCallback = {() => OpenModal('registrar')}
           />
         </div>
-        <button onClick={logOut} >Cerrar sesion</button>
+        {/* <button onClick={logOut} >Cerrar sesion</button> */}
       </main>
       <dialog ref={modal} onClose={() => closeModalForm()}>
         <div className={classes.dialogWraper}>  

@@ -3,3 +3,12 @@
 .route {
   background-color: vars.$neutral-300;
 }
+
+.adminHeader, .adminFooter {
+  background-color: vars.$neutral-500;;
+}
+
+.adminHeader > h4, .adminFooter > h4 {
+  color: vars.$neutral-100;
+  margin: 0 .5em;
+}
