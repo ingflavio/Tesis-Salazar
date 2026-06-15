@@ -9,6 +9,7 @@ import { ProfilePage } from "./pages/ProfilePage.jsx";
 import ScanPage from './pages/ScanPage.jsx'
 import './styles/index.scss'
 import AdminLayout from "./layouts/AdminLayout.jsx";
+import AdminPage from "./pages/AdminPage.jsx";
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
         <Route path='scan' element={<ScanPage />} />
       </Route>
       <Route path="admin" element={<AdminLayout />} >
+        <Route index element={<AdminPage />} />
         <Route path='table' element={<TablePage />} />
       
       </Route>

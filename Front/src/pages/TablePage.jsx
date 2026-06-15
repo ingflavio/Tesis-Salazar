@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useModalForm } from "../hooks/useModalForm";
 import Icons from "../components/Icons";
 import FormField from '../components/FormField'
-import classes from "../styles/admin.module.scss";
+import classes from "../styles/userTable.module.scss";
 import useProfile from "../hooks/useProfile";
 import { useUser } from "../hooks/useUser";
 import { SearchBar } from "../components/SearchBar";

@@ -1,23 +1,36 @@
 import { Outlet, Navigate } from 'react-router';
+import { useScreen } from '../hooks/useScreen.js';
 import { useUser } from '../hooks/useUser.js';
 import { useUsers } from '../hooks/useUsers.js';
+import classes from '../styles/admin.module.scss'
 
 export default function AdminLayout() {
   const { checkAdmin, getUser } = useUsers()
+  const screen = useScreen()  
   const { user } = useUser()
   if (!user) return <Navigate to='/login' replace />
   if (!getUser(user)) return <Navigate to='/login' replace />
   if (!checkAdmin(user)) return <Navigate to='/login' replace />
 
+  const isDesktop = screen.width > 750 
 
   return (
     <>
-      <header>
+      {
+        isDesktop && 
+      <header className={classes.adminHeader}>
         admin
       </header>
-      <div className='route'>
+      }
+      <div className={classes.route}>
         <Outlet />
       </div>
+      {
+        !isDesktop && 
+      <footer className={classes.adminHeader}>
+        admin
+      </footer>
+      }
     </>
   )
 }
