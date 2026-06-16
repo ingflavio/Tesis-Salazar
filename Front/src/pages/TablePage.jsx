@@ -4,9 +4,9 @@ import Icons from "../components/Icons";
 import FormField from '../components/FormField'
 import classes from "../styles/userTable.module.scss";
 import useProfile from "../hooks/useProfile";
-import { useUser } from "../hooks/useUser";
+// import { useUser } from "../hooks/useUser";
 import { SearchBar } from "../components/SearchBar";
-import { useSearch } from '../hooks/useSearch';
+import useFilter from '../hooks/useFilter';
 import SortingButton from "../components/SortingButtons";
 import useSorter from "../hooks/useSorter";
 
@@ -54,8 +54,9 @@ function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initial
   );
 }
 
-function ProfileTable({ fieldsToShow, profileData, profiles, filter, editCallback, deleteCallback, showCallback,tfooterCallback }) {
-  const reducedProfiles = profiles.map((profile) => {
+function ProfileTable({ fieldsToShow, profileData, profiles, editCallback, deleteCallback, showCallback,tfooterCallback }) {
+  const { filterFunc, changeFilterParams } = useFilter()
+  const reducedProfiles = profiles.filter(filterFunc).map((profile) => {
     const reducedProfile = {}
     for (const field of fieldsToShow){
 
@@ -67,8 +68,7 @@ function ProfileTable({ fieldsToShow, profileData, profiles, filter, editCallbac
 
   const [sortParams, setSortParams] = useState({ field: null, direction: null })  
   const { sorter } = useSorter(sortParams)
-  const filteredProfiles = filter(reducedProfiles)
-  const sortedProfiles = sorter(filteredProfiles)
+  const sortedProfiles = sorter(reducedProfiles)
 
   const getFullPofile = (reducedProfile) => profiles.find((profile) => profile.id === reducedProfile.id)
   
@@ -99,11 +99,17 @@ function ProfileTable({ fieldsToShow, profileData, profiles, filter, editCallbac
           <th>Acciones</th>
         </tr>
         <tr>
-          {Object.values(reducedFields).map((value) => {
-            return <th key={value.name}>
-              <input type="text" placeholder='Buscar'/>
-              </th>
-          })}
+          {Object.values(reducedFields).map((value) => <th key={value.name}> {
+            value.name !== 'solvency' ?
+            <input type="text" placeholder="buscar" onChange={(event) => changeFilterParams(event.target.value, value.name)}/> : 
+            <label> 
+              <input type="checkbox" onChange={(event) => changeFilterParams(event.target.checked ? true : '', value.name)}/>
+              solventes
+              <input type="checkbox" onChange={(event) => changeFilterParams(event.target.checked ? false :'' , value.name)}/>
+              Insolventes
+            </label>
+
+          }</th>)}
           <th></th>
         </tr>
       </thead>
@@ -113,7 +119,6 @@ function ProfileTable({ fieldsToShow, profileData, profiles, filter, editCallbac
           delete profileToShow['password']
           return <tr key={index}>{
             Object.entries(profileToShow).map(([key, value]) => {
-
               let content 
               let className = ''
               if(typeof value === 'boolean'){
@@ -158,7 +163,7 @@ function ProfileTable({ fieldsToShow, profileData, profiles, filter, editCallbac
 }
 
 export default function TablePage() { 
-  const { logOut } = useUser()
+  // const { logOut } = useUser()
   const {formInfo, formValues, modalOpen, modal, showModalForm, closeModalForm} = useModalForm()
   const {getProfiles, getProfileColumns} = useProfile()
 
@@ -167,7 +172,8 @@ export default function TablePage() {
   const [profiles, setProfiles] = useState(getProfiles())
 
   const profileColumns = getProfileColumns()
-  const { filterFunc, filter, changeFilterParams } = useSearch()
+
+  const [filterShow, setFilterShow] = useState(false)
 
   const deleteProfile = (profile) => {
     const newProfiles = [...profiles].filter((item) => item.id !== profile.id)
@@ -224,11 +230,16 @@ export default function TablePage() {
     <>
       <main className={classes.adminPage}>
         <div className={classes.userTable_container}>
+          <div>
+            <button onClick={() => setFilterShow(!filterShow)}>Filtro avanzado</button>
+            <form style={{display: filterShow ? 'block' :"none"}}>
+              filtro
+            </form>
+          </div>
           <ProfileTable 
             fieldsToShow = {fieldsToShow}
             profiles = {profiles} 
             profileData = {fields} 
-            filter = {filterFunc}
             editCallback = {(profile)=> OpenModal('editar', profile)}
             deleteCallback = {(profile) => deleteProfile(profile)}
             showCallback = {(profile) => OpenModal('mostrar', profile)}

@@ -5,18 +5,21 @@ $gap-distance: clamp(2px, 6dvh, 40px);
 .adminPage {
   max-width: 100dvw;
   overflow-x: hidden;
+  padding: 1dvw;
 }
 
 .userTable_container {
   max-width: 100dvw;
   overflow-x: scroll;
+  background-color: vars.$neutral-100;
+  padding: 1dvw;
 }
 
 .userTable {
   background-color: vars.$neutral-500;
   grid-template-columns: repeat(5, 1fr); 
   border: 2px solid vars.$neutral-500;
-  margin: 2dvw;
+  margin: 2dvw 0;
   font-size: clamp(10px, 2.8dvw, 20px);
 }
 
@@ -37,6 +40,15 @@ $gap-distance: clamp(2px, 6dvh, 40px);
 .userTable td, .userTable th { 
   background-color: vars.$neutral-100;
   color: vars.$neutral-700;
+  text-transform: capitalize;
+}
+
+.userTable label {
+  color: vars.$neutral-900;
+  font-weight: 400;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .5em;
 }
 
 .userTable tr:nth-child(2n) td { 
@@ -45,19 +57,19 @@ $gap-distance: clamp(2px, 6dvh, 40px);
 
 
 th {
-  text-transform: capitalize;
   display: flex;
-  align-items: center;
+  align-items: space-between;
 }
 
 .userTable tbody tr > td:last-child {
   min-width: calc( 6 * vars.$text-size);
 }
 
-.userTable button {
+.userTable_container button {
   margin: 0 .2em;
-  padding: .1em calc(vars.$text-size / 4);
+  padding: .1em calc(vars.$text-size / 3);
   cursor: pointer;
+  color: vars.$neutral-100;
 }
 
 .userTable > tbody td button{

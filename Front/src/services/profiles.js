@@ -16,8 +16,8 @@ const profileColumns = {
 export const profiles = [
   {
     id: "30123123",
-    name: "Luis",
-    lastName: "Hernandez",
+    name: "luis",
+    lastName: "hernandez",
     age: 27,
     sex: "m",
     phone: '04244084030',
@@ -30,8 +30,8 @@ export const profiles = [
   },
   {
     id: "25197803",
-    name: "Miguel",
-    lastName: "Salazar",
+    name: "miguel",
+    lastName: "salazar",
     age: 43,
     sex: "m",
     phone: '04244084030',
@@ -44,10 +44,10 @@ export const profiles = [
   },
   {
     id: "30123456",
-    name: "Maria",
-    lastName: "Gonzales",
+    name: "maria",
+    lastName: "gonzales",
     age: 22,
-    sex: "m",
+    sex: "f",
     phone: '04244084030',
     height: 1.7,
     weight: 75,
@@ -58,8 +58,8 @@ export const profiles = [
   },
   {
     id: "30215136",
-    name: "Victoria",
-    lastName: "Ramirez",
+    name: "ana",
+    lastName: "ramirez",
     age: 22,
     sex: "f",
     phone: '04244084030',
@@ -72,8 +72,8 @@ export const profiles = [
   },
   {
     id: "30951759",
-    name: "Barbara",
-    lastName: "Garcia",
+    name: "barbara",
+    lastName: "garcia",
     age: 20,
     sex: "f",
     phone: '04244084030',
