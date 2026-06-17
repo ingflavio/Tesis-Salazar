@@ -19,13 +19,11 @@ function App() {
         <Route index element={<MainPage />} />
         <Route path='chat' element={<ChatPage />} />
         <Route path='profile' element={<ProfilePage />} />
-        
         <Route path='scan' element={<ScanPage />} />
       </Route>
       <Route path="admin" element={<AdminLayout />} >
         <Route index element={<AdminPage />} />
         <Route path='table' element={<TablePage />} />
-      
       </Route>
       <Route path='login' element={<LoginPage />} />
       <Route path='*' element={<NotFOundPage />} />
