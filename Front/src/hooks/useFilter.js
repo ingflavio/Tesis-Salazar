@@ -24,7 +24,7 @@ export default function useFilter(){
   } 
 
   const changeFilterParams = (query, field) => {
-    
+    console.log(`query:${query} field:${field}`)
     const index = filters.findIndex((element) => element.field === field)
     const newFilters = [...filters]
     if(query === ''){
@@ -38,5 +38,5 @@ export default function useFilter(){
     setFilters(newFilters)
   }
 
-  return { filterFunc, changeFilterParams}
+  return { filters, filterFunc, changeFilterParams}
 }

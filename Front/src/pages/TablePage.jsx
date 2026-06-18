@@ -4,6 +4,7 @@ import Icons from "../components/Icons";
 import FormField from '../components/FormField'
 import classes from "../styles/userTable.module.scss";
 import useProfile from "../hooks/useProfile";
+import CheckGroup from "../components/CheckGroup";
 // import { useUser } from "../hooks/useUser";
 import { SearchBar } from "../components/SearchBar";
 import useFilter from '../hooks/useFilter';
@@ -54,8 +55,7 @@ function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initial
   );
 }
 
-function ProfileTable({ fieldsToShow, profileData, profiles, editCallback, deleteCallback, showCallback,tfooterCallback }) {
-  const { filterFunc, changeFilterParams } = useFilter()
+function ProfileTable({ fieldsToShow, profileData, profiles, filterFunc, changeFilterParams, editCallback, deleteCallback, showCallback,tfooterCallback }) {
   const reducedProfiles = profiles.filter(filterFunc).map((profile) => {
     const reducedProfile = {}
     for (const field of fieldsToShow){
@@ -83,6 +83,14 @@ function ProfileTable({ fieldsToShow, profileData, profiles, editCallback, delet
     return null
   }
 
+  const handleCheck = (event, value) => {
+    if (event.target.checked){ 
+      const otherCheckbox = document.getElementById(`input-checkbox-${!value}`)
+      otherCheckbox.checked = false
+    }
+    changeFilterParams(event.target.checked ? value : '' , 'solvency')
+  }
+
   return (
     <table className={classes.userTable}>
       <thead>
@@ -101,14 +109,11 @@ function ProfileTable({ fieldsToShow, profileData, profiles, editCallback, delet
         <tr>
           {Object.values(reducedFields).map((value) => <th key={value.name}> {
             value.name !== 'solvency' ?
-            <input type="text" placeholder="buscar" onChange={(event) => changeFilterParams(event.target.value, value.name)}/> : 
-            <label> 
-              <input type="checkbox" onChange={(event) => changeFilterParams(event.target.checked ? true : '', value.name)}/>
-              solventes
-              <input type="checkbox" onChange={(event) => changeFilterParams(event.target.checked ? false :'' , value.name)}/>
-              Insolventes
-            </label>
-
+            <input type="text" placeholder="buscar" name={value.name} id={`filter-input-${value.name}`} onChange={(event) => changeFilterParams(event.target.value, value.name)}/> : 
+            <CheckGroup 
+              options={[{label: 'solvente', value: true}, {label: 'insolvente', value: false}]} 
+              onClickCallback={(value) => changeFilterParams(value === null ? '' :value, 'solvency')}
+            />
           }</th>)}
           <th></th>
         </tr>
@@ -164,16 +169,13 @@ function ProfileTable({ fieldsToShow, profileData, profiles, editCallback, delet
 
 export default function TablePage() { 
   // const { logOut } = useUser()
+  const { filters, filterFunc, changeFilterParams, } = useFilter()
   const {formInfo, formValues, modalOpen, modal, showModalForm, closeModalForm} = useModalForm()
   const {getProfiles, getProfileColumns} = useProfile()
-
   const fieldsToShow = ['id', 'name', 'lastName', 'solvency']
-
   const [profiles, setProfiles] = useState(getProfiles())
-
   const profileColumns = getProfileColumns()
-
-  const [filterShow, setFilterShow] = useState(false)
+  const [filterShow, setFilterShow] = useState(true)
 
   const deleteProfile = (profile) => {
     const newProfiles = [...profiles].filter((item) => item.id !== profile.id)
@@ -213,6 +215,21 @@ export default function TablePage() {
     closeModalForm()
   }
 
+  const aplyFilter = (event) => {
+    event.preventDefault()
+    const data = Object.fromEntries(new FormData(event.target).entries())
+    for (const [field, query] of Object.entries(data)) {
+      const index = filters.findIndex((object) => object.field === field) 
+      if (index !== -1) {
+        const input = document.getElementById(`filter-input-${field}`)
+        input.value = query
+      } else if (query === '') {
+        continue;
+      }
+      changeFilterParams(query, field)
+    }  
+  }
+
   const fields = Object.entries(profileColumns).map(([key, value]) => { return { name: key, label: value }})
 
   const getFormFields = () => {
@@ -232,14 +249,23 @@ export default function TablePage() {
         <div className={classes.userTable_container}>
           <div>
             <button onClick={() => setFilterShow(!filterShow)}>Filtro avanzado</button>
-            <form style={{display: filterShow ? 'block' :"none"}}>
-              filtro
+            <form onSubmit={(event) => aplyFilter(event)}
+              className={classes.filterForm} style={{display: filterShow ? '' :'none'}}>
+              <div>{ fields.map((field) => {
+                return <label key={field.name}> 
+                  <span>{field.label}</span>
+                  <input type="text" placeholder={field.label} name={field.name}/>
+                </label>
+              })}</div>
+              <button type="submit">Aplicar filtro</button>
             </form>
           </div>
           <ProfileTable 
             fieldsToShow = {fieldsToShow}
             profiles = {profiles} 
             profileData = {fields} 
+            filterFunc = { filterFunc }
+            changeFilterParams = { changeFilterParams }  
             editCallback = {(profile)=> OpenModal('editar', profile)}
             deleteCallback = {(profile) => deleteProfile(profile)}
             showCallback = {(profile) => OpenModal('mostrar', profile)}

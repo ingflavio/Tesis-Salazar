@@ -12,3 +12,12 @@
   color: vars.$neutral-100;
   margin: 0 .5em;
 }
+
+.route label {
+  color: vars.$neutral-900;
+  display: block;
+}
+
+.route label::first-letter {
+  text-transform: capitalize
+}

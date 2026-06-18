@@ -15,6 +15,30 @@ $gap-distance: clamp(2px, 6dvh, 40px);
   padding: 1dvw;
 }
 
+.userTable_container input {
+  border: 1px solid vars.$neutral-500;
+  border-radius: .5em;
+  width: 100%;
+}
+
+.filterForm {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.filterForm > div {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2dvw;
+}
+
+.filterForm > button {
+  margin: auto;
+}
+
 .userTable {
   background-color: vars.$neutral-500;
   grid-template-columns: repeat(5, 1fr); 
@@ -25,12 +49,6 @@ $gap-distance: clamp(2px, 6dvh, 40px);
 
 .userTable tbody, .userTable thead {
   grid-template-rows: 1fr;
-}
-
-.userTable input {
-  border: 1px solid vars.$neutral-500;
-  border-radius: .5em;
-  width: 100%;
 }
 
 .userTable, .userTable tbody, .userTable thead {
