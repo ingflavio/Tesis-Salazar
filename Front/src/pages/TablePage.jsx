@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useModalForm } from "../hooks/useModalForm";
 import Icons from "../components/Icons";
-import FormField from '../components/FormField'
+import TextField from '../components/TextField'
 import classes from "../styles/userTable.module.scss";
 import useProfile from "../hooks/useProfile";
 import CheckGroup from "../components/CheckGroup";
@@ -24,9 +24,9 @@ function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initial
       initialValue = rawValue
     }
 
-    return <FormField name={field.name} label={field.label} key={field.name} initialValue={initialValue} />
+    return <TextField name={field.name} label={field.label} key={field.name} initialValue={initialValue} />
   })
-  : fieldsToRender.map((field) => <FormField name={field.name} label={field.label} key={field.name} />)
+  : fieldsToRender.map((field) => <TextField name={field.name} label={field.label} key={field.name} />)
 
   const SubmitFunc = (event) => {
     event.preventDefault()

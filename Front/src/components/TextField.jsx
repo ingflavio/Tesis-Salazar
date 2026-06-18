@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-export function FormField({name, type = 'text', label = name, placeholder = '', initialValue }){
+export default function TextField({name, type = 'text', label = name, placeholder = '', initialValue }){
   const [labelPosition, setLabelPosition] = useState(initialValue ? 'up' : 'down')
 
   const checkContent = (event) => {
@@ -27,5 +27,3 @@ export function FormField({name, type = 'text', label = name, placeholder = '', 
     </div>
   )
 }
-
-export default FormField
