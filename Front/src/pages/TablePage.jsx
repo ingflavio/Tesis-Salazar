@@ -6,7 +6,6 @@ import classes from "../styles/userTable.module.scss";
 import useProfile from "../hooks/useProfile";
 import CheckGroup from "../components/CheckGroup";
 import { fieldsConfig } from "../fieldsConfig";
-// import { useUser } from "../hooks/useUser";
 import { SearchBar } from "../components/SearchBar";
 import useFilter from '../hooks/useFilter';
 import SortingButton from "../components/SortingButtons";
@@ -174,8 +173,7 @@ function ProfileTable({ fieldsToShow, profileData, profiles, filterFunc, changeF
   );
 }
 
-export default function TablePage() { 
-  // const { logOut } = useUser()
+export default function TablePage() {
   const { filters, filterFunc, changeFilterParams, } = useFilter()
   const {formInfo, formValues, modalOpen, modal, showModalForm, closeModalForm} = useModalForm()
   const {getProfiles, getProfileColumns} = useProfile()
@@ -278,7 +276,6 @@ export default function TablePage() {
             tfooterCallback = {() => OpenModal('registrar')}
           />
         </div>
-        {/* <button onClick={logOut} >Cerrar sesion</button> */}
       </main>
       <dialog ref={modal} onClose={() => closeModalForm()}>
         <div className={classes.dialogWraper}>  
