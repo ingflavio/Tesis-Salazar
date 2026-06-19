@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useUser} from '../hooks/useUser'
 import { useUsers } from '../hooks/useUsers'
-import TextField from '../components/TextField'
+import RoundField from '../components/RoundField'
 import classes from '../styles/login.module.scss'
 
 export function LoginPage(){
@@ -21,8 +21,8 @@ export function LoginPage(){
     <main className={classes.loginPage}>
       <form className={classes.formLogin} onSubmit={handleSubmit}>
         <h3>Inicia sesion</h3>
-        <TextField name='id' label='Cedula' />
-        <TextField name='password' label='Contraseña' type="password"/>  
+        <RoundField name='id' label='Cedula' />
+        <RoundField name='password' label='Contraseña' type="password"/>  
         {error && <span className='error-msg'>La cedula o contraseña son incorrectas</span>}
         <button type="submit">Ingresar</button>
       </form>

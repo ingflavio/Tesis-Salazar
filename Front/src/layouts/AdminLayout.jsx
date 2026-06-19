@@ -12,7 +12,7 @@ export default function AdminLayout() {
   if (!getUser(user)) return <Navigate to='/login' replace />
   if (!checkAdmin(user)) return <Navigate to='/login' replace />
 
-  const isDesktop = screen.width > 750 
+  const isDesktop = screen.width > 700 
 
   return (
     <>

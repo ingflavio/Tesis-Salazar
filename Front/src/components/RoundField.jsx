@@ -1,20 +1,21 @@
 import { useState } from "react"
+import classes from '../styles/FormFields.module.scss'
 
-export default function TextField({name, type = 'text', label = name, placeholder = '', initialValue }){
-  const [labelPosition, setLabelPosition] = useState(initialValue ? 'up' : 'down')
+export default function RoundField({name, type = 'text', label = name, placeholder = '', initialValue }){
+  const [labelPosition, setLabelPosition] = useState(initialValue ? classes.up : '')
 
   const checkContent = (event) => {
-    setLabelPosition(event.target.value !== '' ? 'up' : 'down')
+    setLabelPosition(event.target.value !== '' ? classes.up : '')
   }
 
   const handleBlur = (event) => {
-    if (event.target.value === '' && labelPosition === 'up') setLabelPosition('down')
+    if (event.target.value === '' && labelPosition === classes.up) setLabelPosition('')
   }
 
   const defalutValue = initialValue ? {defaultValue: initialValue} : {}
 
   return (
-    <div className="form-field">
+    <fieldset className={classes.roundField}>
       <label htmlFor={name} className={labelPosition}>{label}</label>
       <input id={name} name={name} type={type} 
         placeholder={placeholder}
@@ -24,6 +25,6 @@ export default function TextField({name, type = 'text', label = name, placeholde
         onBlur={handleBlur}
         onFocus={() => setLabelPosition('up')}
       />
-    </div>
+    </fieldset>
   )
 }

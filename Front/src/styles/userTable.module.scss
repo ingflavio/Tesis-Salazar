@@ -10,15 +10,8 @@ $gap-distance: clamp(2px, 6dvh, 40px);
 
 .userTable_container {
   max-width: 100dvw;
-  overflow-x: scroll;
   background-color: vars.$neutral-100;
   padding: 1dvw;
-}
-
-.userTable_container input {
-  border: 1px solid vars.$neutral-500;
-  border-radius: .5em;
-  width: 100%;
 }
 
 .filterForm {

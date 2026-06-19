@@ -1,6 +1,12 @@
 @use './variables.scss' as vars;
 
+#root:has(div.route){
+  grid-template-rows: 1;
+}
+
 .route {
+  max-height: 96dvh;
+  overflow-y: auto;
   background-color: vars.$neutral-300;
 }
 

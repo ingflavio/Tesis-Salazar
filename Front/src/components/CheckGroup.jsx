@@ -1,6 +1,7 @@
 import { useRef } from "react"
+import classes from '../styles/FormFields.module.scss'
 
-export default function CheckGroup({options, onClickCallback}) {
+export default function CheckGroup({options, label, onClickCallback}) {
   const checkedRef = useRef(null) 
 
   const handleClick = (event, value) => {
@@ -20,10 +21,15 @@ export default function CheckGroup({options, onClickCallback}) {
     }
   }
 
-  return options.map((option) => (
-    <>
-      <input type="checkbox" name={option.name} onClick={(event) => handleClick(event, option.value)}/>
-      <label htmlFor={option.name}>{option.label}</label>
-    </>
-  ))
+  return <fieldset className={classes.checkGroup}>
+    <label>{label}</label>
+    { options.map((option) => (
+      
+        <>
+          <input type="checkbox" id={option.label} onClick={(event) => handleClick(event, option.value)}/>
+          <label htmlFor={option.label}>{option.label}</label>
+        </>
+      ))
+    }
+  </fieldset>
 }

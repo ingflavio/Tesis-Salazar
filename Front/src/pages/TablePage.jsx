@@ -1,15 +1,17 @@
 import { useState } from "react";
 import { useModalForm } from "../hooks/useModalForm";
 import Icons from "../components/Icons";
-import TextField from '../components/TextField'
+import RoundField from '../components/RoundField'
 import classes from "../styles/userTable.module.scss";
 import useProfile from "../hooks/useProfile";
 import CheckGroup from "../components/CheckGroup";
+import { fieldsConfig } from "../fieldsConfig";
 // import { useUser } from "../hooks/useUser";
 import { SearchBar } from "../components/SearchBar";
 import useFilter from '../hooks/useFilter';
 import SortingButton from "../components/SortingButtons";
 import useSorter from "../hooks/useSorter";
+import FormField from "../components/FormField";
 
 function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initialValues }) {
   const fields = initialValues
@@ -24,9 +26,14 @@ function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initial
       initialValue = rawValue
     }
 
-    return <TextField name={field.name} label={field.label} key={field.name} initialValue={initialValue} />
+    return <RoundField name={field.name} label={field.label} key={field.name} initialValue={initialValue} />
   })
-  : fieldsToRender.map((field) => <TextField name={field.name} label={field.label} key={field.name} />)
+  : fieldsToRender.map((field) => {
+    const config = fieldsConfig[field.name] 
+    return <FormField config={config} />
+  })
+
+
 
   const SubmitFunc = (event) => {
     event.preventDefault()
@@ -232,6 +239,8 @@ export default function TablePage() {
 
   const fields = Object.entries(profileColumns).map(([key, value]) => { return { name: key, label: value }})
 
+  const filterFields = Object.entries(profileColumns).map(([key, ]) =>  fieldsConfig[key])
+
   const getFormFields = () => {
     let FormFields = fields
     if (formInfo.mode !== 'mostrar'){
@@ -251,11 +260,8 @@ export default function TablePage() {
             <button onClick={() => setFilterShow(!filterShow)}>Filtro avanzado</button>
             <form onSubmit={(event) => aplyFilter(event)}
               className={classes.filterForm} style={{display: filterShow ? '' :'none'}}>
-              <div>{ fields.map((field) => {
-                return <label key={field.name}> 
-                  <span>{field.label}</span>
-                  <input type="text" placeholder={field.label} name={field.name}/>
-                </label>
+              <div>{ filterFields.map((field) => {
+                return <FormField config={field} />
               })}</div>
               <button type="submit">Aplicar filtro</button>
             </form>
