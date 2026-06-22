@@ -1,32 +1,32 @@
 import { useRef } from "react"
 import classes from '../styles/FormFields.module.scss'
 
-export default function CheckGroup({options, label, onClickCallback}) {
+export default function CheckGroup({options, name,label, onClickCallback = null}) {
   const checkedRef = useRef(null) 
 
-  const handleClick = (event, value) => {
-    const checkbox = event.target 
+  const handleClick = (button) => {
     if (checkedRef.current){
-      if (checkedRef.current === checkbox){
+      if (checkedRef.current === button){
+        checkedRef.current.checked = false
         checkedRef.current = null
-        onClickCallback(null)
+        if (onClickCallback) onClickCallback(null)
       }else{
         checkedRef.current.checked = false
-        checkedRef.current = checkbox
-        onClickCallback(value)
+        checkedRef.current = button
+        if (onClickCallback) onClickCallback(button.value)
       }
     }else {
-      checkedRef.current = checkbox
-      onClickCallback(value)
+      checkedRef.current = button
+      if (onClickCallback) onClickCallback(button.value)
     }
   }
 
   return <fieldset className={classes.checkGroup}>
-    <label>{label}</label>
+    {label && <label htmlFor={name}>{label}</label>}
     { options.map((option) => (
       
         <>
-          <input type="checkbox" id={option.label} onClick={(event) => handleClick(event, option.value)}/>
+          <input type="radio" name={name} value={option.value} id={option.label} onClick={(event) => handleClick(event.target)}/>
           <label htmlFor={option.label}>{option.label}</label>
         </>
       ))

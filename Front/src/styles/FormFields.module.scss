@@ -2,6 +2,7 @@
 
 .textField label{
   color:  vars.$neutral-100;
+  padding-left: .3em;
 }
 
 .textField input{
@@ -51,7 +52,7 @@ label.up {
 .checkGroup {
   display: grid;
   grid-template-columns: auto 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
+  grid-auto-rows: 1fr;
   column-gap: .5em;
 }
 

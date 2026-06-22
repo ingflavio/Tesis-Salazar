@@ -5,7 +5,7 @@ import RoundField from '../components/RoundField'
 import classes from "../styles/userTable.module.scss";
 import useProfile from "../hooks/useProfile";
 import CheckGroup from "../components/CheckGroup";
-import { fieldsConfig } from "../fieldsConfig";
+import { configArray } from "../fieldsConfig";
 import { SearchBar } from "../components/SearchBar";
 import useFilter from '../hooks/useFilter';
 import SortingButton from "../components/SortingButtons";
@@ -13,23 +13,11 @@ import useSorter from "../hooks/useSorter";
 import FormField from "../components/FormField";
 
 function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initialValues }) {
-  const fields = initialValues
-  ? fieldsToRender.map((field) => {
-    const rawValue = initialValues[field.name]
-    let initialValue
-    if (field.name === 'solvency'){
-      initialValue = rawValue ? 'Solvente' : 'No solvente'
-    } else if (field.name === 'sex'){
-      initialValue = rawValue === 'm' ? 'Masculino' : 'Femenino'
-    } else {
-      initialValue = rawValue
-    }
-
-    return <RoundField name={field.name} label={field.label} key={field.name} initialValue={initialValue} />
-  })
-  : fieldsToRender.map((field) => {
-    const config = fieldsConfig[field.name] 
-    return <FormField config={config} />
+  const fields = fieldsToRender.map((config) => {
+    console.log(initialValues[config.name])
+    return initialValues
+      ? <FormField config={config} initialValue={initialValues[config.name]} />
+      : <FormField config={config} />
   })
 
 
@@ -38,6 +26,7 @@ function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initial
     event.preventDefault()
     const formData = new FormData(event.target)
     const data = Object.fromEntries(formData.entries())
+    console.log(data)
     if (initialValues){
       data['solvency'] = initialValues['solvency']
     }
@@ -61,7 +50,7 @@ function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initial
   );
 }
 
-function ProfileTable({ fieldsToShow, profileData, profiles, filterFunc, changeFilterParams, editCallback, deleteCallback, showCallback,tfooterCallback }) {
+function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, editCallback, deleteCallback, showCallback,tfooterCallback }) {
   const reducedProfiles = profiles.filter(filterFunc).map((profile) => {
     const reducedProfile = {}
     for (const field of fieldsToShow){
@@ -70,8 +59,7 @@ function ProfileTable({ fieldsToShow, profileData, profiles, filterFunc, changeF
     }
     return reducedProfile
   })
-  const reducedFields = profileData.filter((item) => fieldsToShow.includes(item.name))
-
+  const reducedFields = profileColumns.filter((item) => fieldsToShow.includes(item.name))
   const [sortParams, setSortParams] = useState({ field: null, direction: null })  
   const { sorter } = useSorter(sortParams)
   const sortedProfiles = sorter(reducedProfiles)
@@ -89,38 +77,29 @@ function ProfileTable({ fieldsToShow, profileData, profiles, filterFunc, changeF
     return null
   }
 
-  const handleCheck = (event, value) => {
-    if (event.target.checked){ 
-      const otherCheckbox = document.getElementById(`input-checkbox-${!value}`)
-      otherCheckbox.checked = false
-    }
-    changeFilterParams(event.target.checked ? value : '' , 'solvency')
-  }
-
   return (
     <table className={classes.userTable}>
       <thead>
         <tr>
-          {Object.values(reducedFields).map((value) => {
-            return <th key={value.name}>
-              {value.label}
-              <SortingButton 
-                onClick={(direction) => handleClick(value.name, direction)}
-                isActiveDirection={getActiveDirection(value.name)}
-              />
-              </th>
-          })}
+          {reducedFields.map((value) => <th key={value.name}>
+            {value.label}
+            <SortingButton 
+              onClick={(direction) => handleClick(value.name, direction)}
+              isActiveDirection={getActiveDirection(value.name)}
+            />
+            </th>
+          )}
           <th>Acciones</th>
         </tr>
         <tr>
-          {Object.values(reducedFields).map((value) => <th key={value.name}> {
-            value.name !== 'solvency' ?
-            <input type="text" placeholder="buscar" name={value.name} id={`filter-input-${value.name}`} onChange={(event) => changeFilterParams(event.target.value, value.name)}/> : 
-            <CheckGroup 
-              options={[{label: 'solvente', value: true}, {label: 'insolvente', value: false}]} 
-              onClickCallback={(value) => changeFilterParams(value === null ? '' :value, 'solvency')}
-            />
-          }</th>)}
+          {reducedFields.map((config) => {
+            const noLabelConfig = {...config} 
+            noLabelConfig['placeholder'] = config['label']
+            delete noLabelConfig['label']
+            return <th>
+              <FormField config={noLabelConfig} />
+            </th>
+        })}
           <th></th>
         </tr>
       </thead>
@@ -176,10 +155,9 @@ function ProfileTable({ fieldsToShow, profileData, profiles, filterFunc, changeF
 export default function TablePage() {
   const { filters, filterFunc, changeFilterParams, } = useFilter()
   const {formInfo, formValues, modalOpen, modal, showModalForm, closeModalForm} = useModalForm()
-  const {getProfiles, getProfileColumns} = useProfile()
+  const {getProfiles} = useProfile()
   const fieldsToShow = ['id', 'name', 'lastName', 'solvency']
   const [profiles, setProfiles] = useState(getProfiles())
-  const profileColumns = getProfileColumns()
   const [filterShow, setFilterShow] = useState(true)
 
   const deleteProfile = (profile) => {
@@ -235,21 +213,6 @@ export default function TablePage() {
     }  
   }
 
-  const fields = Object.entries(profileColumns).map(([key, value]) => { return { name: key, label: value }})
-
-  const filterFields = Object.entries(profileColumns).map(([key, ]) =>  fieldsConfig[key])
-
-  const getFormFields = () => {
-    let FormFields = fields
-    if (formInfo.mode !== 'mostrar'){
-      FormFields = FormFields.filter((field) => field.name !== 'solvency')
-    }
-    if (formInfo.mode !== 'registrar'){
-      FormFields = FormFields.filter((field) => field.name !== 'password')
-    }
-    return FormFields
-  }
-
   return (
     <>
       <main className={classes.adminPage}>
@@ -258,16 +221,16 @@ export default function TablePage() {
             <button onClick={() => setFilterShow(!filterShow)}>Filtro avanzado</button>
             <form onSubmit={(event) => aplyFilter(event)}
               className={classes.filterForm} style={{display: filterShow ? '' :'none'}}>
-              <div>{ filterFields.map((field) => {
-                return <FormField config={field} />
+              <div>{ configArray.map((config) => {
+                return <FormField config={config} />
               })}</div>
               <button type="submit">Aplicar filtro</button>
             </form>
           </div>
           <ProfileTable 
             fieldsToShow = {fieldsToShow}
+            profileColumns= {configArray}
             profiles = {profiles} 
-            profileData = {fields} 
             filterFunc = { filterFunc }
             changeFilterParams = { changeFilterParams }  
             editCallback = {(profile)=> OpenModal('editar', profile)}
@@ -285,7 +248,7 @@ export default function TablePage() {
             <ProfileForm 
               title={formInfo.title} 
               sumbitText={formInfo.submit}
-              fieldsToRender={getFormFields()} 
+              fieldsToRender={configArray.filter((config) => config.name !== 'solvency')} 
               initialValues={formValues} 
               onSubmit={handleSubmit}
             />

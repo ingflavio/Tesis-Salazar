@@ -16,7 +16,7 @@ export default function RoundField({name, type = 'text', label = name, placehold
 
   return (
     <fieldset className={classes.roundField}>
-      <label htmlFor={name} className={labelPosition}>{label}</label>
+      {label && <label htmlFor={name} className={labelPosition}>{label}</label>}
       <input id={name} name={name} type={type} 
         placeholder={placeholder}
         {...defalutValue}
