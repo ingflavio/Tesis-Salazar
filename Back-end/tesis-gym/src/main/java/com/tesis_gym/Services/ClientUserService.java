@@ -69,19 +69,22 @@ public class ClientUserService {
                 .orElseThrow(() -> new RuntimeException("User details not found"));
     }
 
-    public List<UserDetails> getAllUsers() {
-        List<UserDetails> users = (List<UserDetails>) detailsRepository.findAll();
+    public List<UserAccount> getAllUsers() {
+        List<UserAccount> accounts = (List<UserAccount>) accountRepository.findAll();
         Date currentDate = new Date();
 
-        for (UserDetails user : users) {
-            boolean isSolvent = !currentDate.after(user.getExpiration_date());
+        for (UserAccount account : accounts) {
+            UserDetails details = account.getUserDetails();
+            if (details != null && details.getExpiration_date() != null) {
+                boolean isSolvent = !currentDate.after(details.getExpiration_date());
 
-            if (user.getSolvent() == null || user.getSolvent() != isSolvent) {
-                user.setSolvent(isSolvent);
-                detailsRepository.save(user);
+                if (details.getSolvent() == null || details.getSolvent() != isSolvent) {
+                    details.setSolvent(isSolvent);
+                    detailsRepository.save(details);
+                }
             }
         }
-        return users;
+        return accounts;
     }
 
     public UserDetails updateUser(Long cedula, UserDetailsUpdate dto) {
@@ -97,6 +100,15 @@ public class ClientUserService {
         existingUser.setCondition(dto.condition());
 
         return detailsRepository.save(existingUser);
+    }
+
+    public boolean verifyPassword(Long cedula, String rawPassword) {
+        // Buscamos la cuenta del usuario
+        UserAccount account = accountRepository.findById(cedula)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+
+        // Comparamos la contraseña en texto plano (frontend) con la encriptada (BD)
+        return passwordEncoder.matches(rawPassword, account.getPassword());
     }
 
     public void deleteUser(Long cedula) {

@@ -1,6 +1,7 @@
 package com.tesis_gym.Entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,7 @@ public class UserDetails {
     @NotNull(message = "La cedula no puede ser nula")
     private Long cedula;
 
+    @JsonIgnore
     @OneToOne
     @MapsId
     @JoinColumn(name = "cedula")

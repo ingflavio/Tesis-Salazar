@@ -21,4 +21,7 @@ public class UserAccount {
 
     @Enumerated(EnumType.STRING)
     private Roles rol;
+
+    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private UserDetails userDetails;
 }
