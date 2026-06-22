@@ -8,7 +8,7 @@ function TextField({name, label, placeholder, initialValue, onChange, id}) {
     {label &&<label>{label}</label>}
     <input type="text" placeholder={placeholder} name={name} 
       id={id}
-      defaultValue={initialValue} onChange={(e) => onChange(e.target.value)}
+      defaultValue={initialValue} onChange={(e) => onChange? onChange(e.target.value): ''}
     />
   </fieldset>
 }
@@ -23,7 +23,7 @@ function NumberField({name, label, placeholder, initialValue, max, min}) {
   </fieldset>
 }
 
-export default function FormField({ config, initialValue, onChange, id='' }) {
+export default function FormField({ config, initialValue, onChange = null, id='' }) {
 
   const { type, name, label, options, ...rest } = config;
 
