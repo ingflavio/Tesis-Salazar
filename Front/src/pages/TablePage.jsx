@@ -50,7 +50,7 @@ function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initial
   );
 }
 
-function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, editCallback, deleteCallback, showCallback,tfooterCallback }) {
+function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, changeFilterParams, editCallback, deleteCallback, showCallback,tfooterCallback }) {
   const reducedProfiles = profiles.filter(filterFunc).map((profile) => {
     const reducedProfile = {}
     for (const field of fieldsToShow){
@@ -97,7 +97,10 @@ function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, edit
             noLabelConfig['placeholder'] = config['label']
             delete noLabelConfig['label']
             return <th>
-              <FormField config={noLabelConfig} />
+              <FormField config={noLabelConfig} 
+                id={`filter-input-${config.label}`}
+                onChange={(value) => changeFilterParams(value, config.label)}  
+              />
             </th>
         })}
           <th></th>
@@ -153,10 +156,11 @@ function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, edit
 }
 
 export default function TablePage() {
-  const { filters, filterFunc, changeFilterParams, } = useFilter()
+  const { filters, filterFunc, changeFilterParams } = useFilter()
   const {formInfo, formValues, modalOpen, modal, showModalForm, closeModalForm} = useModalForm()
   const {getProfiles} = useProfile()
   const fieldsToShow = ['id', 'name', 'lastName', 'solvency']
+  const boleanFields = ['solvency']
   const [profiles, setProfiles] = useState(getProfiles())
   const [filterShow, setFilterShow] = useState(true)
 
@@ -203,13 +207,17 @@ export default function TablePage() {
     const data = Object.fromEntries(new FormData(event.target).entries())
     for (const [field, query] of Object.entries(data)) {
       const index = filters.findIndex((object) => object.field === field) 
-      if (index !== -1) {
+      if (index !== -1 || fieldsToShow.includes(field)) {
         const input = document.getElementById(`filter-input-${field}`)
-        input.value = query
-      } else if (query === '') {
-        continue;
-      }
-      changeFilterParams(query, field)
+        if (input && field !== 'solvency'){
+          input.value = query
+        } 
+      } 
+      if (boleanFields.includes(field)){
+        const parseQuery = query === 'true'
+        changeFilterParams(parseQuery, field)
+
+      } else changeFilterParams(query, field)
     }  
   }
 

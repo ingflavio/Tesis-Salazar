@@ -19,15 +19,15 @@ export default function useFilter(){
       else if (type === 'number') checkList.push(filterNumber(value, filter.query))
       else if (type === 'boolean') checkList.push(filterBoolean(value, filter.query))
     }
+      // console.log(checkList)
     if (checkList.length === 0) return true
     return checkList.every((item) => item)
   } 
 
   const changeFilterParams = (query, field) => {
-    console.log(`query:${query} field:${field}`)
     const index = filters.findIndex((element) => element.field === field)
     const newFilters = [...filters]
-    if(query === ''){
+    if(query === '' || query === null){
       newFilters.splice(index, 1)
     }
     else if (index === -1) {

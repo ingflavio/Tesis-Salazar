@@ -3,10 +3,10 @@ import DobleSlider from './DobleSlider';
 import RoundField from "./RoundField";
 import classes from '../styles/FormFields.module.scss'
 
-function TextField({name, label, placeholder, initialValue}) {
+function TextField({name, label, placeholder, initialValue, onChange}) {
   return <fieldset className={classes.textField}  id={name}> 
     {label &&<label>{label}</label>}
-    <input type="text" placeholder={placeholder} name={name} defaultValue={initialValue}/>
+    <input type="text" placeholder={placeholder} name={name} defaultValue={initialValue} onChange={(e) => onChange(e.target.value)}/>
   </fieldset>
 }
 
@@ -44,6 +44,7 @@ export default function FormField({ config, initialValue, onChange }) {
       <CheckGroup
         name={name}
         label={label}
+        onChange={onChange}
         options={options || [{ label: 'Sí', value: true }, { label: 'No', value: false }]}
       />
     );
@@ -53,7 +54,7 @@ export default function FormField({ config, initialValue, onChange }) {
     <Component
       {...commonProps}
       initialValue={initialValue}
-      onChange={(e) => onChange(name, e.target.value)}
+      onChange={onChange}
     />
   );
 

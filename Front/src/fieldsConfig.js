@@ -74,8 +74,6 @@ export const fieldsConfig = {
     name: 'solvency',
     label: 'Solvencia',
     type: 'boolean',       
-    formatValue: (value) => value ? 'Solvente' : 'No solvente',
-    parseValue: (value) => value === 'Solvente',
     options: [{ label: 'Solvente', value: true }, { label: 'Insolvente', value: false }],
   },
 }
