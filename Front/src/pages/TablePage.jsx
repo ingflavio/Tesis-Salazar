@@ -98,8 +98,8 @@ function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, chan
             delete noLabelConfig['label']
             return <th>
               <FormField config={noLabelConfig} 
-                id={`filter-input-${config.label}`}
-                onChange={(value) => changeFilterParams(value, config.label)}  
+                id={`filter-input-${config.name}`}
+                onChange={(value) => changeFilterParams(value, config.name)}  
               />
             </th>
         })}
@@ -202,22 +202,54 @@ export default function TablePage() {
     closeModalForm()
   }
 
+  const handleChangeFilter = (query, field) => {
+    console.log(field)
+    if (boleanFields.includes(field)) {
+      if (query === null || query === undefined || query === '') {
+        // Pasar null para eliminar el filtro de este campo
+        changeFilterParams(null, field);
+      } else {
+        const parseQuery = query === 'true';
+        changeFilterParams(parseQuery, field);
+      }
+    } else {
+      changeFilterParams(query, field);
+    }
+  }
+
   const aplyFilter = (event) => {
-    event.preventDefault()
-    const data = Object.fromEntries(new FormData(event.target).entries())
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+
+    // Asegurar que todos los campos a filtrar estén presentes en formData
+    fieldsToShow.forEach(field => {
+      if (!formData.has(field)) {
+        formData.append(field, ''); // cadena vacía = sin filtro
+      }
+    });
+
+    const data = Object.fromEntries(formData.entries());
+    console.log(data)
     for (const [field, query] of Object.entries(data)) {
       const index = filters.findIndex((object) => object.field === field) 
-      if (index !== -1 || fieldsToShow.includes(field)) {
-        const input = document.getElementById(`filter-input-${field}`)
-        if (input && field !== 'solvency'){
-          input.value = query
-        } 
-      } 
-      if (boleanFields.includes(field)){
-        const parseQuery = query === 'true'
-        changeFilterParams(parseQuery, field)
-
-      } else changeFilterParams(query, field)
+      if (index === -1 && query === '') continue;
+      if (index !== -1 && fieldsToShow.includes(field)) {
+        if (field !== 'solvency'){
+          const input = document.getElementById(`filter-input-${field}`)
+          if (input) input.value = query
+        } else {
+          if (query === ""){
+            const input = document.getElementById(`filter-input-${field}-${filters[index].query}`)
+            input.checked = false
+          } else {
+            console.log('o')
+            const input = document.getElementById(`filter-input-${field}-${query}`)
+            input.checked = true
+          }
+        }
+      }
+      handleChangeFilter(query, field)
     }  
   }
 
@@ -240,7 +272,7 @@ export default function TablePage() {
             profileColumns= {configArray}
             profiles = {profiles} 
             filterFunc = { filterFunc }
-            changeFilterParams = { changeFilterParams }  
+            changeFilterParams = { handleChangeFilter }  
             editCallback = {(profile)=> OpenModal('editar', profile)}
             deleteCallback = {(profile) => deleteProfile(profile)}
             showCallback = {(profile) => OpenModal('mostrar', profile)}

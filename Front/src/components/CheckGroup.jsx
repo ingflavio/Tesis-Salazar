@@ -1,7 +1,7 @@
 import { useRef } from "react"
 import classes from '../styles/FormFields.module.scss'
 
-export default function CheckGroup({options, name,label, onChange = null}) {
+export default function CheckGroup({options, name, label, id, onChange = null}) {
   const checkedRef = useRef(null) 
 
   const handleClick = (button) => {
@@ -26,7 +26,10 @@ export default function CheckGroup({options, name,label, onChange = null}) {
     { options.map((option) => (
       
         <>
-          <input type="radio" name={name} value={option.value} id={option.label} onClick={(event) => handleClick(event.target)}/>
+          <input type="radio" id={`${id}-${option.value}`} 
+            name={name} value={option.value}  
+            onClick={(event) => handleClick(event.target)}
+          />
           <label htmlFor={option.label}>{option.label}</label>
         </>
       ))

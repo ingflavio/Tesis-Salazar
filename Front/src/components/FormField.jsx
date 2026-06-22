@@ -3,10 +3,13 @@ import DobleSlider from './DobleSlider';
 import RoundField from "./RoundField";
 import classes from '../styles/FormFields.module.scss'
 
-function TextField({name, label, placeholder, initialValue, onChange}) {
+function TextField({name, label, placeholder, initialValue, onChange, id}) {
   return <fieldset className={classes.textField}  id={name}> 
     {label &&<label>{label}</label>}
-    <input type="text" placeholder={placeholder} name={name} defaultValue={initialValue} onChange={(e) => onChange(e.target.value)}/>
+    <input type="text" placeholder={placeholder} name={name} 
+      id={id}
+      defaultValue={initialValue} onChange={(e) => onChange(e.target.value)}
+    />
   </fieldset>
 }
 
@@ -20,7 +23,7 @@ function NumberField({name, label, placeholder, initialValue, max, min}) {
   </fieldset>
 }
 
-export default function FormField({ config, initialValue, onChange }) {
+export default function FormField({ config, initialValue, onChange, id='' }) {
 
   const { type, name, label, options, ...rest } = config;
 
@@ -36,14 +39,14 @@ export default function FormField({ config, initialValue, onChange }) {
   const commonProps = {
     name,
     label,
+    id,
     ...rest,
   };
 
   if (type === 'boolean') {
     return (
       <CheckGroup
-        name={name}
-        label={label}
+        {...commonProps}
         onChange={onChange}
         options={options || [{ label: 'Sí', value: true }, { label: 'No', value: false }]}
       />

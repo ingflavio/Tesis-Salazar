@@ -13,6 +13,7 @@ export default function useFilter(){
   const filterFunc = (object) => {
     const checkList = []
     for (const filter of filters) {
+      // console.log(filter)
       const value = object[filter.field]
       const type = typeof value
       if (type === 'string') checkList.push(filterString(value, filter.query))
