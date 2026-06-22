@@ -162,7 +162,7 @@ export default function TablePage() {
   const fieldsToShow = ['id', 'name', 'lastName', 'solvency']
   const boleanFields = ['solvency']
   const [profiles, setProfiles] = useState(getProfiles())
-  const [filterShow, setFilterShow] = useState(true)
+  const [filterShow, setFilterShow] = useState(false)
 
   const deleteProfile = (profile) => {
     const newProfiles = [...profiles].filter((item) => item.id !== profile.id)
@@ -206,7 +206,6 @@ export default function TablePage() {
     console.log(field)
     if (boleanFields.includes(field)) {
       if (query === null || query === undefined || query === '') {
-        // Pasar null para eliminar el filtro de este campo
         changeFilterParams(null, field);
       } else {
         const parseQuery = query === 'true';
@@ -219,18 +218,14 @@ export default function TablePage() {
 
   const aplyFilter = (event) => {
     event.preventDefault();
-    const form = event.target;
-    const formData = new FormData(form);
-
-    // Asegurar que todos los campos a filtrar estén presentes en formData
+    const formData = new FormData(event.target);
     fieldsToShow.forEach(field => {
       if (!formData.has(field)) {
-        formData.append(field, ''); // cadena vacía = sin filtro
+        formData.append(field, ''); 
       }
     });
-
     const data = Object.fromEntries(formData.entries());
-    console.log(data)
+
     for (const [field, query] of Object.entries(data)) {
       const index = filters.findIndex((object) => object.field === field) 
       if (index === -1 && query === '') continue;
@@ -258,7 +253,9 @@ export default function TablePage() {
       <main className={classes.adminPage}>
         <div className={classes.userTable_container}>
           <div>
-            <button onClick={() => setFilterShow(!filterShow)}>Filtro avanzado</button>
+            <button onClick={() => setFilterShow(!filterShow)}>{
+              filterShow ? 'Ocultar filro avanzado': 'Mostrar Filtro avanzado'
+            }</button>
             <form onSubmit={(event) => aplyFilter(event)}
               className={classes.filterForm} style={{display: filterShow ? '' :'none'}}>
               <div>{ configArray.map((config) => {
