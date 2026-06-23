@@ -27,10 +27,10 @@ export default function CheckGroup({options, name, label, id, onChange = null}) 
       
         <>
           <input type="radio" id={`${id}-${option.value}`} 
-            name={name} value={option.value}  
+            name={name} value={option.value}  key={option.name}
             onClick={(event) => handleClick(event.target)}
           />
-          <label htmlFor={option.label}>{option.label}</label>
+          <label htmlFor={option.label} key={option.name+'label'}>{option.label}</label>
         </>
       ))
     }
