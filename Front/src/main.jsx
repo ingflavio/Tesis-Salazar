@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './styles/index.scss'
 import App from './App'
-import { UserProvider } from './context/user'
+import { SessionProvider } from './context/session'
 import { ScreenProvider } from './context/screen'
 import { BrowserRouter } from 'react-router'
 
@@ -10,9 +10,9 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
       <ScreenProvider>
-        <UserProvider>
+        <SessionProvider>
           <App />
-        </UserProvider>
+        </SessionProvider>
       </ScreenProvider>
     </BrowserRouter>
   </StrictMode>,

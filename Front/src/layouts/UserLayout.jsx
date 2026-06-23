@@ -1,17 +1,15 @@
 import { Outlet, Navigate } from 'react-router';
 import { NavigationBar } from '../components/NavigationBar.jsx';
-import { useUser } from '../hooks/useUser.js';
+import { useSession } from '../hooks/useSession.js';
 import { useScreen } from '../hooks/useScreen.js';
-import { useUsers } from '../hooks/useUsers.js';
 
 export function UserLayout() {
-  const { checkAdmin, getUser } = useUsers()
-  const { user } = useUser()
+  const { session } = useSession()
   const screen = useScreen()  
-  if (!user) return <Navigate to='/login' replace />
-  if (!getUser(user)) return <Navigate to='/login' replace />
+  if (!session) return <Navigate to='/login' replace />
+  if (session.rol !== 'admin') return <Navigate to='/login' replace />
 
-  const admin = checkAdmin(user)
+  // const admin = checkAdmin(user)
 
   const isDesktop = screen.width > 750 
 
@@ -20,7 +18,7 @@ export function UserLayout() {
       {
         isDesktop && 
         <header>
-          <NavigationBar admin={admin}/>
+          <NavigationBar />
         </header>
       }
       <div className='route'>
@@ -29,7 +27,7 @@ export function UserLayout() {
       {
         !isDesktop && 
         <footer>
-          <NavigationBar admin={admin}/>
+          <NavigationBar />
         </footer>
       }
     </>

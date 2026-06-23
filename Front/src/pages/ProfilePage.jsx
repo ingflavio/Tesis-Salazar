@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useUser } from "../hooks/useUser"
+import { useSession } from "../hooks/useSession"
 import useValidateForm from '../hooks/useValidateForm'
 import useProfile from '../hooks/useProfile'
 import classes from '../styles/profile.module.scss'

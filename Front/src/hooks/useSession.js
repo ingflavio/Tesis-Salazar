@@ -1,11 +1,10 @@
-// hooks/useUser.js
 import { useContext } from "react";
-import { userContext } from "../context/session"; // Asegura la ruta
+import { sessionContext } from "../context/session"; // Asegura la ruta
 
-export const useUser = () => {
-  const context = useContext(userContext);
+export const useSession = () => {
+  const context = useContext(sessionContext);
   if (!context) {
-    throw new Error('useUser debe usarse dentro de UserProvider');
+    throw new Error('useSession debe usarse dentro de SessionProvider');
   }
   return context;
 };

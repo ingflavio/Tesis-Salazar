@@ -1,9 +1,9 @@
 import { createContext, useReducer } from "react";
 import { initialState, reducerUser } from "../reducers/session";
-import { useNavigate } from "react-router-dom";
-import { authService } from "../services/authService"; // ← importa el servicio
+import { useNavigate } from "react-router";
+import { authService } from "../services/auth";
 
-export const userContext = createContext();
+export const sessionContext = createContext();
 
 function useUserReducer() {
   const [state, dispatch] = useReducer(reducerUser, initialState);
@@ -42,7 +42,7 @@ function useUserReducer() {
   return { state, login, logOut };
 }
 
-export function UserProvider({ children }) {
+export function SessionProvider({ children }) {
   const { state, login, logOut } = useUserReducer();
   const navigate = useNavigate();
 
@@ -66,12 +66,12 @@ export function UserProvider({ children }) {
   };
 
   return (
-    <userContext.Provider value={{
-      user: state,           // { token, cedula, rol, loading, error }
+    <sessionContext.Provider value={{
+      sessionContext: state,           // { token, cedula, rol, loading, error }
       login: handleLogin,
       logOut: handleLogOut,
     }}>
       {children}
-    </userContext.Provider>
+    </sessionContext.Provider>
   );
 }

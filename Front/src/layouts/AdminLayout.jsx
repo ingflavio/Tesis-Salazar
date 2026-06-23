@@ -1,6 +1,6 @@
 import { Outlet, Navigate } from 'react-router';
 import { useScreen } from '../hooks/useScreen.js';
-import { useUser } from '../hooks/useUser.js';
+import { useSession } from '../hooks/useSession.js';
 import { useUsers } from '../hooks/useUsers.js';
 import classes from '../styles/admin.module.scss'
 
