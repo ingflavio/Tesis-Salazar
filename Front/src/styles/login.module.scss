@@ -3,9 +3,17 @@
 
 .loginPage {
   height: 100dvh;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  justify-items: center;
   align-items: center;
-  justify-content: center;
-  gap: clamp(10px, 5dvh, 30px) ;
+  padding-top: 2dvh;
+}
+
+.loginPage h1 {
+  text-align: center;
+}
+
+.loginPage form {
+  height: fit-content;
 }
