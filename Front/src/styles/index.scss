@@ -58,12 +58,6 @@ ul, ol {
 
 input {
   background-color: vars.$neutral-100;
-  border: 2px solid vars.$neutral-900;
-  padding:
-  calc(0.2 * vars.$text-size)
-  calc(0.8 * vars.$text-size);
-  color: vars.$neutral-900;
-  border-radius: vars.$text-size;
 }
 
 button {
@@ -125,40 +119,12 @@ form {
   background-color: vars.$neutral-100;
 }
 
+fieldset {
+  border: none;
+}
+
 form label, form input  {
   font-size: vars.$text-size;
-}
-
-.form-field {
-  position:relative;
-  border: 2px solid vars.$neutral-900;
-  font-size: vars.$text-size;
-  border-radius: vars.$text-size;
-}
-
-.form-field input {
-  padding: calc(0.9 * vars.$text-size)
-  calc(0.5 * vars.$text-size)
-  calc(0.2 * vars.$text-size);
-  border: 0;
-}
-
-.form-field label {
-  font-size: 1.3em;
-  position:absolute; 
-  top: .3em;
-  left: .3em;
-  transition: all .5s;
-  background-color: vars.$neutral-100;
-  padding: 0 .3em;
-  border-radius: 1em;
-  color: vars.$neutral-900;
-}
-
-label.up {
-  font-size: 1.2em;
-  top: -.55em;
-  left: .6em;
 }
 
 label.toDo {
@@ -284,8 +250,9 @@ div.sortButtons-wrapper > button {
 
 .sortButtons-wrapper .icon {
   width: 1em;
-  stroke: vars.$neutral-600;
-  fill: vars.$neutral-600;
+  stroke: vars.$neutral-300;
+  fill: vars.$neutral-300;
+  opacity: 0.85;
 }
 
 .sortButtons-wrapper button:last-child > .icon {
@@ -293,12 +260,141 @@ div.sortButtons-wrapper > button {
 }
 
 .sortButtons-wrapper .highlight svg{
-  stroke: vars.$neutral-100;
-  fill: vars.$neutral-100;
+  stroke: vars.$primary-500;
+  fill: vars.$primary-500;
+  opacity: 1;
 }
 
 .route {
   height: 100%;
+}
+
+
+
+.range_container {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  margin: 20px auto;
+  font-family: sans-serif;
+}
+
+.sliders_control {
+  position: relative;
+  min-height: 50px;
+}
+
+/* Ocultamos el track nativo y personalizamos */
+input[type="range"] {
+  position: absolute;
+  width: 100%;
+  height: 6px;
+  background: transparent;
+  pointer-events: none;
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 3px;
+}
+
+/* Track para WebKit */
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 6px;
+  background: transparent;
+  border: none;
+}
+
+/* Track para Firefox */
+input[type="range"]::-moz-range-track {
+  height: 6px;
+  background: transparent;
+  border: none;
+}
+
+/* Thumb para WebKit */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: #2b6c9e;
+  border-radius: 50%;
+  cursor: pointer;
+  pointer-events: auto;
+  border: 2px solid white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  margin-top: -6px; /* Centra el thumb respecto al track */
+}
+
+/* Thumb para Firefox */
+input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: #2b6c9e;
+  border-radius: 50%;
+  cursor: pointer;
+  pointer-events: auto;
+  border: 2px solid white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Colores distintos para cada thumb */
+.from_slider::-webkit-slider-thumb {
+  background: #e67e22;
+}
+.from_slider::-moz-range-thumb {
+  background: #e67e22;
+}
+
+.to_slider::-webkit-slider-thumb {
+  background: #2c3e50;
+}
+.to_slider::-moz-range-thumb {
+  background: #2c3e50;
+}
+
+/* Por defecto el slider "from" está por encima */
+.from_slider {
+  z-index: 3;
+}
+.to_slider {
+  z-index: 1;
+}
+
+/* Inputs numéricos */
+.form_control {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.form_control_container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form_control_container span {
+  font-weight: 600;
+  color: #333;
+}
+
+.form_control_container input[type="number"] {
+  width: 60px;
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* Ocultar flechas de spinner en inputs numéricos */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
 }
 
 // DESKTOP

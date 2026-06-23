@@ -1,31 +1,64 @@
-import { useState } from "react"
+import CheckGroup from './CheckGroup';
+import DobleSlider from './DobleSlider';
+import RoundField from "./RoundField";
+import classes from '../styles/FormFields.module.scss'
 
-export function FormField({name, type = 'text', label = name, placeholder = '', initialValue }){
-  const [labelPosition, setLabelPosition] = useState(initialValue ? 'up' : 'down')
-
-  const checkContent = (event) => {
-    setLabelPosition(event.target.value !== '' ? 'up' : 'down')
-  }
-
-  const handleBlur = (event) => {
-    if (event.target.value === '' && labelPosition === 'up') setLabelPosition('down')
-  }
-
-  const defalutValue = initialValue ? {defaultValue: initialValue} : {}
-
-  return (
-    <div className="form-field">
-      <label htmlFor={name} className={labelPosition}>{label}</label>
-      <input id={name} name={name} type={type} 
-        placeholder={placeholder}
-        {...defalutValue}
-        onChange={checkContent} 
-        onClick={() => setLabelPosition('up')} 
-        onBlur={handleBlur}
-        onFocus={() => setLabelPosition('up')}
-      />
-    </div>
-  )
+function TextField({name, label, placeholder, initialValue, onChange, id}) {
+  return <fieldset className={classes.textField}  id={name}> 
+    {label &&<label>{label}</label>}
+    <input type="text" placeholder={placeholder} name={name} 
+      id={id}
+      defaultValue={initialValue} onChange={(e) => onChange? onChange(e.target.value): ''}
+    />
+  </fieldset>
 }
 
-export default FormField
+function NumberField({name, label, placeholder, initialValue, max, min}) {
+  return <fieldset className={classes.textField} id={name}> 
+    {label &&<label>{label}</label>}
+    <input 
+      type="text" placeholder={placeholder} name={name}
+      min={min} max={max} step={0.01} defaultValue={initialValue}
+    />
+  </fieldset>
+}
+
+export default function FormField({ config, initialValue, onChange = null, id='' }) {
+
+  const { type, name, label, options, ...rest } = config;
+
+  const componentMap = {
+    text: TextField,
+    round: RoundField,
+    number: NumberField, 
+    slider: DobleSlider,
+  };
+
+  const Component = componentMap[type] || TextField; 
+
+  const commonProps = {
+    name,
+    label,
+    id,
+    ...rest,
+  };
+
+  if (type === 'boolean') {
+    return (
+      <CheckGroup
+        {...commonProps}
+        onChange={onChange}
+        options={options || [{ label: 'Sí', value: true }, { label: 'No', value: false }]}
+      />
+    );
+  }
+
+  return (
+    <Component
+      {...commonProps}
+      initialValue={initialValue}
+      onChange={onChange}
+    />
+  );
+
+}
