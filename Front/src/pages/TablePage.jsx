@@ -5,7 +5,7 @@ import RoundField from '../components/RoundField'
 import classes from "../styles/userTable.module.scss";
 import useProfile from "../hooks/useProfile";
 import CheckGroup from "../components/CheckGroup";
-import { configArray } from "../fieldsConfig";
+import { configArray } from "../utils/fieldsConfig";
 import { SearchBar } from "../components/SearchBar";
 import useFilter from '../hooks/useFilter';
 import SortingButton from "../components/SortingButtons";
