@@ -6,3 +6,5 @@ export function useUser() {
 
   return context
 }
+
+export default useUser

@@ -146,7 +146,7 @@ export function ProfilePage () {
   const handleSubmit = (event) => {
     event.preventDefault()
     const status = sendData(validations, numericFields)
-    if (status) SetEditMode(true)
+    if (status) SetEditMode(false)
   }
 
   return (<main>

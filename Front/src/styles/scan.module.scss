@@ -1,0 +1,28 @@
+@use './variables.scss' as vars;
+
+.scanPage {
+  position: relative;
+  height: calc(100dvh - vars.$navigation-bar--height);
+}
+
+.scanPage video {
+  height: 100%;
+  background-color: #011;
+}
+
+
+.scanPage div {
+  position: absolute;
+  top: 33%;
+  left: 50dvw;
+  transform: translateX(-50%);
+  height: 33%;
+  display: grid;
+  grid-template-columns: 1fr repeat(3, 5fr) 1fr;
+  grid-template-rows: 1fr repeat(3, 5fr) 1fr;
+  aspect-ratio: 1;
+}
+
+.filled {
+  background-color: vars.$primary-500;
+}

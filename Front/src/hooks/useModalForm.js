@@ -1,22 +1,24 @@
 import { useState, useRef } from "react"
 
 export function useModalForm () {
-  const [formText, setFormText] = useState({})
+  const [formInfo, setFormInfo] = useState({})
   const [formValues, setFormValues] = useState(null)
   const [modalOpen, setModalOpen] = useState(false)
   const modal = useRef()
 
-  const showModalForm = (text, submit, profile = null) => {
-    setFormText({title: text, submit: submit})
+  const showModalForm = (text, submit, mode, profile = null) => {
+    setFormInfo({title: text, submit: submit, mode: mode})
     setFormValues(profile)
     setModalOpen(true)
     modal.current.showModal()
   }
 
   const closeModalForm = () => {
+    setFormInfo({})
+    setFormValues(null)
     modal.current.close()
     setModalOpen(false)
   }
 
-  return {formText, formValues, modalOpen, modal, showModalForm, closeModalForm}
+  return {formInfo, formValues, modalOpen, modal, showModalForm, closeModalForm}
 }

@@ -14,13 +14,14 @@ $info-500: #aa66ff;
 $neutral-900: #000205;
 $neutral-800: #01050a;
 $neutral-700: #020a12;
+$neutral-600: #2b312c;
 $neutral-500: #718574;
 $neutral-300: #f5f3eb;
-$neutral-100:#fdfaf7;
+$neutral-100: #fdfaf7;
 
 // medidas 
-$title-size: clamp(1rem, 5dvw, 1.7rem);
-$text-size: clamp(1rem, 3.8dvw, 1.3rem);
+$title-size: clamp(2rem, 4dvw, 3rem);
+$text-size: clamp(1rem, 2dvw, 1.5rem);
 
 // Zonas de la pagina
 $navigation-bar--height: clamp(5dvh, 16dvw, 9dvh);

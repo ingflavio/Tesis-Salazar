@@ -1,45 +1,106 @@
+import { useState } from "react";
 import { useModalForm } from "../hooks/useModalForm";
 import Icons from "../components/Icons";
 import FormField from '../components/FormField'
 import classes from "../styles/admin.module.scss";
 import useProfile from "../hooks/useProfile";
+import { useUser } from "../hooks/useUser";
 import { SearchBar } from "../components/SearchBar";
 import { useSearch } from '../hooks/useSearch';
+import SortingButton from "../components/SortingButtons";
+import useSorter from "../hooks/useSorter";
 
-function ProfileForm({ fieldsToRender = [], title, sumbitText, initialValues }) {
+function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initialValues }) {
   const fields = initialValues
-  ? fieldsToRender.map((field) => <FormField name={field.name} label={field.label} key={field.name} initialValue={initialValues[field.name]} />)
+  ? fieldsToRender.map((field) => {
+    const rawValue = initialValues[field.name]
+    let initialValue
+    if (field.name === 'solvency'){
+      initialValue = rawValue ? 'Solvente' : 'No solvente'
+    } else if (field.name === 'sex'){
+      initialValue = rawValue === 'm' ? 'Masculino' : 'Femenino'
+    } else {
+      initialValue = rawValue
+    }
+
+    return <FormField name={field.name} label={field.label} key={field.name} initialValue={initialValue} />
+  })
   : fieldsToRender.map((field) => <FormField name={field.name} label={field.label} key={field.name} />)
 
+  const SubmitFunc = (event) => {
+    event.preventDefault()
+    const formData = new FormData(event.target)
+    const data = Object.fromEntries(formData.entries())
+    if (initialValues){
+      data['solvency'] = initialValues['solvency']
+    }
+    onSubmit(data)
+  }
+
   return (
-    <form className={classes.profileForm}>
+    <form className={classes.profileForm} onSubmit={(event) => SubmitFunc(event)}>
       <h2>{title}</h2>
       <div className={classes.fieldWrapper}>
         {
           fields
         }
       </div>
-      <button type="submit">
-        {sumbitText}
-      </button>
+      { sumbitText &&
+        <button type="submit">
+          {sumbitText}
+        </button>
+      }
     </form>
   );
 }
 
-function ProfileTable({ profileData, profiles, filter, editCallback, deleteCallback,tfooterCallback }) {
-  const filteredProfiles = filter(profiles)
+function ProfileTable({ fieldsToShow, profileData, profiles, filter, editCallback, deleteCallback, showCallback,tfooterCallback }) {
+  const reducedProfiles = profiles.map((profile) => {
+    const reducedProfile = {}
+    for (const field of fieldsToShow){
+
+      reducedProfile[field] = profile[field]
+    }
+    return reducedProfile
+  })
+  const reducedFields = profileData.filter((item) => fieldsToShow.includes(item.name))
+
+  const [sortParams, setSortParams] = useState({ field: null, direction: null })  
+  const { sorter } = useSorter(sortParams)
+  const filteredProfiles = filter(reducedProfiles)
+  const sortedProfiles = sorter(filteredProfiles)
+
+  const getFullPofile = (reducedProfile) => profiles.find((profile) => profile.id === reducedProfile.id)
+  
+  const handleClick = (field, direction) => {
+    setSortParams({ field: direction !== null ? field : null, direction: direction })
+  }
+
+  const getActiveDirection = (field) => {
+    if (sortParams.field === field) {
+      return sortParams.direction 
+    }
+    return null
+  }
+
   return (
     <table className={classes.userTable}>
       <thead>
         <tr>
-          {Object.values(profileData).map((value) => {
-            return <th key={value.name}>{value.label}</th>
+          {Object.values(reducedFields).map((value) => {
+            return <th key={value.name}>
+              {value.label}
+              <SortingButton 
+                onClick={(direction) => handleClick(value.name, direction)}
+                isActiveDirection={getActiveDirection(value.name)}
+              />
+              </th>
           })}
           <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
-        {filteredProfiles.map((profile, index) => {
+        {sortedProfiles.map((profile, index) => {
           const profileToShow = {...profile}
           delete profileToShow['password']
           return <tr key={index}>{
@@ -62,11 +123,14 @@ function ProfileTable({ profileData, profiles, filter, editCallback, deleteCallb
               })
             }
             <td>
-              <button onClick={() => editCallback(profile)}>
+              <button onClick={() => editCallback(getFullPofile(profile))}>
                 <Icons icon="edit" />
               </button>
-              <button onClick={() => deleteCallback(profile)}>
+              <button onClick={() => deleteCallback(getFullPofile(profile))}>
                 <Icons icon="delete" />
+              </button>
+              <button onClick={() => showCallback(getFullPofile(profile))}>
+                <Icons icon="eye"/>
               </button>
             </td>
           </tr>
@@ -85,18 +149,69 @@ function ProfileTable({ profileData, profiles, filter, editCallback, deleteCallb
   );
 }
 
-export function AdminPage() {
-  const {formText, formValues, modalOpen, modal, showModalForm, closeModalForm} = useModalForm()
+export function AdminPage() { 
+  const { logOut } = useUser()
+  const {formInfo, formValues, modalOpen, modal, showModalForm, closeModalForm} = useModalForm()
   const {getProfiles, getProfileColumns} = useProfile()
-  const profiles = getProfiles()
+
+  const fieldsToShow = ['id', 'name', 'lastName', 'solvency']
+
+  const [profiles, setProfiles] = useState(getProfiles())
+
   const profileColumns = getProfileColumns()
   const { filterFunc, filter, changeFilterParams } = useSearch()
 
   const deleteProfile = (profile) => {
-    console.log(profile)
+    const newProfiles = [...profiles].filter((item) => item.id !== profile.id)
+    setProfiles(newProfiles)
   }
-  const fields = Object.entries(profileColumns).map(([key, value]) => { return { name: key, label: value }})
   
+  const editProfile = (profile) => {
+    const newProfiles = [...profiles]
+    const index = newProfiles.findIndex((item) => item.id === profile.id)
+    newProfiles[index] = profile
+    setProfiles(newProfiles)
+  }
+
+  const addProfile = (profile) => {
+    const newProfiles = [...profiles]
+    profile['solvency'] = true
+    newProfiles.push(profile)
+    setProfiles(newProfiles)
+  }
+
+  const OpenModal = (mode, profile = null) => {
+    if (mode === 'registrar'){
+      showModalForm('Registrar cliente','Registrar', mode)
+    }else if (mode === 'editar'){
+      showModalForm('Editar datos de un cliente','Guardar cambios', mode, profile)
+    }else if (mode === 'mostrar'){
+      showModalForm('Perfil completo del cliente',false, mode, profile)
+    }
+  }
+
+  const handleSubmit = (profile) => {
+    if (formInfo.mode === 'registrar'){
+      addProfile(profile)
+    }else if (formInfo.mode === 'editar'){
+      editProfile(profile)
+    }
+    closeModalForm()
+  }
+
+  const fields = Object.entries(profileColumns).map(([key, value]) => { return { name: key, label: value }})
+
+  const getFormFields = () => {
+    let FormFields = fields
+    if (formInfo.mode !== 'mostrar'){
+      FormFields = FormFields.filter((field) => field.name !== 'solvency')
+    }
+    if (formInfo.mode !== 'registrar'){
+      FormFields = FormFields.filter((field) => field.name !== 'password')
+    }
+    return FormFields
+  }
+
   return (
     <>
       <main className={classes.adminPage}>
@@ -104,14 +219,17 @@ export function AdminPage() {
         <SearchBar filter={filter} changeFilter={changeFilterParams}/>
         <div className={classes.userTable_container}>
           <ProfileTable 
+            fieldsToShow = {fieldsToShow}
             profiles = {profiles} 
-            profileData = {fields.filter((field) => field.name !== 'password')} 
+            profileData = {fields} 
             filter = {filterFunc}
-            editCallback = {(profile)=> showModalForm('Editar datos de un cliente','Guardar cambios', profile)}
+            editCallback = {(profile)=> OpenModal('editar', profile)}
             deleteCallback = {(profile) => deleteProfile(profile)}
-            tfooterCallback = {() => showModalForm('Registrar cliente','Registrar')}
+            showCallback = {(profile) => OpenModal('mostrar', profile)}
+            tfooterCallback = {() => OpenModal('registrar')}
           />
         </div>
+        <button onClick={logOut} >Cerrar sesion</button>
       </main>
       <dialog ref={modal} onClose={() => closeModalForm()}>
         <div className={classes.dialogWraper}>  
@@ -119,10 +237,11 @@ export function AdminPage() {
           {
             modalOpen &&
             <ProfileForm 
-              title={formText.title} 
-              sumbitText={formText.submit}
-              fieldsToRender={fields.filter((field) => field.name !== 'solvency')} 
+              title={formInfo.title} 
+              sumbitText={formInfo.submit}
+              fieldsToRender={getFormFields()} 
               initialValues={formValues} 
+              onSubmit={handleSubmit}
             />
           }
         </div>

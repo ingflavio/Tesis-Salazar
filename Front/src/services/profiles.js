@@ -15,10 +15,10 @@ const profileColumns = {
 
 export const profiles = [
   {
-    id: "30281014",
-    name: "Jose",
-    lastName: "Olival",
-    age: 22,
+    id: "30123123",
+    name: "Luis",
+    lastName: "Hernandez",
+    age: 27,
     sex: "m",
     phone: '04244084030',
     height: 1.69,
@@ -29,8 +29,8 @@ export const profiles = [
     password: '1234'
   },
   {
-    id: "25117107",
-    name: "Stallin",
+    id: "25197803",
+    name: "Miguel",
     lastName: "Salazar",
     age: 43,
     sex: "m",
@@ -44,8 +44,8 @@ export const profiles = [
   },
   {
     id: "30123456",
-    name: "Flavio",
-    lastName: "Franchich",
+    name: "Maria",
+    lastName: "Gonzales",
     age: 22,
     sex: "m",
     phone: '04244084030',
@@ -57,8 +57,8 @@ export const profiles = [
     password: '1234'
   },
   {
-    id: "30123456",
-    name: "Patty",
+    id: "30215136",
+    name: "Victoria",
     lastName: "Ramirez",
     age: 22,
     sex: "f",
@@ -71,7 +71,7 @@ export const profiles = [
     password: '1234'
   },
   {
-    id: "30123456",
+    id: "30951759",
     name: "Barbara",
     lastName: "Garcia",
     age: 20,
@@ -93,7 +93,7 @@ export const searchProfiles = () => {
 
 export const searchProfile = (id) => {
   //fetch
-  return profiles.filter((item) => item.id === id)[0]
+  return profiles.filter((item) => item.id == id)[0]
 }
 
 export const searchProfileColumns = () => {

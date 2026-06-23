@@ -17,3 +17,5 @@ export const useUsers = () => {
 
   return {getUsers, getUser, checkAdmin}
 }
+
+export default useUsers

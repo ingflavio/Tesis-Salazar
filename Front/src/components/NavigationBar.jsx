@@ -17,7 +17,7 @@ export function NavigationBar({admin = false}) {
         </Link>
       }
 
-      <Link to={'/camera'}>
+      <Link to={'/scan'}>
           <Icons icon='qr'/>
           {isDesktop && <span>escanear QR</span>}
       </Link>
@@ -26,16 +26,13 @@ export function NavigationBar({admin = false}) {
         <Icons icon='home'/>
           {isDesktop && <span>Inicio</span>}
       </Link>
-
-      <Link to={'/chat'}>
-        <Icons icon='chat'/>
-          {isDesktop && <span>Chat con bot</span>}
-      </Link>
-
-      <Link to={'/profile'}>
-        <Icons icon='profile'/>
-          {isDesktop && <span>Perfil</span>}
-      </Link>
+      {
+        !admin &&
+        <Link to={'/profile'}>
+          <Icons icon='profile'/>
+            {isDesktop && <span>Perfil</span>}
+        </Link>
+      }
     </nav>
   )
 }
