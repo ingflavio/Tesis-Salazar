@@ -67,7 +67,7 @@ export function SessionProvider({ children }) {
 
   return (
     <sessionContext.Provider value={{
-      sessionContext: state,           
+      session: state,           
       login: handleLogin,
       logOut: handleLogOut,
     }}>

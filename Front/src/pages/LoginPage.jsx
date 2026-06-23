@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import { useSession } from '../hooks/useSession';
-import { useNavigate } from 'react-router';
+import { Navigate } from 'react-router';
 import RoundField from '../components/RoundField';
 import classes from '../styles/login.module.scss';
 
 export function LoginPage() {
-  const { login, user } = useSession(); 
-  const navigate = useNavigate();
+  const { login, session } = useSession(); 
   const [localError, setLocalError] = useState('');
 
   const handleSubmit = async (event) => {
@@ -31,10 +30,8 @@ export function LoginPage() {
     // Si success es true, el Provider ya redirige
   };
 
-  // Si ya hay sesión, redirigir (opcional)
-  if (user?.token) {
-    navigate('/');
-    return null;
+  if (session?.token) {
+    return <Navigate to={'/admin'} />
   }
 
   return (
@@ -45,12 +42,12 @@ export function LoginPage() {
         <RoundField name="id" label="Cédula" />
         <RoundField name="password" label="Contraseña" type="password" />
         
-        {(localError || user?.error) && (
-          <span className="error-msg">{localError || user.error}</span>
+        {(localError || session?.error) && (
+          <span className="error-msg">{localError || session.error}</span>
         )}
         
-        <button type="submit" disabled={user?.loading}>
-          {user?.loading ? 'Cargando...' : 'Ingresar'}
+        <button type="submit" disabled={session?.loading}>
+          {session?.loading ? 'Cargando...' : 'Ingresar'}
         </button>
       </form>
     </main>
