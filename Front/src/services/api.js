@@ -15,7 +15,7 @@ export const apiClient = axios.create({
 // Interceptor para añadir token automáticamente
 apiClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem('session');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
