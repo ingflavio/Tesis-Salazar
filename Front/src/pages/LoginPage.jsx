@@ -5,7 +5,7 @@ import RoundField from '../components/RoundField';
 import classes from '../styles/login.module.scss';
 
 export function LoginPage() {
-  const { login, user } = useSession(); // user contiene { loading, error }
+  const { login, user } = useSession(); 
   const navigate = useNavigate();
   const [localError, setLocalError] = useState('');
 

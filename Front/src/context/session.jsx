@@ -51,7 +51,7 @@ export function SessionProvider({ children }) {
     const result = await login(id, password);
     if (result.success) {
       // Redirigir según el rol
-      if (result.user.rol === 'admin') {
+      if (result.user.rol.toLocaleLowerCase() === 'admin') {
         navigate('/admin');
       } else {
         navigate('/');
@@ -67,7 +67,7 @@ export function SessionProvider({ children }) {
 
   return (
     <sessionContext.Provider value={{
-      sessionContext: state,           // { token, cedula, rol, loading, error }
+      sessionContext: state,           
       login: handleLogin,
       logOut: handleLogOut,
     }}>
