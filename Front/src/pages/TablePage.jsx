@@ -93,7 +93,7 @@ function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, chan
             const noLabelConfig = {...config} 
             noLabelConfig['placeholder'] = config['label']
             delete noLabelConfig['label']
-            return <th>
+            return <th key={config.name}>
               <FormField config={noLabelConfig} 
                 id={`filter-input-${config.name}`}
                 onChange={(value) => changeFilterParams(value, config.name)}  
@@ -200,7 +200,6 @@ export default function TablePage() {
   }
 
   const handleChangeFilter = (query, field) => {
-    console.log(field)
     if (boleanFields.includes(field)) {
       if (query === null || query === undefined || query === '') {
         changeFilterParams(null, field);
@@ -256,7 +255,7 @@ export default function TablePage() {
             <form onSubmit={(event) => aplyFilter(event)}
               className={classes.filterForm} style={{display: filterShow ? '' :'none'}}>
               <div>{ configArray.map((config) => {
-                return <FormField config={config} />
+                return <FormField config={config} key={config.name}/>
               })}</div>
               <button type="submit">Aplicar filtro</button>
             </form>

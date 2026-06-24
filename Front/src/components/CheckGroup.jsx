@@ -1,4 +1,4 @@
-import { useRef } from "react"
+import React, { useRef } from "react"
 import classes from '../styles/FormFields.module.scss'
 
 export default function CheckGroup({options, name, label, id, onChange = null}) {
@@ -23,16 +23,17 @@ export default function CheckGroup({options, name, label, id, onChange = null}) 
 
   return <fieldset className={classes.checkGroup}>
     {label && <label htmlFor={name}>{label}</label>}
-    { options.map((option) => (
-      
-        <>
-          <input type="radio" id={`${id}-${option.value}`} 
-            name={name} value={option.value}  key={option.name}
-            onClick={(event) => handleClick(event.target)}
-          />
-          <label htmlFor={option.label} key={option.name+'label'}>{option.label}</label>
-        </>
-      ))
-    }
+    {options.map((option) => (
+      <React.Fragment key={option.label}>
+        <input 
+          type="radio" 
+          id={`${id}-${option.value}`} 
+          name={name} 
+          value={option.value}
+          onClick={(event) => handleClick(event.target)}
+        />
+        <label htmlFor={`${id}-${option.value}`}>{option.label}</label>
+      </React.Fragment>
+    ))}
   </fieldset>
 }
