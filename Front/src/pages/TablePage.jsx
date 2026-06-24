@@ -1,17 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useModalForm } from "../hooks/useModalForm";
 import Icons from "../components/Icons";
 import classes from "../styles/userTable.module.scss";
-import useProfile from "../hooks/useProfile";
 import { configArray } from "../utils/fieldsConfig";
 import useFilter from '../hooks/useFilter';
 import SortingButton from "../components/SortingButtons";
 import useSorter from "../hooks/useSorter";
 import FormField from "../components/FormField";
+import useUsers from "../hooks/useUsers";
 
 function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initialValues }) {
   const fields = fieldsToRender.map((config) => {
-    console.log(initialValues[config.name])
     return initialValues
       ? <FormField config={config} initialValue={initialValues[config.name]} />
       : <FormField config={config} />
@@ -155,29 +154,87 @@ function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, chan
 export default function TablePage() {
   const { filters, filterFunc, changeFilterParams } = useFilter()
   const {formInfo, formValues, modalOpen, modal, showModalForm, closeModalForm} = useModalForm()
-  const {getProfiles} = useProfile()
   const fieldsToShow = ['id', 'name', 'lastName', 'solvency']
   const boleanFields = ['solvency']
-  const [profiles, setProfiles] = useState(getProfiles())
   const [filterShow, setFilterShow] = useState(false)
+  const {
+    users,
+    usersLoading,
+    usersError,
+    user,
+    userLoading,
+    getUser,
+    registerUser,
+    registerLoading,
+    addProfile,
+    profileLoading,
+    fetchUsers,
+    refetchUsers
+  } = useUsers();
 
-  const deleteProfile = (profile) => {
-    const newProfiles = [...profiles].filter((item) => item.id !== profile.id)
-    setProfiles(newProfiles)
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const deleteProfile = () => {
   }
   
-  const editProfile = (profile) => {
-    const newProfiles = [...profiles]
-    const index = newProfiles.findIndex((item) => item.id === profile.id)
-    newProfiles[index] = profile
-    setProfiles(newProfiles)
+  const editProfile = () => {
   }
 
-  const addProfile = (profile) => {
-    const newProfiles = [...profiles]
-    profile['solvency'] = true
-    newProfiles.push(profile)
-    setProfiles(newProfiles)
+  const handleRegisterUser = async ({id, username, password}) => {
+    try {
+      const newUser = await registerUser({
+        id: id,
+        username: username,
+        password: password,
+        rol: 'user'
+      });
+      console.log(newUser)
+      return true
+    } catch (error) {
+      console.error('Error al registrar usuario:', error);
+      return false
+    }
+  }
+
+  const handleAddProfile = async ({id, name, lastName, email, phone, age, height_Cm, init_weight_kg, condition }) => {
+    try {
+      const profile = await addProfile({
+        id: id,
+        name: name,
+        lastName: lastName,
+        email: email,
+        phone: phone,
+        age: age,
+        height_Cm: height_Cm,
+        init_weight_kg: init_weight_kg,
+        condition: condition
+      });
+      console.log(profile);
+      return true
+    } catch (error) {
+      console.error('Error al agregar perfil:', error);
+      return false
+    }
+  };
+
+  const registerClient = async ({ data, password }) => {
+    const newUser = await registerUser({
+      id: data.id,
+      username: `${data.name} ${data.lastName}`,
+      password
+    })
+    if(!newUser) {
+      console.log('fallo con usuario')
+      return 
+    }
+    const newProfile = await handleAddProfile(data)
+    if(!newProfile) {
+      console.log('fallo con perfil')
+      return 
+    }
+    await refetchUsers();
   }
 
   const OpenModal = (mode, profile = null) => {
@@ -192,7 +249,7 @@ export default function TablePage() {
 
   const handleSubmit = (profile) => {
     if (formInfo.mode === 'registrar'){
-      addProfile(profile)
+      console.log(profile)
     }else if (formInfo.mode === 'editar'){
       editProfile(profile)
     }
@@ -259,11 +316,11 @@ export default function TablePage() {
               })}</div>
               <button type="submit">Aplicar filtro</button>
             </form>
-          </div>
+          </div> 
           <ProfileTable 
             fieldsToShow = {fieldsToShow}
             profileColumns= {configArray}
-            profiles = {profiles} 
+            profiles = {[]} 
             filterFunc = { filterFunc }
             changeFilterParams = { handleChangeFilter }  
             editCallback = {(profile)=> OpenModal('editar', profile)}

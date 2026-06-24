@@ -25,14 +25,14 @@ export const fieldsConfig = {
     min: 18,
     max: 80     
   },
-  sex: {
-    name: 'sex',
-    label: 'sexo',
-    type: 'boolean',       
-    placeholder: '', 
-    formatValue: (value) => value ? 'femenino' : 'masculino',
-    options: [{ label: 'femenino', value: 'f' }, { label: 'masculino', value: 'm' }],
-  },
+  // sex: {
+  //   name: 'sex',
+  //   label: 'sexo',
+  //   type: 'boolean',       
+  //   placeholder: '', 
+  //   formatValue: (value) => value ? 'femenino' : 'masculino',
+  //   options: [{ label: 'femenino', value: 'f' }, { label: 'masculino', value: 'm' }],
+  // },
   phone: {
     name: 'phone',
     label: 'telefono',
@@ -56,14 +56,14 @@ export const fieldsConfig = {
     min: 50,
     max: 100     
   },
-  fat: {
-    name: 'fat',
-    label: 'Porcentaje de grasa',
-    type: 'number',  
-    placeholder: '',
-    min: 18,
-    max: 80     
-  },
+  // fat: {
+  //   name: 'fat',
+  //   label: 'Porcentaje de grasa',
+  //   type: 'number',  
+  //   placeholder: '',
+  //   min: 18,
+  //   max: 80     
+  // },
   condition: {
     name: 'condition',
     label: 'condición',
