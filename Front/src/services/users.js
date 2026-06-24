@@ -9,7 +9,7 @@ export const usersService = {
     "password": password,
     "rol": rol
   }),
-  addProfile: ({id, name, lastName, email, phone, age, height_Cm, init_weight_kg, condition='ninguna' }) => apiClient.post(`users/${id}/details`,{
+  addProfile: ({id, name, lastName, email, phone, age, height_Cm, init_weight_kg, condition }) => apiClient.post(`users/${id}/details`,{
     "firstName": name,
     "lastName": lastName,
     "email": email,
