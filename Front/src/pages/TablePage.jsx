@@ -1,12 +1,9 @@
 import { useState } from "react";
 import { useModalForm } from "../hooks/useModalForm";
 import Icons from "../components/Icons";
-import RoundField from '../components/RoundField'
 import classes from "../styles/userTable.module.scss";
 import useProfile from "../hooks/useProfile";
-import CheckGroup from "../components/CheckGroup";
 import { configArray } from "../utils/fieldsConfig";
-import { SearchBar } from "../components/SearchBar";
 import useFilter from '../hooks/useFilter';
 import SortingButton from "../components/SortingButtons";
 import useSorter from "../hooks/useSorter";
