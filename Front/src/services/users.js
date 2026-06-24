@@ -1,6 +1,6 @@
 import { apiClient } from "./api";
 
-export const userService = {
+export const usersService = {
   getUsers: () => apiClient.get('users'),
   getUser: (id) => apiClient.get(`users/${id}`),
   registerUser: ({ id, username, password, rol }) => apiClient.post(`users/register`,{
