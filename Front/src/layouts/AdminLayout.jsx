@@ -6,9 +6,7 @@ import classes from '../styles/admin.module.scss'
 export default function AdminLayout() {
   const screen = useScreen()  
   const { session } = useSession()
-  console.log(session)
   if (!session) {
-    alert('vete al login')
     return <Navigate to='/login' replace />
   }
   if (session.rol.toLowerCase() !== 'admin') return <Navigate to='/' replace />
