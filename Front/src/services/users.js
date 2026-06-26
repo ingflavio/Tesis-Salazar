@@ -1,23 +1,53 @@
 import { apiClient } from "./api";
 
+const formatUser = (user) => {
+  if(user.userDetails){
+    return {
+      id: user.cedula, 
+      name: user.userDetails.firstName,
+      lastName: user.userDetails.lastName,
+      email: user.userDetails.lastName,
+      phone: user.userDetails.phone,
+      age: user.userDetails.age,
+      height: user.userDetails.height_Cm,
+      weight: user.userDetails.last_weight_kg,
+      first_weight: user.userDetails.init_weight_kg,
+      condition: user.userDetails.condition,
+      solvency: user.userDetails.solvent,
+      registration_date: user.userDetails.registration_date,
+      expiration_date: user.userDetails.expiration_date,
+      rol: user.rol.toLowerCase()
+    }
+  }
+  return {
+    id: user.cedula,
+    name: user.name,
+    rol: user.rol.toLowerCase()
+  }
+}   
+
 export const usersService = {
-  getUsers: () => apiClient.get('users'),
-  getUser: (id) => apiClient.get(`users/${id}`),
+  getUsers: async () => {
+    const response = await apiClient.get('users')
+    return response.data.map(formatUser)
+  },
+  getUser: (id) => formatUser(apiClient.get(`users/${id}`)),
   registerUser: ({ id, username, password, rol }) => apiClient.post(`users/register`,{
     "cedula": id,
     "name": username,
     "password": password,
-    "rol": rol
+    "rol": rol[0].toUpperCase() + rol.slice(1) 
   }),
-  addProfile: ({id, name, lastName, email, phone, age, height_Cm, init_weight_kg, condition }) => apiClient.post(`users/${id}/details`,{
-    "firstName": name,
-    "lastName": lastName,
-    "email": email,
-    "phone": phone,
-    "age": age,
-    "height_Cm": height_Cm,
-    "init_weight_kg": init_weight_kg,
-    "condition":  condition
+  addProfile: (data) => apiClient.post(`users/${data.id}/details`,{
+    "firstName": data.name,
+    "lastName": data.lastName,
+    "email": data.email,
+    "phone": data.phone,
+    "age": data.age,
+    "height_Cm": data.height,
+    "init_weight_kg": data.weight,
+    "condition":  data.condition,
+    "rol": data.rol
   })
 
 } 

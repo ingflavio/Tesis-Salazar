@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useModalForm } from "../hooks/useModalForm";
 import Icons from "../components/Icons";
 import classes from "../styles/userTable.module.scss";
-import { configArray } from "../utils/fieldsConfig";
+import { configArray, fieldsConfig } from "../utils/fieldsConfig";
 import useFilter from '../hooks/useFilter';
 import SortingButton from "../components/SortingButtons";
 import useSorter from "../hooks/useSorter";
@@ -16,13 +16,16 @@ function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initial
       : <FormField config={config} />
   })
 
-
-
   const SubmitFunc = (event) => {
     event.preventDefault()
     const formData = new FormData(event.target)
-    const data = Object.fromEntries(formData.entries())
-    console.log(data)
+    const entries = formData.entries()
+    const parsedEntries = entries.map(([name, value]) => {
+      const parseValue = fieldsConfig[name].parseValue
+      const newValue = parseValue ? parseValue(value) : value
+      return [name, newValue]
+    })
+    const data = Object.fromEntries(parsedEntries)
     if (initialValues){
       data['solvency'] = initialValues['solvency']
     }
@@ -47,6 +50,13 @@ function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initial
 }
 
 function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, changeFilterParams, editCallback, deleteCallback, showCallback,tfooterCallback }) {
+  const [sortParams, setSortParams] = useState({ field: null, direction: null })  
+  const { sorter } = useSorter(sortParams)
+
+  if (!profiles){
+    return <h3>Cargando perfiles</h3>
+  }
+
   const reducedProfiles = profiles.filter(filterFunc).map((profile) => {
     const reducedProfile = {}
     for (const field of fieldsToShow){
@@ -56,8 +66,6 @@ function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, chan
     return reducedProfile
   })
   const reducedFields = profileColumns.filter((item) => fieldsToShow.includes(item.name))
-  const [sortParams, setSortParams] = useState({ field: null, direction: null })  
-  const { sorter } = useSorter(sortParams)
   const sortedProfiles = sorter(reducedProfiles)
 
   const getFullPofile = (reducedProfile) => profiles.find((profile) => profile.id === reducedProfile.id)
@@ -159,18 +167,13 @@ export default function TablePage() {
   const [filterShow, setFilterShow] = useState(false)
   const {
     users,
-    usersLoading,
-    usersError,
-    user,
-    userLoading,
-    getUser,
     registerUser,
-    registerLoading,
     addProfile,
-    profileLoading,
     fetchUsers,
     refetchUsers
   } = useUsers();
+
+  const profiles = users ? [...users].filter((profile) => profile.rol === 'user') : []
 
   useEffect(() => {
     fetchUsers();
@@ -184,13 +187,12 @@ export default function TablePage() {
 
   const handleRegisterUser = async ({id, username, password}) => {
     try {
-      const newUser = await registerUser({
+      await registerUser({
         id: id,
         username: username,
         password: password,
         rol: 'user'
       });
-      console.log(newUser)
       return true
     } catch (error) {
       console.error('Error al registrar usuario:', error);
@@ -198,20 +200,9 @@ export default function TablePage() {
     }
   }
 
-  const handleAddProfile = async ({id, name, lastName, email, phone, age, height_Cm, init_weight_kg, condition }) => {
+  const handleAddProfile = async (data) => {
     try {
-      const profile = await addProfile({
-        id: id,
-        name: name,
-        lastName: lastName,
-        email: email,
-        phone: phone,
-        age: age,
-        height_Cm: height_Cm,
-        init_weight_kg: init_weight_kg,
-        condition: condition
-      });
-      console.log(profile);
+      await addProfile(data);
       return true
     } catch (error) {
       console.error('Error al agregar perfil:', error);
@@ -219,17 +210,20 @@ export default function TablePage() {
     }
   };
 
-  const registerClient = async ({ data, password }) => {
-    const newUser = await registerUser({
+  const registerClient = async (data) => {
+    const newUser = await handleRegisterUser({
       id: data.id,
       username: `${data.name} ${data.lastName}`,
-      password
+      password: data.password
     })
     if(!newUser) {
       console.log('fallo con usuario')
       return 
     }
-    const newProfile = await handleAddProfile(data)
+    const newProfile = await handleAddProfile({
+      ...data,
+      rol: 'user'
+    })
     if(!newProfile) {
       console.log('fallo con perfil')
       return 
@@ -247,9 +241,9 @@ export default function TablePage() {
     }
   }
 
-  const handleSubmit = (profile) => {
+  const handleSubmit = async (profile) => {
     if (formInfo.mode === 'registrar'){
-      console.log(profile)
+      await registerClient(profile)
     }else if (formInfo.mode === 'editar'){
       editProfile(profile)
     }
@@ -291,7 +285,6 @@ export default function TablePage() {
             const input = document.getElementById(`filter-input-${field}-${filters[index].query}`)
             input.checked = false
           } else {
-            console.log('o')
             const input = document.getElementById(`filter-input-${field}-${query}`)
             input.checked = true
           }
@@ -320,7 +313,7 @@ export default function TablePage() {
           <ProfileTable 
             fieldsToShow = {fieldsToShow}
             profileColumns= {configArray}
-            profiles = {[]} 
+            profiles = {profiles} 
             filterFunc = { filterFunc }
             changeFilterParams = { handleChangeFilter }  
             editCallback = {(profile)=> OpenModal('editar', profile)}

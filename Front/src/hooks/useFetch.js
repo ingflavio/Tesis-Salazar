@@ -15,13 +15,13 @@ export const useFetch = (fetchFunction, dependencies = [], options = {}) => {
     setState(prev => ({ ...prev, loading: true, error: null }));
     
     try {
-      const response = await fetchFunction(...args);
+      const data = await fetchFunction(...args);
       setState({
-        data: response.data,
+        data: data,
         loading: false,
         error: null,
       });
-      return response.data;
+      return data;
     } catch (error) {
       setState({
         data: null,

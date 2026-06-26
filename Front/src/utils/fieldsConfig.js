@@ -3,27 +3,35 @@ export const fieldsConfig = {
     name: 'id',
     label: 'cedula',
     type: 'text',
-    placeholder: '',    
+    placeholder: '',   
+    parseValue: (value) => Number(value) 
   },
   name: {
     name: 'name',
     label: 'nombre',
     type: 'text', 
-    placeholder: '',   
+    placeholder: '',      
+    parseValue: (value) => value.toLowerCase()
   },
   lastName: {
     name: 'lastName',
     label: 'apellido',
     type: 'text',  
     placeholder: '',  
+    parseValue: (value) => value.toLowerCase()
+  },
+  password: {
+    name: 'password',
+    label: 'contraseña',
+    type: 'text',  
+    placeholder: '',  
   },
   age: {
     name: 'age',
     label: 'edad',
-    type: 'number', 
-    placeholder: '', 
-    min: 18,
-    max: 80     
+    type: 'text', 
+    placeholder: '',
+    parseValue: (value) => Number(value)
   },
   // sex: {
   //   name: 'sex',
@@ -39,22 +47,25 @@ export const fieldsConfig = {
     type: 'text',  
     placeholder: '',  
   },
+  email: {
+    name: 'email',
+    label: 'correo electronico',
+    type: 'text',  
+    placeholder: '',  
+  },
   height: {
     name: 'height',
     label: 'altura',
-    type: 'number',       
-    placeholder: '', 
-    min: 1.40,
-    max: 2.00     
+    type: 'text',       
+    placeholder: '',
+    parseValue: (value) => Number(value.replace(',','')) 
   },
   weight: {
     name: 'weight',
     label: 'peso',
-    type: 'number', 
+    type: 'text', 
     placeholder: '',
-    step: 0.1, 
-    min: 50,
-    max: 100     
+    parseValue: (value) => Number(value.replace(',','.'))
   },
   // fat: {
   //   name: 'fat',
