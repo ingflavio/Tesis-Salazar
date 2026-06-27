@@ -71,6 +71,8 @@ div:has(div.route){
 
   .hideWrapper {
     transform: translateX(-100px);
+    width: auto;
+    transition: all .2.5s .2s;
   }
 
   .sideBar:has(input:checked) {
@@ -79,6 +81,8 @@ div:has(div.route){
 
   .sideBar:has(input:checked) .hideWrapper {
     transform: none;
+    transition-delay: 0;
+    transition-duration: .4s ;
   }
 
 }
