@@ -252,7 +252,7 @@ export default function TablePage() {
       FieldsToExclude.push('solvency', 'password')
       showModalForm('Editar datos de un cliente','Guardar cambios', mode, profile)
     }else if (mode === 'mostrar'){
-      FieldsToExclude.push('solvency')
+      FieldsToExclude.push('password')
       showModalForm('Perfil completo del cliente',false, mode, profile)
     }
     setFormFields(configArray.filter((config) =>  !FieldsToExclude.includes(config.name)))

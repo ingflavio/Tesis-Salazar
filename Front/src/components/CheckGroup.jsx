@@ -1,7 +1,7 @@
 import React, { useRef } from "react"
 import classes from '../styles/FormFields.module.scss'
 
-export default function CheckGroup({options, name, label, id, onChange = null}) {
+export default function CheckGroup({options, name, label, id, onChange = null, defaultChecked}) {
   const checkedRef = useRef(null) 
 
   const handleClick = (button) => {
@@ -30,6 +30,7 @@ export default function CheckGroup({options, name, label, id, onChange = null}) 
           id={`${id}-${option.value}`} 
           name={name} 
           value={option.value}
+          defaultChecked={option.value === defaultChecked}
           onClick={(event) => handleClick(event.target)}
         />
         <label htmlFor={`${id}-${option.value}`}>{option.label}</label>

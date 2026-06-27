@@ -48,6 +48,7 @@ export default function FormField({ config, initialValue, onChange = null, id=''
       <CheckGroup
         {...commonProps}
         onChange={onChange}
+        defaultChecked={initialValue || null}
         options={options || [{ label: 'Sí', value: true }, { label: 'No', value: false }]}
       />
     );
