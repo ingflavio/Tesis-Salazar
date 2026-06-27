@@ -12,8 +12,8 @@ import useUsers from "../hooks/useUsers";
 function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initialValues }) {
   const fields = fieldsToRender.map((config) => {
     return initialValues
-      ? <FormField key={config[name]} config={config} initialValue={initialValues[config.name]} />
-      : <FormField key={config[name]} config={config} />
+      ? <FormField key={config.name} config={config} initialValue={initialValues[config.name]} />
+      : <FormField key={config.name} config={config} />
   })
 
   const SubmitFunc = (event) => {
