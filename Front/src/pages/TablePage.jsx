@@ -162,9 +162,10 @@ function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, chan
 export default function TablePage() {
   const { filters, filterFunc, changeFilterParams } = useFilter()
   const {formInfo, formValues, modalOpen, modal, showModalForm, closeModalForm} = useModalForm()
+  const [filterShow, setFilterShow] = useState(false)
+  const [formFields, setFormFields] = useState([])
   const fieldsToShow = ['id', 'name', 'lastName', 'solvency']
   const boleanFields = ['solvency']
-  const [filterShow, setFilterShow] = useState(false)
   const {
     users,
     registerUser,
@@ -172,12 +173,23 @@ export default function TablePage() {
     fetchUsers,
     refetchUsers
   } = useUsers();
-
-  const profiles = users ? [...users].filter((profile) => profile.rol === 'user') : []
-
+  
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  const formatProfiles = (profiles) => profiles.filter((profile) => profile.rol === 'user').map((profile) => {
+    const formatedEntries = Object.entries(profile).filter(([name, ]) =>  name !== 'rol')
+    .map(([name, value]) => {
+      const formatValue = fieldsConfig[name].formatValue
+      const newValue = formatValue ? formatValue(value) : value
+      return [name, newValue]
+    })
+    return Object.fromEntries(formatedEntries)
+
+  })
+
+  const profiles = users ? formatProfiles(users) : []
 
   const deleteProfile = () => {
   }
@@ -232,13 +244,18 @@ export default function TablePage() {
   }
 
   const OpenModal = (mode, profile = null) => {
+    const FieldsToExclude = []
     if (mode === 'registrar'){
+      FieldsToExclude.push('solvency')
       showModalForm('Registrar cliente','Registrar', mode)
     }else if (mode === 'editar'){
+      FieldsToExclude.push('solvency', 'password')
       showModalForm('Editar datos de un cliente','Guardar cambios', mode, profile)
     }else if (mode === 'mostrar'){
+      FieldsToExclude.push('solvency')
       showModalForm('Perfil completo del cliente',false, mode, profile)
     }
+    setFormFields(configArray.filter((config) =>  !FieldsToExclude.includes(config.name)))
   }
 
   const handleSubmit = async (profile) => {
@@ -331,7 +348,7 @@ export default function TablePage() {
             <ProfileForm 
               title={formInfo.title} 
               sumbitText={formInfo.submit}
-              fieldsToRender={configArray.filter((config) => config.name !== 'solvency')} 
+              fieldsToRender={formFields} 
               initialValues={formValues} 
               onSubmit={handleSubmit}
             />

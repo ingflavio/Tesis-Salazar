@@ -11,11 +11,11 @@ const formatUser = (user) => {
       age: user.userDetails.age,
       height: user.userDetails.height_Cm,
       weight: user.userDetails.last_weight_kg,
-      first_weight: user.userDetails.init_weight_kg,
+      // first_weight: user.userDetails.init_weight_kg,
       condition: user.userDetails.condition,
       solvency: user.userDetails.solvent,
-      registration_date: user.userDetails.registration_date,
-      expiration_date: user.userDetails.expiration_date,
+      // registration_date: user.userDetails.registration_date,
+      // expiration_date: user.userDetails.expiration_date,
       rol: user.rol.toLowerCase()
     }
   }

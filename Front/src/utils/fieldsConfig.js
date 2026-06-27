@@ -58,14 +58,16 @@ export const fieldsConfig = {
     label: 'altura',
     type: 'text',       
     placeholder: '',
-    parseValue: (value) => Number(value.replace(',','')) 
+    parseValue: (value) => Number(value.replace(',','')),
+    formatValue: (value) => `${String(value)[0]},${String(value).slice(1)}` 
   },
   weight: {
     name: 'weight',
     label: 'peso',
     type: 'text', 
     placeholder: '',
-    parseValue: (value) => Number(value.replace(',','.'))
+    parseValue: (value) => Number(value.replace(',','.')),
+    formatValue: (value) => String(value).replace('.',',')
   },
   // fat: {
   //   name: 'fat',
