@@ -6,8 +6,19 @@
 
 .route {
   max-height: 96dvh;
+  display: grid;
+  grid-template-columns: auto 1fr;
   overflow-y: auto;
   background-color: vars.$neutral-300;
+}
+
+.navbar {
+  background-color: vars.$neutral-700;
+  color: vars.$neutral-100;
+}
+
+.navbar h5 {
+  // color: inherit;
 }
 
 .adminHeader, .adminFooter {

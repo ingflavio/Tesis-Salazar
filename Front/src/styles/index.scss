@@ -39,6 +39,14 @@ h4 {
   font-size: calc(1 * vars.$title-size)
 }
 
+h5 {
+  font-size: calc(.8 * vars.$title-size)
+}
+
+h6 {
+  font-size: calc(.6 * vars.$title-size)
+}
+
 h1,h2,h3,h4,h5,h6 {
   color: vars.$primary-500;
 }
