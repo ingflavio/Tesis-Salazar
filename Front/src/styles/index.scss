@@ -18,8 +18,8 @@ body {
 }
 
 #root {
-  display: grid;
   min-height: 100dvh;
+  display: grid;
   grid-template-rows: 1fr auto;
 }
 
@@ -406,6 +406,6 @@ input[type="number"] {
 }
 
 // DESKTOP
-@media (min-width: 701px) {
+@media (min-width: 851px) {
   #root {grid-template-rows: auto 1fr}
 }

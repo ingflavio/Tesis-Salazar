@@ -12,7 +12,7 @@ export default function AdminLayout() {
   }
   if (session.rol.toLowerCase() !== 'admin') return <Navigate to='/' replace />
 
-  const isDesktop = screen.width > 700 
+  const isDesktop = screen.width > 850 
 
   return (
     <>
@@ -24,6 +24,9 @@ export default function AdminLayout() {
       }
       <div className={classes.route}>
         {
+          !isDesktop && 
+          <span></span>
+        }
           <aside className={classes.sideBar}>
             {
               !isDesktop && 
@@ -34,33 +37,28 @@ export default function AdminLayout() {
                 </label>
               </>
             }
-            <h5>owo</h5>
-            <span> nombre y apellido</span>
-            <span>rol</span>
-            <nav>
-              <ul>
-                <li>
-                  <Link to={'/admin'}>inicio</Link>
-                </li>
-                <li>
-                  <Link to={'/admin/table'}>Clientes</Link>
-                </li>
-                <li>
-                  <Link to={'/admin'}>Gestion de maquinas</Link>
-                </li>
-              </ul>
-              <button>Cerrar Sesion</button>  
-            </nav>
+            <div className={classes.hideWrapper}>
+              <h5>owo</h5>
+              <span> nombre y apellido</span>
+              <span>rol</span>
+              <nav>
+                <ul>
+                  <li>
+                    <Link to={'/admin'}>inicio</Link>
+                  </li>
+                  <li>
+                    <Link to={'/admin/table'}>Clientes</Link>
+                  </li>
+                  <li>
+                    <Link to={'/admin'}>Gestion de maquinas</Link>
+                  </li>
+                </ul>
+                <button>Cerrar Sesion</button>  
+              </nav>
+            </div>
           </aside>
-        }
         <Outlet />
       </div>
-      {
-        !isDesktop && 
-      <footer className={classes.adminFooter}>
-        <h4>Administracion</h4>
-      </footer>
-      }
     </>
   )
 }
