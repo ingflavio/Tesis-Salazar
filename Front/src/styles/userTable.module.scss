@@ -21,6 +21,10 @@ $gap-distance: clamp(2px, 6dvh, 40px);
   justify-content: center;
 }
 
+.filterForm label, .filterForm input{
+  font-size: clamp(1rem, .8vw, 1.2rem);
+}
+
 .filterForm > div {
   display: grid;
   width: 100%;
@@ -148,13 +152,4 @@ td, th {
 .adminPage > button{
   margin-top: 2.5dvh;
   margin-left: 2.5dvw;
-}
-
-@media screen and (max-width:560px) {
-  .fieldWrapper {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1em 2%;
-  }
-
 }

@@ -12,13 +12,30 @@
   background-color: vars.$neutral-300;
 }
 
-.navbar {
+.sideBar {
   background-color: vars.$neutral-700;
   color: vars.$neutral-100;
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
 }
 
 .navbar h5 {
   // color: inherit;
+}
+
+.hideButton {
+  align-self: end;
+}
+
+.hideButton input{
+  display: none;
+}
+
+.hideButton svg {
+  color: vars.$primary-500;
+  fill: vars.$primary-500;
+  width: 1.5em;
 }
 
 .adminHeader, .adminFooter {
@@ -37,4 +54,24 @@
 
 .route label::first-letter {
   text-transform: capitalize
+}
+
+@media screen and (max-width:700px) {
+  .route {
+    grid-template-columns: 50px 1fr;
+  }
+  
+  .sideBar nav, .sideBar span, .sideBar h5  { 
+    transform: translateX(-100px);
+  }
+
+  .route:has(input:checked){
+    grid-template-columns: auto 1fr;
+  }
+
+  .sideBar:has(input:checked) nav, 
+  .sideBar:has(input:checked) span, 
+  .sideBar:has(input:checked) h5  { 
+    transform: none;
+  }
 }
