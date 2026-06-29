@@ -10,6 +10,7 @@ import ScanPage from './pages/ScanPage.jsx'
 import './styles/index.scss'
 import AdminLayout from "./layouts/AdminLayout.jsx";
 import AdminPage from "./pages/AdminPage.jsx";
+import FinancePage from "./pages/FinancePage.jsx";
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
       <Route path="admin" element={<AdminLayout />} >
         <Route index element={<AdminPage />} />
         <Route path='table' element={<TablePage />} />
+        <Route path='finance' element={<FinancePage />} />
       </Route>
       <Route path='login' element={<LoginPage />} />
       <Route path='*' element={<NotFOundPage />} />

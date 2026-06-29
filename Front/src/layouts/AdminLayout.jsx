@@ -22,7 +22,7 @@ function AdminNav() {
         </Link>
       </li>
       <li className={classes.link}>
-        <Link to={'/admin'}>
+        <Link to={'/admin/finance'}>
           <Icons icon='finance' />
           Finanzas
         </Link>
