@@ -30,8 +30,12 @@ export function LoginPage() {
     // Si success es true, el Provider ya redirige
   };
 
-  if (session?.token) {
-    return <Navigate to={'/admin'} />
+  if (session){
+    if (session.rol === 'admin') {
+      return <Navigate to={'/admin'} />
+    } else if(session.rol === 'user') {
+      return <Navigate to={'/'} />
+    }
   }
 
   return (
