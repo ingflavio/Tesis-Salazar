@@ -6,7 +6,7 @@ import Icons from '../components/Icons.jsx';
 import classes from '../styles/admin.module.scss'
 import useUsers from '../hooks/useUsers.js';
 
-function AdminNav() {
+function AdminNav({ children }) {
   return <nav>
     <ul className={classes.links_list}>
       <li className={classes.link}>
@@ -28,13 +28,13 @@ function AdminNav() {
         </Link>
       </li>
     </ul>
-    <button>Cerrar Sesion</button>  
+    {children} 
   </nav>
 }
 
 export default function AdminLayout() {
   const screen = useScreen()  
-  const { session } = useSession()
+  const { session, logOut } = useSession()
   const { user, getUser } = useUsers()
 
   useEffect( () => {
@@ -76,7 +76,11 @@ export default function AdminLayout() {
             <div className={classes.hideWrapper}>
               <h6> Jose Olival </h6>
               <i>Administrador</i>
-              <AdminNav />
+              <AdminNav>
+                <button onClick={logOut}>
+                  Cerrar Sesion
+                </button>
+              </AdminNav>
             </div>
           </aside>
         <Outlet />
