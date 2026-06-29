@@ -4,10 +4,8 @@ export default function AdminPage() {
   const navigate = useNavigate()
   
   return (
-    <nav>
-      <button onClick={() => navigate('table')}> 
-          Tabla de usuarios
-      </button>
-    </nav>
+    <>
+      <h3>Buenos dias [nombre]</h3>
+    </>
   );
 }

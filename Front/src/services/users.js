@@ -31,7 +31,12 @@ export const usersService = {
     const response = await apiClient.get('users')
     return response.data.map(formatUser)
   },
-  getUser: (id) => formatUser(apiClient.get(`users/${id}`)),
+  getUser: async (id) => {
+    console.log('Soy el servicio y voy a buscar al usuario ' + id)
+    const user = await apiClient.get(`users/${id}`)
+    console.log(user)
+    return formatUser(user)
+  },
   registerUser: ({ id, username, password, rol }) => apiClient.post(`users/register`,{
     "cedula": id,
     "name": username,
