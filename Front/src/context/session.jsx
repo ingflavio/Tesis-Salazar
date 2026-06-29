@@ -15,15 +15,15 @@ function useUserReducer() {
 
     try {
       const response = await authService.login(id, password);
-      const { token, cedula, rol } = response;
+      const { token, rol } = response;
 
       // Guardar en el estado y localStorage
       dispatch({
         type: 'LOGIN',
-        payload: { token, cedula, rol }
+        payload: { token, id, rol }
       });
 
-      return { success: true, user: { cedula, rol } };
+      return { success: true, user: { id, rol } };
     } catch (error) {
       const errorMsg = error.response?.data?.message || 'Credenciales incorrectas';
       dispatch({ type: 'SET_ERROR', payload: errorMsg });

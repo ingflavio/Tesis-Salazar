@@ -22,9 +22,7 @@ export function LoginPage() {
       return;
     }
 
-    console.log(`submit id:${id} password:${password}`)
     const result = await login(Number(id), password);
-    alert(result)
 
     if (!result.success) {
       setLocalError(result.error || 'Error al iniciar sesión');
