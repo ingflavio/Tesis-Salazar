@@ -28,11 +28,11 @@ function LinesGraphic({ data, xAxis, lines=[] }) {
 }
 export default function AdminPage() { 
   const data = [
-    {name: 'enero', activos: 30, inactivos: 10},
-    {name: 'febrero', activos: 36, inactivos: 4},
-    {name: 'marzo', activos: 24, inactivos: 16},
-    {name: 'abril', activos: 28, inactivos: 12},
-    {name: 'mayo', activos: 37, inactivos: 3},
+    {name: 'enero', activos: 15, inactivos: 5},
+    {name: 'febrero', activos: 13, inactivos: 11}, 
+    {name: 'marzo', activos: 20, inactivos: 11}, 
+    {name: 'abril', activos: 27, inactivos: 8}, 
+    {name: 'mayo', activos: 37, inactivos: 6}, 
   ]
 
   const lines = [
@@ -45,7 +45,7 @@ export default function AdminPage() {
       <h3>Buenos dias [nombre]</h3>
       <div className={classes.dashboard}>
         <section>
-          <h3>Usuarios</h3>
+          <h4>Usuarios</h4>
           <LinesGraphic data={data} lines={lines} xAxis={'name'} />
         </section>
       </div>
