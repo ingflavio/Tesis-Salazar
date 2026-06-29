@@ -3,16 +3,26 @@ import { useScreen } from '../hooks/useScreen.js';
 import { useSession } from '../hooks/useSession.js';
 import Icons from '../components/Icons.jsx';
 import classes from '../styles/admin.module.scss'
+import useUsers from '../hooks/useUsers.js';
+import { useEffect } from 'react';
 
 export default function AdminLayout() {
   const screen = useScreen()  
   const { session } = useSession()
+  const { user, getUser } = useUsers()
+
+  useEffect( () => {
+    if(session) getUser(session.id)
+  }, [session]) 
+
   if (!session) {
     return <Navigate to='/login' replace />
   }
   if (session.rol.toLowerCase() !== 'admin') return <Navigate to='/' replace />
 
+
   const isDesktop = screen.width > 850 
+  console.log(user)
 
   return (
     <>
@@ -38,9 +48,8 @@ export default function AdminLayout() {
               </>
             }
             <div className={classes.hideWrapper}>
-              <h5>owo</h5>
-              <span> nombre y apellido</span>
-              <span>rol</span>
+              <h6> {session.name} </h6>
+              <span>Administrador</span>
               <nav>
                 <ul>
                   <li>
@@ -50,7 +59,7 @@ export default function AdminLayout() {
                     <Link to={'/admin/table'}>Clientes</Link>
                   </li>
                   <li>
-                    <Link to={'/admin'}>Gestion de maquinas</Link>
+                    <Link to={'/admin'}>Finanzas</Link>
                   </li>
                 </ul>
                 <button>Cerrar Sesion</button>  

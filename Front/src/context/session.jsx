@@ -15,7 +15,7 @@ function useUserReducer() {
 
     try {
       const response = await authService.login(id, password);
-      const { token, cedula, rol } = response.data;
+      const { token, cedula, rol } = response;
 
       // Guardar en el estado y localStorage
       dispatch({
@@ -49,9 +49,9 @@ export function SessionProvider({ children }) {
   // Envolvemos las funciones para añadir la redirección
   const handleLogin = async (id, password) => {
     const result = await login(id, password);
-    if (result.success) {
+    if (typeof result === 'object') {
       // Redirigir según el rol
-      if (result.user.rol.toLocaleLowerCase() === 'admin') {
+      if (result.rol === 'admin') {
         navigate('/admin');
       } else {
         navigate('/');
