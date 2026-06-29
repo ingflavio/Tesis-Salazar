@@ -57,7 +57,7 @@ div:has(div.route){
 }
 
 .hideWrapper {
-  height: 95%;
+  height: 94.5%;
 }
 
 .hideWrapper nav {
@@ -99,7 +99,8 @@ div:has(div.route){
   background-color: vars.$warn-500;
   border: 0;
   color: vars.$neutral-100;
-  padding: .2em ;
+  padding: .2em;
+  align-self: center;
 }
 
 @media screen and (max-width:850px) {
@@ -119,6 +120,7 @@ div:has(div.route){
     transform: translateX(-200px);
     width: auto;
     transition: all .2.5s .2s;
+    height: 92%;
   }
 
   .sideBar:has(input:checked) {
