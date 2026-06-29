@@ -152,10 +152,10 @@ export default function AdminPage() {
             <PieGraphic data={pieData} />
           </div>
         </section>
-        <section>
+        {/* <section>
           <h4>Maquinas</h4>
           
-        </section>
+        </section> */}
       </div>
     </main>
   );
