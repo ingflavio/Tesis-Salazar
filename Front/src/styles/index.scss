@@ -405,6 +405,10 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
+.recharts-legend-item-text, .recharts-tooltip-item {
+  text-transform: capitalize;
+}
+
 // DESKTOP
 @media (min-width: 851px) {
   #root {grid-template-rows: auto 1fr}
