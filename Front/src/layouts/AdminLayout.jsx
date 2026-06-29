@@ -1,10 +1,36 @@
 import { Outlet, Navigate, Link } from 'react-router';
+import { useEffect } from 'react';
 import { useScreen } from '../hooks/useScreen.js';
 import { useSession } from '../hooks/useSession.js';
 import Icons from '../components/Icons.jsx';
 import classes from '../styles/admin.module.scss'
 import useUsers from '../hooks/useUsers.js';
-import { useEffect } from 'react';
+
+function AdminNav() {
+  return <nav>
+    <ul className={classes.links_list}>
+      <li className={classes.link}>
+        <Link to={'/admin'}>
+          <Icons icon='home' />
+          inicio
+        </Link>
+      </li>
+      <li className={classes.link}>
+        <Link to={'/admin/table'}>
+          <Icons icon='user' />
+          Clientes
+        </Link>
+      </li>
+      <li className={classes.link}>
+        <Link to={'/admin'}>
+          <Icons icon='finance' />
+          Finanzas
+        </Link>
+      </li>
+    </ul>
+    <button>Cerrar Sesion</button>  
+  </nav>
+}
 
 export default function AdminLayout() {
   const screen = useScreen()  
@@ -48,22 +74,9 @@ export default function AdminLayout() {
               </>
             }
             <div className={classes.hideWrapper}>
-              <h6> {session.name} </h6>
-              <span>Administrador</span>
-              <nav>
-                <ul>
-                  <li>
-                    <Link to={'/admin'}>inicio</Link>
-                  </li>
-                  <li>
-                    <Link to={'/admin/table'}>Clientes</Link>
-                  </li>
-                  <li>
-                    <Link to={'/admin'}>Finanzas</Link>
-                  </li>
-                </ul>
-                <button>Cerrar Sesion</button>  
-              </nav>
+              <h6> Jose Olival </h6>
+              <i>Administrador</i>
+              <AdminNav />
             </div>
           </aside>
         <Outlet />
