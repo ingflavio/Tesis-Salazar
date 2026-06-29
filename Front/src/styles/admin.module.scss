@@ -103,6 +103,16 @@ div:has(div.route){
   align-self: center;
 }
 
+// pagina admin index
+.adminPage {
+  padding: 1dvw;
+}
+
+.dashboard section {
+  background-color: vars.$neutral-100;
+  padding: 1dvw;
+}
+
 @media screen and (max-width:850px) {
   .route {
     grid-template-columns: 50px 1fr;
