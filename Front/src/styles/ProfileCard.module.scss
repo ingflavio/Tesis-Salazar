@@ -1,9 +1,45 @@
+@use './variables.scss' as vars;
+
 .profileCard {
-  width: clamp(300px, 40dvw, 600px);
+  display: block;
+  border-radius: 0;
+  padding:0 ;
+  background-color: transparent;
+  font-size: clamp(1.5rem, 3dvw, 3rem);
+}
+
+.profileCard label , .profileCard input, .profileCard button {
+  font-size: inherit;
+}
+
+.buttonBar {
+  background-color: transparent;
+  display: flex;
+}
+
+.buttonBar button {
+  background-color: vars.$neutral-500;
+  color: vars.$neutral-700;
+  border-bottom-left-radius:0 ;
+  border-bottom-right-radius: 0;
+  padding-bottom: 0;
+  text-transform: capitalize;
+}
+
+.buttonBar button.activeButton {
+  background-color: vars.$neutral-100;
+  color: vars.$primary-500;
+}
+
+.fields_Wrapper {
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 10px; /* Espacio entre filas */
   align-items: center;
+  background-color: vars.$neutral-100;
+  padding: .5em 1em 1em;
+  border-radius: 1em;
+  border-top-left-radius: 0;
 
   // Cada campo ocupa 2 columnas (label + input)
   > * {
@@ -16,6 +52,7 @@
 
 .profileCard label {
   height: 1em;
+  font-weight: 500;
 }
 
 .profileCard input {
