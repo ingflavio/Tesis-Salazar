@@ -5,7 +5,7 @@ import { NotFOundPage } from "./pages/NotFoundPage.jsx";
 import { UserLayout } from "./layouts/UserLayout.jsx";
 import { LoginPage } from "./pages/LoginPage.jsx";
 import TablePage from './pages/TablePage.jsx'
-import { ProfilePage } from "./pages/ProfilePage.jsx";
+import ProfilePage from "./pages/ProfilePage.jsx";
 import ScanPage from './pages/ScanPage.jsx'
 import './styles/index.scss'
 import AdminLayout from "./layouts/AdminLayout.jsx";

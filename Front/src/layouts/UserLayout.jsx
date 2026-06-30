@@ -9,8 +9,6 @@ export function UserLayout() {
   if (!session) return <Navigate to='/login' replace />
   if (session.rol !== 'user') return <Navigate to='/login' replace />
 
-  // const admin = checkAdmin(user)
-
   const isDesktop = screen.width > 750 
 
   return (

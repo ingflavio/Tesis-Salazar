@@ -33,7 +33,7 @@ export const usersService = {
   },
   getUser: async (id) => {
     console.log('Soy el servicio y voy a buscar al usuario ' + id)
-    const user = await apiClient.get(`users/${id}`)
+    const user = await (await apiClient.get(`users/${id}`)).data
     console.log(user)
     return formatUser(user)
   },
