@@ -1,3 +1,5 @@
+const capitalize = (value) => value[0].toUpperCase() + value.slice(1)
+
 export const fieldsConfig = {
   id: {
     name: 'id',
@@ -11,14 +13,16 @@ export const fieldsConfig = {
     label: 'nombre',
     type: 'text', 
     placeholder: '',      
-    parseValue: (value) => value.toLowerCase()
+    parseValue: (value) => value.toLowerCase(),
+    formatValue: capitalize
   },
   lastName: {
     name: 'lastName',
     label: 'apellido',
     type: 'text',  
     placeholder: '',  
-    parseValue: (value) => value.toLowerCase()
+    parseValue: (value) => value.toLowerCase(),
+    formatValue: capitalize
   },
   password: {
     name: 'password',
@@ -49,7 +53,7 @@ export const fieldsConfig = {
   },
   email: {
     name: 'email',
-    label: 'correo electronico',
+    label: 'E-mail',
     type: 'text',  
     placeholder: '',  
   },

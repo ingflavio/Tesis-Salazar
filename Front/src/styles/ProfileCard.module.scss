@@ -1,5 +1,5 @@
 .profileCard {
-  width: clamp(380px, 70dvw, 600px);
+  width: clamp(300px, 40dvw, 600px);
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 10px; /* Espacio entre filas */
@@ -10,5 +10,14 @@
     grid-column: 1 / -1;
     display: grid;
     grid-template-columns: subgrid;
+    align-items: center;
   }
+}
+
+.profileCard label {
+  height: 1em;
+}
+
+.profileCard input {
+  border: none;
 }

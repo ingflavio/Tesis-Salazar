@@ -14,13 +14,12 @@ export default function ProfilePage(){
   //   if (session) 
   // }, [session]) getUser(session.id)
 
+  // const capitalize = (text)
+
   const formatProfile = (user) => {
     let entries = Object.entries({...user})
     entries = entries.filter(([name,]) => name !== 'solvency')
-    return Object.fromEntries(entries.map(([name, value]) => {
-      console.log(value)
-      return [name, value]
-    }))
+    return Object.fromEntries(entries)
   }
 
   return <main className={classes.profilePage}>
