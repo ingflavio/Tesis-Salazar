@@ -41,7 +41,6 @@ export const useUsers = () => {
 
   // Función para obtener un usuario por ID
   const getUser = async (id) => {
-    console.log("buscare el id "+id)
     if (!id) {
       throw new Error('ID de usuario es requerido');
     }

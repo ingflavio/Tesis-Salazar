@@ -32,9 +32,7 @@ export const usersService = {
     return response.data.map(formatUser)
   },
   getUser: async (id) => {
-    console.log('Soy el servicio y voy a buscar al usuario ' + id)
     const user = await (await apiClient.get(`users/${id}`)).data
-    console.log(user)
     return formatUser(user)
   },
   registerUser: ({ id, username, password, rol }) => apiClient.post(`users/register`,{

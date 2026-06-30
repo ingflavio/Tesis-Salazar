@@ -1,11 +1,16 @@
 @use './variables.scss' as vars;
 
-.textField label{
-  color:  vars.$neutral-100;
+.fieldWrapper label{
+  color: vars.$neutral-900;
+  text-transform:capitalize ;
+}
+
+.fieldWrapper label{
+  color:  vars.$neutral-900;
   padding-left: .3em;
 }
 
-.textField input{
+.fieldWrapper input{
   border: 1px solid vars.$neutral-500;
   border-radius: .5em;
   width: 100%;
@@ -54,6 +59,10 @@ label.up {
   grid-template-columns: auto 1fr;
   grid-auto-rows: 1fr;
   column-gap: .5em;
+}
+
+.checkGroup label {
+  color:  vars.$neutral-900;
 }
 
 .checkGroup label:first-child {

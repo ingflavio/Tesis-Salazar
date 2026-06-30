@@ -4,27 +4,42 @@ import RoundField from "./RoundField";
 import classes from '../styles/FormFields.module.scss'
 
 function TextField({name, label, placeholder, initialValue, onChange, id}) {
-  return <fieldset className={classes.textField}  id={name}> 
-    {label &&<label>{label}</label>}
-    <input type="text" placeholder={placeholder} name={name} 
-      id={id}
-      defaultValue={initialValue} onChange={(e) => onChange? onChange(e.target.value): ''}
-    />
-  </fieldset>
+  return (
+    <div className={classes.fieldWrapper}> 
+      {label && <label htmlFor={id}>{label}</label>}
+      <input 
+        type="text" 
+        placeholder={placeholder} 
+        name={name}
+        id={id}
+        defaultValue={initialValue} 
+        onChange={(e) => onChange? onChange(e.target.value) : ''}
+      />
+    </div>
+  )
 }
 
-function NumberField({name, label, placeholder, initialValue, max, min}) {
-  return <fieldset className={classes.textField} id={name}> 
-    {label &&<label>{label}</label>}
-    <input 
-      type="text" placeholder={placeholder} name={name}
-      min={min} max={max} step={0.01} defaultValue={initialValue}
-    />
-  </fieldset>
+function NumberField({name, label, placeholder, initialValue, max, min, id}) {
+  return (
+    <div className={classes.fieldWrapper}> 
+      {label && <label htmlFor={id}>{label}</label>}
+      <input 
+        type="number" 
+        placeholder={placeholder} 
+        name={name}
+        id={id}
+        min={min} 
+        max={max} 
+        step={0.01} 
+        defaultValue={initialValue}
+      />
+    </div>
+  )
 }
 
 export default function FormField({ config, initialValue, onChange = null, id='' }) {
-
+  if (!config) return null;
+  
   const { type, name, label, options, ...rest } = config;
 
   const componentMap = {
@@ -39,7 +54,7 @@ export default function FormField({ config, initialValue, onChange = null, id=''
   const commonProps = {
     name,
     label,
-    id,
+    id: id || name,
     ...rest,
   };
 
@@ -61,5 +76,4 @@ export default function FormField({ config, initialValue, onChange = null, id=''
       onChange={onChange}
     />
   );
-
 }
