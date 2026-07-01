@@ -48,7 +48,7 @@
   height: 80%;
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 10px; 
+  gap: clamp(5px, 2dvw, 10px); 
   align-items: center;
   background-color: vars.$neutral-100;
   padding: 1em;
