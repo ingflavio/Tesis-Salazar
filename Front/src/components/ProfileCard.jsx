@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { fieldsConfig } from '../utils/fieldsConfig'
 import FormField from '../components/FormField'
 import classes from '../styles/ProfileCard.module.scss'
 
 export default function ProfileCard({ profile, rol = 'user' }){
   const [ mode, setMode] = useState('profile')
+  const refSavedChanges = useRef(false)
 
   const editableFields = ['phone', 'email', 'age', 'weight', 'height','condition'] 
   if(rol === 'admin') editableFields.push('name', 'lastName')
@@ -12,7 +13,10 @@ export default function ProfileCard({ profile, rol = 'user' }){
   const changeMode = (event, value) => {
     event.preventDefault()
     if (mode === value) return
-    if (mode === 'edit' && value === 'profile') resetValues()
+    if (mode === 'edit' && value === 'profile') {
+      resetValues()
+      refSavedChanges.current = false
+    }
     setMode(value)
   }
 
@@ -29,12 +33,14 @@ export default function ProfileCard({ profile, rol = 'user' }){
 
   const handleSumbit = (event) => {
     event.preventDefault()
+    refSavedChanges.current = true
     const form = event.target
     const data = Object.fromEntries(new FormData(form).entries())
     console.log(data)
   }
 
   const resetValues = () => {
+    if(refSavedChanges.current) return
     for (const field of editableFields){
       const input = document.getElementById(field)
       const formatValue = fieldsConfig[field].formatValue
@@ -44,9 +50,7 @@ export default function ProfileCard({ profile, rol = 'user' }){
   }
 
   return (
-    <form className={`${classes.profileCard} ${mode === 'edit' ? classes.editMode : ''}`} onSubmit={(event) => handleSumbit(event)}
-      style={{transition: 'all 1s'}}
-    >
+    <form className={`${classes.profileCard} ${mode === 'edit' ? classes.editMode : ''}`} onSubmit={(event) => handleSumbit(event)}>
       <div className={classes.buttonBar}>
         {buttons.map((button) => 
           <button className={mode === button.mode ? classes.activeButton : ""}
