@@ -44,7 +44,9 @@ export default function ProfileCard({ profile, rol = 'user' }){
   }
 
   return (
-    <form className={classes.profileCard} onSubmit={(event) => handleSumbit(event)}>
+    <form className={`${classes.profileCard} ${mode === 'edit' ? classes.editMode : ''}`} onSubmit={(event) => handleSumbit(event)}
+      style={{transition: 'all 1s'}}
+    >
       <div className={classes.buttonBar}>
         {buttons.map((button) => 
           <button className={mode === button.mode ? classes.activeButton : ""}
@@ -68,12 +70,9 @@ export default function ProfileCard({ profile, rol = 'user' }){
             readOnly={notEditable}
           />
         })}
-        {
-          mode === 'edit' &&
-          <button className={classes.sumbitBtn}>
-            guardar cambios
-          </button>
-        }
+        <button className={classes.sumbitBtn}>
+          guardar cambios
+        </button>
       </div>
     </form>
   )

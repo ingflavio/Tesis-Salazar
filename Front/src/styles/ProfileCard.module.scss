@@ -7,7 +7,15 @@
   padding:0 ;
   background-color: transparent;
   font-size: clamp(1rem, 4.5dvw, 1.6rem);
+  transition: width 0.5s ease, all 0.5s ease;
+  overflow: hidden; 
 }
+
+.editMode {
+  width: clamp(300px, 80dvw, 550px);
+  transition: width 0.5s ease, all 0.5s ease;
+}
+
 
 .profileCard label , .profileCard input, .profileCard button {
   font-size: inherit;
@@ -36,14 +44,19 @@
 }
 
 .fields_Wrapper {
+  width: 100%; 
+  height: 80%;
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 10px; /* Espacio entre filas */
+  gap: 10px; 
   align-items: center;
   background-color: vars.$neutral-100;
   padding: 1em;
   border-radius: 1em;
   border-top-left-radius: 0;
+  transition: all 0.5s ease;
+  overflow-y: hidden;
+  animation: hideButton 1s ease;
 
   // Cada campo ocupa 2 columnas (label + input)
   > div {
@@ -51,7 +64,14 @@
     display: grid;
     grid-template-columns: subgrid;
     align-items: center;
+    width: 100%;
   }
+}
+
+.editMode > .fields_Wrapper {
+  height: auto;
+  animation: showButton 1s ease;
+  animation-direction: normal;
 }
 
 .profileCard label {
@@ -60,15 +80,40 @@
 }
 
 .profileCard input {
-  border-color:transparent ;
+  border-color: transparent;
+  width: 100%; // Hacer que los inputs ocupen todo el espacio disponible
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, width 0.5s ease;
 }
 
 input.showInput {
   border: 1px solid vars.$neutral-600;
+  width: 100%;
 }
 
 .sumbitBtn {
   grid-column: span 2;
   justify-self: center;
   margin-top: .5em;
+}
+
+@keyframes showButton {
+  0% {
+    height: 80%;
+  } 
+
+  100% {
+    height: 92.8%;
+  }
+}
+
+
+@keyframes hideButton {
+  0% {
+    height: 92.8%;
+  }
+
+  100% {
+    height: 80%;
+  } 
 }
