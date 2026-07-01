@@ -6,7 +6,7 @@ const formatUser = (user) => {
       id: user.cedula, 
       name: user.userDetails.firstName,
       lastName: user.userDetails.lastName,
-      email: user.userDetails.lastName,
+      email: user.userDetails.email,
       phone: user.userDetails.phone,
       age: user.userDetails.age,
       height: user.userDetails.height_Cm,

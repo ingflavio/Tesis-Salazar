@@ -3,12 +3,16 @@ import { fieldsConfig } from '../utils/fieldsConfig'
 import FormField from '../components/FormField'
 import classes from '../styles/ProfileCard.module.scss'
 
-export default function ProfileCard({ profile }){
+export default function ProfileCard({ profile, rol = 'user' }){
   const [ mode, setMode] = useState('profile')
+
+  const editableFields = ['phone', 'email', 'age', 'weight', 'height','condition'] 
+  if(rol === 'admin') editableFields.push('name', 'lastName')
 
   const changeMode = (event, value) => {
     event.preventDefault()
     if (mode === value) return
+    if (mode === 'edit' && value === 'profile') resetValues()
     setMode(value)
   }
 
@@ -18,8 +22,29 @@ export default function ProfileCard({ profile }){
     { name: 'pagos', mode: 'finance'}
   ]
 
+  const checkReadOnly = (field) => {
+    if (mode !== 'edit') return true
+    return !editableFields.includes(field)
+  }
+
+  const handleSumbit = (event) => {
+    event.preventDefault()
+    const form = event.target
+    const data = Object.fromEntries(new FormData(form).entries())
+    console.log(data)
+  }
+
+  const resetValues = () => {
+    for (const field of editableFields){
+      const input = document.getElementById(field)
+      const formatValue = fieldsConfig[field].formatValue
+      const newValue = formatValue ? formatValue(profile[field]) : profile[field]
+      if (newValue !== input.value) input.value = newValue
+    }
+  }
+
   return (
-    <form className={classes.profileCard}>
+    <form className={classes.profileCard} onSubmit={(event) => handleSumbit(event)}>
       <div className={classes.buttonBar}>
         {buttons.map((button) => 
           <button className={mode === button.mode ? classes.activeButton : ""}
@@ -27,19 +52,28 @@ export default function ProfileCard({ profile }){
           >{button.name}</button>
         )}
       </div>
-      <div className={classes.fields_Wrapper}>
-        {Object.entries(profile).map(([name, value]) => {
+      <div className={`${classes.fields_Wrapper} ${mode === 'edit' ? classes.editMode : ''}`}>
+        {mode !== 'finance' && Object.entries(profile).map(([name, value]) => {
           const config = fieldsConfig[name] 
           if (!config) return
           const formatValue = config.formatValue 
           const newValue = formatValue ? formatValue(value) : value
+          const notEditable = checkReadOnly(name)
           return <FormField 
+            className={notEditable ? '' : classes.showInput}
             key={name}
             config={config} 
             initialValue={newValue}
             id={name}
+            readOnly={notEditable}
           />
         })}
+        {
+          mode === 'edit' &&
+          <button className={classes.sumbitBtn}>
+            guardar cambios
+          </button>
+        }
       </div>
     </form>
   )
