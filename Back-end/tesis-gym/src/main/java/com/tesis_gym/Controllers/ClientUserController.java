@@ -35,8 +35,9 @@ public class ClientUserController {
     }
 
     @GetMapping("/{cedula}")
-    public ResponseEntity<UserDetails> getById(@PathVariable Long cedula) {
-        return ResponseEntity.ok(userService.getUserByCedula(cedula));
+    public ResponseEntity<UserAccount> getById(@PathVariable Long cedula) {
+        // Ahora usamos el método que busca en accountRepository
+        return ResponseEntity.ok(userService.getUserAccountByCedula(cedula));
     }
 
     @GetMapping

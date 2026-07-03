@@ -154,6 +154,11 @@ public class ClientUserService {
         return admins;
     }
 
+    public UserAccount getUserAccountByCedula(Long cedula) {
+        return accountRepository.findById(cedula)
+                .orElseThrow(() -> new RuntimeException("User account not found"));
+    }
+
     public UserDetails paySubscription(Long cedula, PayDto payDto) {
 
         UserAccount account = accountRepository.findById(cedula)
