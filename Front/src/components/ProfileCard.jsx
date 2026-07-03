@@ -58,25 +58,27 @@ export default function ProfileCard({ profile, rol = 'user' }){
           >{button.name}</button>
         )}
       </div>
-      <div className={`${classes.fields_Wrapper} ${mode === 'edit' ? classes.editMode : ''}`}>
-        {mode !== 'finance' && Object.entries(profile).map(([name, value]) => {
-          const config = fieldsConfig[name] 
-          if (!config) return
-          const formatValue = config.formatValue 
-          const newValue = formatValue ? formatValue(value) : value
-          const notEditable = checkReadOnly(name)
-          return <FormField 
-            className={notEditable ? '' : classes.showInput}
-            key={name}
-            config={config} 
-            initialValue={newValue}
-            id={name}
-            readOnly={notEditable}
-          />
-        })}
+      <div className={mode !== 'finance' ? classes.fields_Wrapper : classes.paymentsList}>
+        {mode !== 'finance' && <>
+          {Object.entries(profile).map(([name, value]) => {
+            const config = fieldsConfig[name] 
+            if (!config) return
+            const formatValue = config.formatValue 
+            const newValue = formatValue ? formatValue(value) : value
+            const notEditable = checkReadOnly(name)
+            return <FormField 
+              className={notEditable ? '' : classes.showInput}
+              key={name}
+              config={config} 
+              initialValue={newValue}
+              id={name}
+              readOnly={notEditable}
+            />})}
         <button className={classes.sumbitBtn}>
           guardar cambios
         </button>
+        </> 
+        }
       </div>
     </form>
   )

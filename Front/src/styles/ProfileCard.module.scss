@@ -43,17 +43,21 @@
   color: vars.$primary-500;
 }
 
-.fields_Wrapper {
+.fields_Wrapper, .paymentsList {
   width: 100%; 
+  background-color: vars.$neutral-100;
+  padding: 1em;
+  border-radius: 1em;
+  border-top-left-radius: 0;
+
+}
+
+.fields_Wrapper {
   height: 80%;
   display: grid;
   grid-template-columns: auto 1fr;
   gap: clamp(5px, 2dvw, 10px); 
   align-items: center;
-  background-color: vars.$neutral-100;
-  padding: 1em;
-  border-radius: 1em;
-  border-top-left-radius: 0;
   transition: all 0.5s ease;
   overflow-y: hidden;
   animation: hideButton 1s ease;
