@@ -1,10 +1,14 @@
 package com.tesis_gym.Services;
 
+import com.tesis_gym.Controllers.Dto.PayDto;
 import com.tesis_gym.Controllers.Dto.UserDetailsUpdate;
 import com.tesis_gym.Controllers.Dto.UserRegistrationDto;
 import com.tesis_gym.Controllers.Dto.UserDetailsDto;
+import com.tesis_gym.Entities.Pay;
+import com.tesis_gym.Entities.Roles;
 import com.tesis_gym.Entities.UserAccount;
 import com.tesis_gym.Entities.UserDetails;
+import com.tesis_gym.Repository.PayRepository;
 import com.tesis_gym.Repository.UserAccountRepository;
 import com.tesis_gym.Repository.UserDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +25,15 @@ public class ClientUserService {
     private final UserAccountRepository accountRepository;
     private final UserDetailsRepository detailsRepository;
     private final PasswordEncoder passwordEncoder;
+    private final PayRepository payRepository;
 
     public ClientUserService(UserAccountRepository accountRepository,
                              UserDetailsRepository detailsRepository,
-                             PasswordEncoder passwordEncoder) {
+                             PasswordEncoder passwordEncoder,PayRepository payRepository) {
         this.accountRepository = accountRepository;
         this.detailsRepository = detailsRepository;
         this.passwordEncoder = passwordEncoder;
+        this.payRepository = payRepository;
     }
 
     public UserAccount registerAccount(UserRegistrationDto dto) {
@@ -58,6 +64,8 @@ public class ClientUserService {
                 .condition(dto.condition())
                 .registration_date(now)
                 .expiration_date(calculateExpirationDate(now))
+                .sex(dto.sex())
+                .bodyFatPercentage(dto.bodyFatPercentage())
                 .solvent(true)
                 .build();
 
@@ -98,6 +106,8 @@ public class ClientUserService {
         existingUser.setHeight_Cm(dto.height_Cm());
         existingUser.setLast_weight_kg(dto.last_weight_kg());
         existingUser.setCondition(dto.condition());
+        existingUser.setSex(dto.sex());
+        existingUser.setBodyFatPercentage(dto.bodyFatPercentage());
 
         return detailsRepository.save(existingUser);
     }
@@ -126,6 +136,52 @@ public class ClientUserService {
 
         return detailsRepository.save(user);
     }
+
+
+    public List<UserAccount> getAllAdmins() {
+        List<UserAccount> admins = accountRepository.findByRol(Roles.Admin);
+        Date currentDate = new Date();
+        for (UserAccount admin : admins) {
+            UserDetails details = admin.getUserDetails();
+            if (details != null && details.getExpiration_date() != null) {
+                boolean isSolvent = !currentDate.after(details.getExpiration_date());
+                if (details.getSolvent() == null || details.getSolvent() != isSolvent) {
+                    details.setSolvent(isSolvent);
+                    detailsRepository.save(details);
+                }
+            }
+        }
+        return admins;
+    }
+
+    public UserAccount getUserAccountByCedula(Long cedula) {
+        return accountRepository.findById(cedula)
+                .orElseThrow(() -> new RuntimeException("User account not found"));
+    }
+
+    public UserDetails paySubscription(Long cedula, PayDto payDto) {
+
+        UserAccount account = accountRepository.findById(cedula)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+
+        UserDetails userDetails = getUserByCedula(cedula);
+        Pay payment = Pay.builder()
+                .user(account)
+                .bank(payDto.bank())
+                .phone(payDto.phone())
+                .amount(payDto.amount())
+                .image(payDto.image())
+                .build();
+        payRepository.save(payment);
+
+        Date now = new Date();
+        userDetails.setRegistration_date(now);
+        userDetails.setExpiration_date(calculateExpirationDate(now));
+        userDetails.setSolvent(true);
+
+        return detailsRepository.save(userDetails);
+    }
+
 
     private Date calculateExpirationDate(Date startDate) {
         Calendar calendar = Calendar.getInstance();

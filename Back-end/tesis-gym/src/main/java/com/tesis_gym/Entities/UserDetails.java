@@ -58,6 +58,12 @@ public class UserDetails {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date registration_date;
 
+    @NotBlank(message = "El sexo no puede estar vacío")
+    private String sex;
+
+    @Positive(message = "El % de grasa debe ser positivo")
+    private Float bodyFatPercentage;
+
     @NotNull
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date expiration_date;

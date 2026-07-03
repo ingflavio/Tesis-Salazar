@@ -8,5 +8,7 @@ public record UserDetailsDto(
         Integer age,
         Float height_Cm,
         Float init_weight_kg,
-        String condition
+        String condition,
+        String sex,
+        Float bodyFatPercentage
 ) {}
