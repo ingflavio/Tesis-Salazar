@@ -9,7 +9,7 @@ export default function ProfileCard({ profile, rol = 'user' }){
   const { payments, fetchUserPayments } = usePayemnts()
   const refSavedChanges = useRef(false)
 
-  const editableFields = ['phone', 'email', 'age', 'weight', 'height','condition'] 
+  const editableFields = ['phone', 'email', 'age', 'weight', 'height', 'fat','condition'] 
   if(rol === 'admin') editableFields.push('name', 'lastName','sex')
 
   const errorMessages = Object.fromEntries(editableFields.map((field) => [field, '']))
@@ -89,9 +89,11 @@ export default function ProfileCard({ profile, rol = 'user' }){
               readOnly={notEditable}
               errorMsg={errorMsg}
             />})}
-        <button className={classes.sumbitBtn}>
-          guardar cambios
-        </button>
+        <div className={classes.submitWrapper}>
+          <button className={classes.submitBtn}>
+            guardar cambios
+          </button>
+        </div>
         </> 
         }
         {

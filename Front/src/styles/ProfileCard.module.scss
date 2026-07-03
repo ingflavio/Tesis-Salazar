@@ -4,11 +4,11 @@
   width: clamp(300px, 80dvw, 430px);
   display: block;
   border-radius: 0;
-  padding:0 ;
+  padding: 0;
   background-color: transparent;
   font-size: clamp(1rem, 4.5dvw, 1.6rem);
   transition: width 0.5s ease, all 0.5s ease;
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 .editMode {
@@ -16,8 +16,9 @@
   transition: width 0.5s ease, all 0.5s ease;
 }
 
-
-.profileCard label , .profileCard input, .profileCard button {
+.profileCard label,
+.profileCard input,
+.profileCard button {
   font-size: inherit;
 }
 
@@ -33,7 +34,7 @@
 .buttonBar button {
   background-color: vars.$neutral-500;
   color: vars.$neutral-700;
-  border-bottom-left-radius:0 ;
+  border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
   padding-bottom: .1em;
 }
@@ -43,25 +44,24 @@
   color: vars.$primary-500;
 }
 
-.fields_Wrapper, .paymentsList {
-  width: 100%; 
+.fields_Wrapper,
+.paymentsList {
+  width: 100%;
   background-color: vars.$neutral-100;
   padding: 1em;
   border-radius: 1em;
   border-top-left-radius: 0;
-
 }
 
 .fields_Wrapper {
-  // height: 80%;
   display: grid;
   grid-template-columns: minmax(auto, 40%) 1fr;
-  gap: clamp(5px, 2dvw, 10px); 
+  gap: clamp(5px, 2dvw, 10px);
   align-items: center;
   transition: all 0.5s ease;
   overflow-y: hidden;
-  animation: hideButton 1s ease;
-
+  padding-bottom:0 ;
+  
   // Cada campo ocupa 2 columnas (label + input)
   > div {
     grid-column: 1 / -1;
@@ -72,23 +72,45 @@
   }
 }
 
-.editMode > .fields_Wrapper {
+// Nuevo wrapper para el botón submit con animación
+.submitWrapper {
+  grid-column: span 2;
+  // justify-self: center;
+  margin-top: .5em;
+  overflow: hidden; // Para ocultar el botón durante la transición
+  transition: all 0.5s ease;
+  height: 0; // Altura inicial (oculto)
+  opacity: 0;
+  transform: translateY(10px); // Efecto de deslizamiento hacia arriba
+}
+
+.editMode .submitWrapper {
   height: auto;
-  animation: showButton 1s ease;
-  animation-direction: normal;
+  opacity: 1;
+  transform: translateY(0);
+  padding-bottom:1em ;
+}
+
+// Ocultar el botón submit cuando no está en modo edición
+button.submitBtn {
+  font-size: .8em;
+  display: inline; 
+  padding: 0.5em 1em;
+  grid-column: span 2;
+  justify-self: center;
 }
 
 .profileCard label {
   font-weight: 500;
 }
 
-.fields_Wrapper > * > label:nth-child(2){
+.fields_Wrapper > * > label:nth-child(2) {
   font-weight: 400;
 }
 
 .profileCard input {
   border-color: transparent;
-  width: 100%; // Hacer que los inputs ocupen todo el espacio disponible
+  width: 100%;
   box-sizing: border-box;
   transition: border-color 0.3s ease, width 0.5s ease;
 }
@@ -102,31 +124,4 @@ input.showInput {
   grid-column: span 2;
   text-align: center;
   color: vars.$warn-500;
-}
-
-.sumbitBtn {
-  grid-column: span 2;
-  justify-self: center;
-  margin-top: .5em;
-}
-
-@keyframes showButton {
-  0% {
-    height: 80%;
-  } 
-
-  100% {
-    height: 92.8%;
-  }
-}
-
-
-@keyframes hideButton {
-  0% {
-    height: 92.8%;
-  }
-
-  100% {
-    height: 80%;
-  } 
 }
