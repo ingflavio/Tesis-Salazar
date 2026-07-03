@@ -1,5 +1,5 @@
 // pagos
-const pays = [
+const payments = [
   {
     id: 1,
     user: 25107117,
@@ -47,6 +47,6 @@ const pays = [
   }
 ]
 
-export const getAll = () => pays
+export const getAll = () => payments
 
-export const getByUser = (user) => pays.filter((pay) => pay.user == user)
+export const getByUser = (user) => payments.filter((pay) => pay.user == user)
