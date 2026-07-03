@@ -37,14 +37,6 @@ export const fieldsConfig = {
     placeholder: '',
     parseValue: (value) => Number(value)
   },
-  // sex: {
-  //   name: 'sex',
-  //   label: 'sexo',
-  //   type: 'boolean',       
-  //   placeholder: '', 
-  //   formatValue: (value) => value ? 'femenino' : 'masculino',
-  //   options: [{ label: 'femenino', value: 'f' }, { label: 'masculino', value: 'm' }],
-  // },
   phone: {
     name: 'phone',
     label: 'telefono',
@@ -56,6 +48,15 @@ export const fieldsConfig = {
     label: 'E-mail',
     type: 'text',  
     placeholder: '',  
+  },
+  sex: {
+    name: 'sex',
+    label: 'sexo',
+    type: 'enum',       
+    placeholder: '', 
+    parseValue: (value) => value.toUpperCase(),
+    formatValue: (value) => value.toLowerCase(),
+    options: [{ label: 'femenino', value: 'f' }, { label: 'masculino', value: 'm' }],
   },
   height: {
     name: 'height',
@@ -73,14 +74,13 @@ export const fieldsConfig = {
     parseValue: (value) => Number(value.replace(',','.')),
     formatValue: (value) => String(value).replace('.',',')
   },
-  // fat: {
-  //   name: 'fat',
-  //   label: 'Porcentaje de grasa',
-  //   type: 'number',  
-  //   placeholder: '',
-  //   min: 18,
-  //   max: 80     
-  // },
+  fat: {
+    name: 'fat',
+    label: 'Porcentaje de grasa',
+    type: 'text',  
+    parseValue: (value) => Number(value.replace('%','')),
+    formatValue: (value) => String(value) + '%'
+  },
   condition: {
     name: 'condition',
     label: 'condición',

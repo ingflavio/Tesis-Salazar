@@ -7,10 +7,11 @@ import classes from '../styles/profile.module.scss'
 export default function ProfilePage(){
   const { session } = useSession()
   const { user, getUser } = useUsers()
-  
+  console.log('render')
+
   useEffect(() => {
     if (session) getUser(session.id)
-  }, [session, getUser]) 
+  }, [session]) 
 
   // const capitalize = (text)
 

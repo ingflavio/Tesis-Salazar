@@ -22,6 +22,21 @@ function TextField({id, name, label, placeholder, initialValue, onChange, readOn
   )
 }
 
+function SelectField({ id, name, label, options, initialValue, onChange, readOnly = false }){
+  console.log(options)
+  return <div className={classes.fieldWrapper}>
+    <label htmlFor={name}>{label}</label>
+    {
+    !readOnly ? 
+      <select name={name} id={id} defaultValue={initialValue} onChange={onChange}>
+        {options.map((option) => <option value={option.value}>{option.label}</option>)}
+      </select>
+    :
+      readOnly && <label>{options.find((option) => option.value === initialValue).label}</label>
+    }
+  </div>
+}
+
 function NumberField({id, name, label, placeholder, initialValue, max, min }) {
   return (
     <div className={classes.fieldWrapper}> 
@@ -58,6 +73,7 @@ export default function FormField({ config, initialValue, onChange = null, id=''
     name,
     label,
     errorMsg,
+    readOnly,
     id: id || name,
     ...rest,
   };
@@ -68,7 +84,18 @@ export default function FormField({ config, initialValue, onChange = null, id=''
         {...commonProps}
         onChange={onChange}
         defaultChecked={initialValue || null}
-        options={options || [{ label: 'Sí', value: true }, { label: 'No', value: false }]}
+        options={options || [{ label: 'Si', value: true }, { label: 'No', value: false }]}
+      />
+    );
+  }
+
+  if (type === 'enum') {
+    return (
+      <SelectField
+        {...commonProps}
+        onChange={onChange}
+        initialValue={initialValue || null}
+        options={options}
       />
     );
   }
@@ -77,7 +104,6 @@ export default function FormField({ config, initialValue, onChange = null, id=''
     <Component
       {...commonProps}
       initialValue={initialValue}
-      readOnly={readOnly}
       onChange={onChange}
       className={className}
 

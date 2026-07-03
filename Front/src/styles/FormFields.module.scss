@@ -53,6 +53,11 @@ label.up {
   left: .6em;
 }
 
+.fieldWrapper select {
+  background-color: vars.$neutral-100;
+  border: 1px solid vars.$neutral-900;
+}
+
 
 .checkGroup {
   display: grid;

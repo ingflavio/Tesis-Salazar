@@ -11,7 +11,7 @@ export const useUsers = () => {
     execute: fetchUsers,
     refetch: refetchUsers,
     reset: resetUsers
-  } = useFetch(usersService.getUsers);
+  } = useFetch(usersService.getUsers, [], { immediate: false });
 
   // Hook para obtener un usuario específico
   const {

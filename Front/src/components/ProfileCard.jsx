@@ -10,7 +10,9 @@ export default function ProfileCard({ profile, rol = 'user' }){
   const refSavedChanges = useRef(false)
 
   const editableFields = ['phone', 'email', 'age', 'weight', 'height','condition'] 
-  if(rol === 'admin') editableFields.push('name', 'lastName')
+  if(rol === 'admin') editableFields.push('name', 'lastName','sex')
+
+  const errorMessages = Object.fromEntries(editableFields.map((field) => [field, '']))
 
   const changeMode = (event, value) => {
     event.preventDefault()
@@ -72,14 +74,20 @@ export default function ProfileCard({ profile, rol = 'user' }){
             const formatValue = config.formatValue 
             const newValue = formatValue ? formatValue(value) : value
             const notEditable = checkReadOnly(name)
+            const errorMsg = mode !== 'edit' 
+              ? '' 
+              : Object.keys(errorMessages).includes(name) 
+                ? errorMessages[name] 
+                : ''
+
             return <FormField 
               className={notEditable ? '' : classes.showInput}
-              key={name}
+              key={`${name}-${mode}`}
               config={config} 
               initialValue={newValue}
               id={name}
               readOnly={notEditable}
-              errorMsg='la push nena'
+              errorMsg={errorMsg}
             />})}
         <button className={classes.sumbitBtn}>
           guardar cambios

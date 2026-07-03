@@ -53,9 +53,9 @@
 }
 
 .fields_Wrapper {
-  height: 80%;
+  // height: 80%;
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: minmax(auto, 40%) 1fr;
   gap: clamp(5px, 2dvw, 10px); 
   align-items: center;
   transition: all 0.5s ease;
@@ -79,8 +79,11 @@
 }
 
 .profileCard label {
-  height: 1em;
   font-weight: 500;
+}
+
+.fields_Wrapper > * > label:nth-child(2){
+  font-weight: 400;
 }
 
 .profileCard input {

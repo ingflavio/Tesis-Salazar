@@ -1,7 +1,6 @@
 import { apiClient } from "./api";
 
 const formatUser = (user) => {
-  console.log(user)
   if(user.userDetails){
     return {
       id: user.cedula, 
@@ -10,8 +9,10 @@ const formatUser = (user) => {
       email: user.userDetails.email,
       phone: user.userDetails.phone,
       age: user.userDetails.age,
+      sex: user.userDetails.sex,
       height: user.userDetails.height_Cm,
       weight: user.userDetails.last_weight_kg,
+      fat:user.userDetails.bodyFatPercentage,
       // first_weight: user.userDetails.init_weight_kg,
       condition: user.userDetails.condition,
       solvency: user.userDetails.solvent,
@@ -33,7 +34,8 @@ export const usersService = {
     return response.data.map(formatUser)
   },
   getUser: async (id) => {
-    const user = await (await apiClient.get(`users/${id}`)).data
+    const response = await apiClient.get(`users/${id}`)
+    const user = await response.data
     return formatUser(user)
   },
   registerUser: ({ id, username, password, rol }) => apiClient.post(`users/register`,{
