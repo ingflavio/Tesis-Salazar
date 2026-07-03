@@ -7,6 +7,14 @@ function HomeIcon() {
   )
 }
 
+function UserIcon() {
+  return(
+    <svg viewBox="0 0 448 512">
+      <path d="M224 248a120 120 0 1 0 0-240 120 120 0 1 0 0 240zm-29.7 56C95.8 304 16 383.8 16 482.3 16 498.7 29.3 512 45.7 512l356.6 0c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3l-59.4 0z"/>
+    </svg>
+  )
+}
+
 function ChatIcon() {
   return (
     <svg viewBox="0 0 24 24">
@@ -89,6 +97,14 @@ function CheckIcon() {
   )
 }
 
+function FinanceIcon(){
+  return(
+    <svg viewBox="0 0 576 512">
+      <path d="M288-16c-13.3 0-24 10.7-24 24l0 12-1.8 0c-36.6 0-66.2 29.7-66.2 66.2 0 33.4 24.9 61.6 58 65.7l61 7.6c5.1 .6 9 5 9 10.2 0 5.7-4.6 10.2-10.2 10.2L240 180c-15.5 0-28 12.5-28 28s12.5 28 28 28l24 0 0 12c0 13.3 10.7 24 24 24s24-10.7 24-24l0-12 1.8 0c36.6 0 66.2-29.7 66.2-66.2 0-33.4-24.9-61.6-58-65.7l-61-7.6c-5.1-.6-9-5-9-10.2 0-5.7 4.6-10.2 10.2-10.2L328 76c15.5 0 28-12.5 28-28s-12.5-28-28-28l-16 0 0-12c0-13.3-10.7-24-24-24zM109.3 341.5L66.7 384 32 384c-17.7 0-32 14.3-32 32l0 64c0 17.7 14.3 32 32 32l320.5 0c29 0 57.3-9.3 80.7-26.5l126.6-93.3c17.8-13.1 21.6-38.1 8.5-55.9s-38.1-21.6-55.9-8.5L392.6 416 280 416c-13.3 0-24-10.7-24-24s10.7-24 24-24l72 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-152.2 0c-33.9 0-66.5 13.5-90.5 37.5z"/>
+    </svg>
+  )
+}
+
 function XIcon() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -130,10 +146,19 @@ function Eye(){
   )
 }
 
+function Bars() {
+  return (
+    <svg viewBox="0 0 448 512">
+      <path d="M0 96C0 78.3 14.3 64 32 64l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 128C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32L32 448c-17.7 0-32-14.3-32-32s14.3-32 32-32l384 0c17.7 0 32 14.3 32 32z"/>
+    </svg>
+  )
+}
+
 
 export function Icons({icon}) {
   const icons = {
     'home': <HomeIcon />,
+    'user':<UserIcon />,
     'chat': <ChatIcon />,
     'gear': <GearIcon />,
     'profile': <ProfileIcon />,
@@ -143,11 +168,13 @@ export function Icons({icon}) {
     'edit': <EditIcon />,
     'plus': <PlusIcon />,
     'check': <CheckIcon />,
+    'finance': <FinanceIcon />,
     'x': <XIcon />,
     'search': <SearchIcon />,
     'chevron': <ChevronICon />,
     'triangle': <Triangle/>,
-    'eye': <Eye />
+    'eye': <Eye />,
+    'bars': <Bars />
   }
 
   return icons[icon]

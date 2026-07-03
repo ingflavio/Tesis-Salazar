@@ -1,126 +1,187 @@
 @use './variables.scss' as vars;
 
-$gap-distance: clamp(2px, 6dvh, 40px);
-
-.adminPage {
-  width: 100dvw;
-  overflow-x: hidden;
+div:has(div.route){
+  grid-template-rows: 1;
 }
 
-.userTable_container {
-  width: 100dvw;
-  overflow-x: scroll;
+.route {
+  max-height: 100dvh;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  overflow-y: auto;
+  background-color: vars.$neutral-300;
 }
 
-.userTable {
-  background-color: vars.$neutral-100;
-  grid-template-columns: repeat(5, 1fr); 
-  border: 2px solid vars.$neutral-100;
-  margin: 2dvw;
-  font-size: clamp(10px, 2.8dvw, 20px);
-}
-
-.userTable tbody {
-  grid-template-rows: 1fr;
-}
-
-.userTable, .userTable tbody {
-  gap: 2px;
-}
-
-.userTable td, .userTable th { 
+.sideBar {
   background-color: vars.$neutral-700;
   color: vars.$neutral-100;
-}
-
-th {
-  text-transform: capitalize;
-  display: flex;
-  align-items: center;
-}
-
-.userTable tbody tr > td:last-child {
-  min-width: calc( 6 * vars.$text-size);
-}
-
-.userTable button {
-  margin: 0 .2em;
-  padding: .1em calc(vars.$text-size / 4);
-  cursor: pointer;
-}
-
-.userTable > tbody td button{
-  box-sizing: border-box;
-  padding-top: .25em;
-}
-
-.userTable button svg{
-  stroke: vars.$neutral-100;
-  width: 1em;
-}
-
-.userTable tfoot td {
-  grid-column: 1/-1;
-}
-
-.userTable tfoot button {
-  padding: .2em .6em;
-}
-
-.footerButton {
-  color: vars.$neutral-100;
   padding: 1em;
-}
-
-.dialogWraper {
-  position: relative;
-}
-
-.dialogWraper > button {
-  position: absolute;
-  top: .5%;
-  right: 2%;
-  background-color: transparent;
-}
-
-.profileForm {
-  width: clamp(300px, 90dvw, 700px);;
-}
-
-.fieldWrapper {
-  display: grid;
-  grid-template-columns: 50% 50%;
-  gap: 1em 2%;
-}
-
-.profileForm h2 {
-  font-size: 2em
-}
-
-td, th {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+}
+
+.navbar h5 {
+  // color: inherit;
+}
+
+.hideButton {
+  align-self: end;
+}
+
+.hideButton input{
+  display: none;
+}
+
+.hideButton svg {
+  color: vars.$primary-500;
+  fill: vars.$primary-500;
+  width: 1.5em;
+}
+
+.adminHeader, .adminFooter {
+  background-color: vars.$neutral-500;;
+}
+
+.adminHeader > h4, .adminFooter > h4 {
+  color: vars.$neutral-100;
+  margin: 0 .5em;
+}
+
+.route label {
+  color: vars.$neutral-900;
+  display: block;
+}
+
+.route label::first-letter {
+  text-transform: capitalize
+}
+
+.hideWrapper {
+  height: 94.5%;
+}
+
+.hideWrapper nav {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.links_list {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: .5em;
+}
+
+.links_list li, .links_list li a {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: span 2;
   align-items: center;
 }
 
-.greenText {
-  color: #2e886d !important;
+.link {
+  color: vars.$neutral-100;
 }
 
-.redText {
-  color:  vars.$warn-500 !important;
+.link a {
+  color: inherit;
+  text-decoration: none;
+  font-weight: 700;
 }
 
-.adminPage > button{
-  margin-top: 2.5dvh;
-  margin-left: 2.5dvw;
+.link svg{
+  fill: vars.$neutral-100;
+  width: 1.2em;
 }
 
-@media screen and (max-width:560px) {
-  .fieldWrapper {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1em 2%;
+.hideWrapper button {
+  background-color: vars.$warn-500;
+  border: 0;
+  color: vars.$neutral-100;
+  padding: .2em;
+  align-self: center;
+}
+
+// pagina admin index
+.adminPage {
+  padding: 1dvw;
+  height: calc(100dvh - 58px);
+  overflow-y: auto;
+}
+
+.adminPage h3 {
+  margin-bottom: 2dvw;
+}
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 5dvh;
+}
+
+.dashboard section {
+  background-color: vars.$neutral-100;
+  padding: 1dvw;
+}
+
+.adminPage h4, .adminPage h3{
+  color: vars.$neutral-500;
+}
+
+.dobleGraphics {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  grid-auto-rows: 1fr;
+  align-items: center;
+  container-type: inline-size;
+}
+
+.dobleGraphics div:first-child{
+  grid-column: span 2;
+}
+
+@container (width < 1050px) {  
+  .dobleGraphics div:last-child{
+    grid-column: span 2;
+  }
+  
+}
+
+@container (width > 1400px) {  
+  .dobleGraphics div:first-child{
+    grid-column: span 3;
+  }
+}
+
+@media screen and (max-width:850px) {
+  .route {
+    grid-template-columns: 50px 1fr;
+  }
+
+  .sideBar {
+    position: absolute;
+    width: 50px;
+    z-index: 1;
+    height: 100dvh;
+    transition: all .5s;
+  }
+
+  .hideWrapper {
+    transform: translateX(-200px);
+    width: auto;
+    transition: all .2.5s .2s;
+    height: 92%;
+  }
+
+  .sideBar:has(input:checked) {
+    width: clamp(150px, 35dvw ,250px);
+  }
+
+  .sideBar:has(input:checked) .hideWrapper {
+    transform: none;
+    transition-delay: 0;
+    transition-duration: .4s ;
   }
 
 }

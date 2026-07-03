@@ -1,251 +1,162 @@
-import { useState } from "react";
-import { useModalForm } from "../hooks/useModalForm";
-import Icons from "../components/Icons";
-import FormField from '../components/FormField'
-import classes from "../styles/admin.module.scss";
-import useProfile from "../hooks/useProfile";
-import { useUser } from "../hooks/useUser";
-import { SearchBar } from "../components/SearchBar";
-import { useSearch } from '../hooks/useSearch';
-import SortingButton from "../components/SortingButtons";
-import useSorter from "../hooks/useSorter";
+import { LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import classes from '../styles/admin.module.scss'
 
-function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initialValues }) {
-  const fields = initialValues
-  ? fieldsToRender.map((field) => {
-    const rawValue = initialValues[field.name]
-    let initialValue
-    if (field.name === 'solvency'){
-      initialValue = rawValue ? 'Solvente' : 'No solvente'
-    } else if (field.name === 'sex'){
-      initialValue = rawValue === 'm' ? 'Masculino' : 'Femenino'
-    } else {
-      initialValue = rawValue
-    }
-
-    return <FormField name={field.name} label={field.label} key={field.name} initialValue={initialValue} />
-  })
-  : fieldsToRender.map((field) => <FormField name={field.name} label={field.label} key={field.name} />)
-
-  const SubmitFunc = (event) => {
-    event.preventDefault()
-    const formData = new FormData(event.target)
-    const data = Object.fromEntries(formData.entries())
-    if (initialValues){
-      data['solvency'] = initialValues['solvency']
-    }
-    onSubmit(data)
-  }
-
-  return (
-    <form className={classes.profileForm} onSubmit={(event) => SubmitFunc(event)}>
-      <h2>{title}</h2>
-      <div className={classes.fieldWrapper}>
+function LinesGraphic({ data, xAxis, lines=[] }) {
+  return(
+    <ResponsiveContainer width="100%" height={300}>
+      <LineChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 30 }}>
+        <XAxis 
+          dataKey={xAxis}
+          height={40}
+          />        
+        <YAxis />
+        <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+        <Tooltip />
+        <Legend verticalAlign="top" height={36} />
         {
-          fields
+          lines.map((line) => <Line 
+            key={line.key} 
+            type="monotone" 
+            dataKey={line.key} 
+            stroke={line.color} 
+            dot={false}
+          />)
         }
+      </LineChart>
+    </ResponsiveContainer>
+  )
+}
+
+const renderCustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
+  const RADIAN = Math.PI / 180;
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+  return (
+    <text 
+      x={x} 
+      y={y} 
+      fill="white"
+      textAnchor="middle" 
+      dominantBaseline="central"
+      style={{
+        fontSize: '14px',
+        fontWeight: 'bold',
+        textShadow: '0 1px 3px rgba(0,0,0,0.3)'
+      }}
+    >
+      {`${(percent * 100).toFixed(1)}%`}
+    </text>
+  );
+};
+
+// Tooltip personalizado
+const CustomTooltip = ({ active, payload }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div style={{
+        backgroundColor: 'white',
+        padding: '10px',
+        border: '1px solid #ccc',
+        borderRadius: '4px',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+      }}>
+        <p style={{ margin: 0, fontWeight: 'bold' }}>
+          {payload[0].name || `Sección ${payload[0].payload.index + 1}`}
+        </p>
+        <p style={{ margin: 0, color: '#666' }}>
+          {payload[0].value} usuarios ({payload[0].payload.percentage}%)
+        </p>
       </div>
-      { sumbitText &&
-        <button type="submit">
-          {sumbitText}
-        </button>
-      }
-    </form>
-  );
-}
+    );
+  }
+  return null;
+};
 
-function ProfileTable({ fieldsToShow, profileData, profiles, filter, editCallback, deleteCallback, showCallback,tfooterCallback }) {
-  const reducedProfiles = profiles.map((profile) => {
-    const reducedProfile = {}
-    for (const field of fieldsToShow){
-
-      reducedProfile[field] = profile[field]
-    }
-    return reducedProfile
-  })
-  const reducedFields = profileData.filter((item) => fieldsToShow.includes(item.name))
-
-  const [sortParams, setSortParams] = useState({ field: null, direction: null })  
-  const { sorter } = useSorter(sortParams)
-  const filteredProfiles = filter(reducedProfiles)
-  const sortedProfiles = sorter(filteredProfiles)
-
-  const getFullPofile = (reducedProfile) => profiles.find((profile) => profile.id === reducedProfile.id)
+function PieGraphic({ data }) {
+  // Calcular el total para los porcentajes
+  const total = data.reduce((sum, item) => sum + item.value, 0);
   
-  const handleClick = (field, direction) => {
-    setSortParams({ field: direction !== null ? field : null, direction: direction })
-  }
-
-  const getActiveDirection = (field) => {
-    if (sortParams.field === field) {
-      return sortParams.direction 
-    }
-    return null
-  }
+  // Agregar índice y porcentaje a los datos
+  const dataWithIndex = data.map((item, index) => ({
+    ...item,
+    index,
+    percentage: ((item.value / total) * 100).toFixed(1),
+    name: item.name || `Sección ${index + 1}` // Nombre por defecto si no viene
+  }));
 
   return (
-    <table className={classes.userTable}>
-      <thead>
-        <tr>
-          {Object.values(reducedFields).map((value) => {
-            return <th key={value.name}>
-              {value.label}
-              <SortingButton 
-                onClick={(direction) => handleClick(value.name, direction)}
-                isActiveDirection={getActiveDirection(value.name)}
-              />
-              </th>
-          })}
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        {sortedProfiles.map((profile, index) => {
-          const profileToShow = {...profile}
-          delete profileToShow['password']
-          return <tr key={index}>{
-            Object.entries(profileToShow).map(([key, value]) => {
-
-              let content 
-              let className = ''
-              if(typeof value === 'boolean'){
-                [content, className] = value 
-                ? ['Solvente', classes.greenText] 
-                : ['No solvente', classes.redText]
-                 
-              } else if(value === 'm' || value === 'f'){
-                content = value === 'f' ? 'Femenino' : 'Masculino'
-              } else {
-                content = value
-              }
-
-              return <td className={className} key={key}>{content}</td>
-              })
-            }
-            <td>
-              <button onClick={() => editCallback(getFullPofile(profile))}>
-                <Icons icon="edit" />
-              </button>
-              <button onClick={() => deleteCallback(getFullPofile(profile))}>
-                <Icons icon="delete" />
-              </button>
-              <button onClick={() => showCallback(getFullPofile(profile))}>
-                <Icons icon="eye"/>
-              </button>
-            </td>
-          </tr>
-        })}
-      </tbody>
-      <tfoot>
-        <tr>
-          <td>
-            <button onClick={tfooterCallback} className={classes.footerButton}>
-              Registrar cliente
-            </button>
-          </td>
-        </tr>
-      </tfoot>
-    </table>
-  );
-}
-
-export function AdminPage() { 
-  const { logOut } = useUser()
-  const {formInfo, formValues, modalOpen, modal, showModalForm, closeModalForm} = useModalForm()
-  const {getProfiles, getProfileColumns} = useProfile()
-
-  const fieldsToShow = ['id', 'name', 'lastName', 'solvency']
-
-  const [profiles, setProfiles] = useState(getProfiles())
-
-  const profileColumns = getProfileColumns()
-  const { filterFunc, filter, changeFilterParams } = useSearch()
-
-  const deleteProfile = (profile) => {
-    const newProfiles = [...profiles].filter((item) => item.id !== profile.id)
-    setProfiles(newProfiles)
-  }
-  
-  const editProfile = (profile) => {
-    const newProfiles = [...profiles]
-    const index = newProfiles.findIndex((item) => item.id === profile.id)
-    newProfiles[index] = profile
-    setProfiles(newProfiles)
-  }
-
-  const addProfile = (profile) => {
-    const newProfiles = [...profiles]
-    profile['solvency'] = true
-    newProfiles.push(profile)
-    setProfiles(newProfiles)
-  }
-
-  const OpenModal = (mode, profile = null) => {
-    if (mode === 'registrar'){
-      showModalForm('Registrar cliente','Registrar', mode)
-    }else if (mode === 'editar'){
-      showModalForm('Editar datos de un cliente','Guardar cambios', mode, profile)
-    }else if (mode === 'mostrar'){
-      showModalForm('Perfil completo del cliente',false, mode, profile)
-    }
-  }
-
-  const handleSubmit = (profile) => {
-    if (formInfo.mode === 'registrar'){
-      addProfile(profile)
-    }else if (formInfo.mode === 'editar'){
-      editProfile(profile)
-    }
-    closeModalForm()
-  }
-
-  const fields = Object.entries(profileColumns).map(([key, value]) => { return { name: key, label: value }})
-
-  const getFormFields = () => {
-    let FormFields = fields
-    if (formInfo.mode !== 'mostrar'){
-      FormFields = FormFields.filter((field) => field.name !== 'solvency')
-    }
-    if (formInfo.mode !== 'registrar'){
-      FormFields = FormFields.filter((field) => field.name !== 'password')
-    }
-    return FormFields
-  }
-
-  return (
-    <>
-      <main className={classes.adminPage}>
-        <h1>Admin</h1>
-        <SearchBar filter={filter} changeFilter={changeFilterParams}/>
-        <div className={classes.userTable_container}>
-          <ProfileTable 
-            fieldsToShow = {fieldsToShow}
-            profiles = {profiles} 
-            profileData = {fields} 
-            filter = {filterFunc}
-            editCallback = {(profile)=> OpenModal('editar', profile)}
-            deleteCallback = {(profile) => deleteProfile(profile)}
-            showCallback = {(profile) => OpenModal('mostrar', profile)}
-            tfooterCallback = {() => OpenModal('registrar')}
-          />
-        </div>
-        <button onClick={logOut} >Cerrar sesion</button>
-      </main>
-      <dialog ref={modal} onClose={() => closeModalForm()}>
-        <div className={classes.dialogWraper}>  
-          <button onClick={() => modal.current.close()}>X</button>
-          {
-            modalOpen &&
-            <ProfileForm 
-              title={formInfo.title} 
-              sumbitText={formInfo.submit}
-              fieldsToRender={getFormFields()} 
-              initialValues={formValues} 
-              onSubmit={handleSubmit}
+    <ResponsiveContainer width="100%" height={350}>
+      <PieChart>
+        <Pie
+          data={dataWithIndex}
+          cx="50%"
+          cy="50%"
+          labelLine={false}
+          label={renderCustomLabel}
+          outerRadius={120}
+          fill="#8884d8"
+          dataKey="value"
+          nameKey="name"
+        >
+          {dataWithIndex.map((entry, index) => (
+            <Cell 
+              key={`cell-${index}`} 
+              fill={entry.color}
             />
-          }
-        </div>
-      </dialog>       
-    </>
+          ))}
+        </Pie>
+        <Tooltip content={<CustomTooltip />} />
+        <Legend 
+          verticalAlign="bottom" 
+          height={36}
+          formatter={(value, ) => {
+            const item = dataWithIndex.find(d => d.name === value);
+            return `${value} (${item?.percentage || 0}%)`;
+          }}
+        />
+      </PieChart>
+    </ResponsiveContainer>
+  );
+}
+
+export default function AdminPage() { 
+  const data = [
+    {name: 'enero', activos: 15, inactivos: 5, totales:20},
+    {name: 'febrero', activos: 13, inactivos: 11, totales:24}, 
+    {name: 'marzo', activos: 20, inactivos: 11, totales:31}, 
+    {name: 'abril', activos: 27, inactivos: 8, totales:35}, 
+    {name: 'mayo', activos: 26, inactivos: 14, totales:40}, 
+  ]
+
+  const lines = [
+    {key: 'activos', color: '#ffab45'},
+    {key: 'inactivos', color: '#aa66ff'},
+    {key: 'totales', color: '#45c2ff'}
+  ]
+
+  const pieData = [
+    {name:'activos', value: 26, color: "#ffab45"},
+    {name:'inactivos', value: 14, color: "#aa66ff"}
+  ]
+  
+  return (
+    <main className={classes.adminPage}>
+      <h3>Buenos dias [nombre]</h3>
+      <div className={classes.dashboard}>
+        <section>
+          <h4>Usuarios</h4>
+          <div className={classes.dobleGraphics}>
+            <LinesGraphic data={data} lines={lines} xAxis={'name'} />
+            <PieGraphic data={pieData} />
+          </div>
+        </section>
+        {/* <section>
+          <h4>Maquinas</h4>
+          
+        </section> */}
+      </div>
+    </main>
   );
 }
