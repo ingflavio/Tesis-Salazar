@@ -61,7 +61,7 @@ export default function ProfileCard({ profile, rol = 'user' }){
     <form className={`${classes.profileCard} ${mode === 'edit' ? classes.editMode : ''}`} onSubmit={(event) => handleSumbit(event)}>
       <div className={classes.buttonBar}>
         {buttons.map((button) => 
-          <button className={mode === button.mode ? classes.activeButton : ""}
+          <button key={button.mode} className={mode === button.mode ? classes.activeButton : ""}
             onClick={(event) => changeMode(event, button.mode)}
           >{button.name}</button>
         )}

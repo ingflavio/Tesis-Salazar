@@ -23,7 +23,6 @@ function TextField({id, name, label, placeholder, initialValue, onChange, readOn
 }
 
 function SelectField({ id, name, label, options, initialValue, onChange, readOnly = false }){
-  console.log(options)
   return <div className={classes.fieldWrapper}>
     <label htmlFor={name}>{label}</label>
     {
