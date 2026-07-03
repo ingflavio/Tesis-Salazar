@@ -18,9 +18,13 @@ body {
 }
 
 #root {
-  min-height: 100dvh;
+  height: 100dvh;
   display: grid;
-  grid-template-rows: 1fr auto;
+  grid-template-rows: calc(100dvh - vars.$navigation-bar--height) vars.$navigation-bar--height;
+}
+
+.route {
+  overflow-y: auto;
 }
 
 h1 {
@@ -272,12 +276,6 @@ div.sortButtons-wrapper > button {
   fill: vars.$primary-500;
   opacity: 1;
 }
-
-.route {
-  height: 100%;
-}
-
-
 
 .range_container {
   display: flex;

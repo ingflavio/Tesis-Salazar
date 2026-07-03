@@ -1,11 +1,12 @@
 @use './variables.scss' as vars;
 
 .profilePage {
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  overflow-y: auto;
+  padding: 4.5dvh 4.5dvw;
 }
 
 // main:has(.profile) {
