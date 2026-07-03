@@ -1,10 +1,12 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { fieldsConfig } from '../utils/fieldsConfig'
 import FormField from '../components/FormField'
 import classes from '../styles/ProfileCard.module.scss'
+import usePayemnts from '../hooks/usePayments'
 
 export default function ProfileCard({ profile, rol = 'user' }){
   const [ mode, setMode] = useState('profile')
+  const { payments, fetchUserPayments } = usePayemnts()
   const refSavedChanges = useRef(false)
 
   const editableFields = ['phone', 'email', 'age', 'weight', 'height','condition'] 
@@ -30,6 +32,10 @@ export default function ProfileCard({ profile, rol = 'user' }){
     if (mode !== 'edit') return true
     return !editableFields.includes(field)
   }
+
+  useEffect(() => {
+    fetchUserPayments(profile.id)
+  }, [])
 
   const handleSumbit = (event) => {
     event.preventDefault()
@@ -78,6 +84,14 @@ export default function ProfileCard({ profile, rol = 'user' }){
           guardar cambios
         </button>
         </> 
+        }
+        {
+          mode === 'finance' &&
+          <div>{
+            payments.map((payment) => {
+              <span>{payment}</span>
+            })  
+          }</div>
         }
       </div>
     </form>
