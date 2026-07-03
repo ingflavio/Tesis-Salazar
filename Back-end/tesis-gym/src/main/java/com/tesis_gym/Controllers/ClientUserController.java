@@ -1,10 +1,7 @@
 package com.tesis_gym.Controllers;
 
 
-import com.tesis_gym.Controllers.Dto.PasswordVerifyDto;
-import com.tesis_gym.Controllers.Dto.UserDetailsDto;
-import com.tesis_gym.Controllers.Dto.UserDetailsUpdate;
-import com.tesis_gym.Controllers.Dto.UserRegistrationDto;
+import com.tesis_gym.Controllers.Dto.*;
 import com.tesis_gym.Entities.UserAccount;
 import com.tesis_gym.Entities.UserDetails;
 import com.tesis_gym.Security.JwtService;
@@ -21,7 +18,7 @@ import java.util.List;
 public class ClientUserController {
 
     private final ClientUserService userService;
-    private final JwtService jwtService; // NUEVO: inyectamos el JwtService
+    private final JwtService jwtService;
 
     public ClientUserController(ClientUserService userService, JwtService jwtService) {
         this.userService = userService;
@@ -59,34 +56,48 @@ public class ClientUserController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/{cedula}/pay")
-    public ResponseEntity<UserDetails> pay(@PathVariable Long cedula) {
-        return ResponseEntity.ok(userService.paySubscription(cedula));
+    @PostMapping("/pay")
+    public ResponseEntity<?> pay(
+            @RequestHeader("Authorization") String authHeader,
+            @Valid @RequestBody PayDto payDto) {
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token faltante o formato incorrecto");
+        }
+        String token = authHeader.substring(7);
+        Long cedula;
+
+        try {
+            String cedulaStr = jwtService.getCedulaFromToken(token);
+            cedula = Long.valueOf(cedulaStr);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token inválido o expirado");
+        }
+
+        UserDetails updatedUser = userService.paySubscription(cedula, payDto);
+
+        return ResponseEntity.ok(updatedUser);
     }
     @PostMapping("/verify-password")
     public ResponseEntity<?> verifyPassword(
             @RequestHeader("Authorization") String authHeader,
             @Valid @RequestBody PasswordVerifyDto dto) {
 
-        // 1. Validar que la cabecera tenga el formato correcto
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token faltante o formato incorrecto");
         }
-
-        // 2. Extraer el token quitando la palabra "Bearer "
         String token = authHeader.substring(7);
         Long cedula;
 
-        // 3. Extraer la cédula del token
         try {
             String cedulaStr = jwtService.getCedulaFromToken(token);
             cedula = Long.valueOf(cedulaStr);
         } catch (Exception e) {
-            // Si el token expiró, fue modificado o es inválido, caerá aquí
+
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token inválido o expirado");
         }
 
-        // 4. Verificar la contraseña usando la cédula extraída de forma segura
+
         boolean isMatch = userService.verifyPassword(cedula, dto.password());
 
         if (isMatch) {
@@ -95,6 +106,15 @@ public class ClientUserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Contraseña incorrecta");
         }
     }
+
+    @GetMapping("/admins")
+    public ResponseEntity<List<UserAccount>> getAllAdmins() {
+        return ResponseEntity.ok(userService.getAllAdmins());
+    }
+
+
+
+
 
 
 

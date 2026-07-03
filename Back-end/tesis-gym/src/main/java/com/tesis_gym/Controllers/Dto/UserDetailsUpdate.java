@@ -8,5 +8,7 @@ public record UserDetailsUpdate(
         Integer age,
         Float height_Cm,
         Float last_weight_kg,
-        String condition
+        String condition,
+        String sex,
+        Float bodyFatPercentage
 ) {}
