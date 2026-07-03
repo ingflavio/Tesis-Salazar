@@ -1,18 +1,16 @@
+import { useEffect } from "react";
 import { useSession } from "../hooks/useSession"
-// import useUsers from "../hooks/useUsers";
-import getUser from '../mocks/GET_users{id}'
+import useUsers from "../hooks/useUsers";
 import ProfileCard from '../components/ProfileCard'
-// import { useState } from "react";
 import classes from '../styles/profile.module.scss'
 
 export default function ProfilePage(){
   const { session } = useSession()
-  const user = getUser(session.id)
+  const { user, getUser } = useUsers()
   console.log(user)
-  // const { getUser, user } = useUsers()
-  // useEffect(() => {
-  //   if (session) 
-  // }, [session]) getUser(session.id)
+  useEffect(() => {
+    if (session) getUser(session.id)
+  }, [session, getUser]) 
 
   // const capitalize = (text)
 

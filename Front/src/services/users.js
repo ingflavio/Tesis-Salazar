@@ -1,6 +1,7 @@
 import { apiClient } from "./api";
 
 const formatUser = (user) => {
+  console.log(user)
   if(user.userDetails){
     return {
       id: user.cedula, 
