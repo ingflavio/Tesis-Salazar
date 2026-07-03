@@ -7,7 +7,7 @@ import classes from '../styles/profile.module.scss'
 export default function ProfilePage(){
   const { session } = useSession()
   const { user, getUser } = useUsers()
-  console.log(user)
+  
   useEffect(() => {
     if (session) getUser(session.id)
   }, [session, getUser]) 

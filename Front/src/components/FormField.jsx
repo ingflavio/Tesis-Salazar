@@ -3,7 +3,7 @@ import DobleSlider from './DobleSlider';
 import RoundField from "./RoundField";
 import classes from '../styles/FormFields.module.scss'
 
-function TextField({id, name, label, placeholder, initialValue, onChange, readOnly = false, className = ''}) {
+function TextField({id, name, label, placeholder, initialValue, onChange, readOnly = false, className = '', errorMsg = ''}) {
   return (
     <div className={classes.fieldWrapper}> 
       {label && <label htmlFor={id}>{label}</label>}
@@ -17,6 +17,7 @@ function TextField({id, name, label, placeholder, initialValue, onChange, readOn
         defaultValue={initialValue} 
         onChange={(e) => onChange? onChange(e.target.value) : ''}
       />
+      {errorMsg !== '' && <span>{errorMsg}</span>}
     </div>
   )
 }
@@ -39,7 +40,7 @@ function NumberField({id, name, label, placeholder, initialValue, max, min }) {
   )
 }
 
-export default function FormField({ config, initialValue, onChange = null, id='', readOnly = false, className = '' }) {
+export default function FormField({ config, initialValue, onChange = null, id='', readOnly = false, className = '', errorMsg = '' }) {
   if (!config) return null;
   
   const { type, name, label, options, ...rest } = config;
@@ -56,6 +57,7 @@ export default function FormField({ config, initialValue, onChange = null, id=''
   const commonProps = {
     name,
     label,
+    errorMsg,
     id: id || name,
     ...rest,
   };
@@ -78,6 +80,7 @@ export default function FormField({ config, initialValue, onChange = null, id=''
       readOnly={readOnly}
       onChange={onChange}
       className={className}
+
     />
   );
 }

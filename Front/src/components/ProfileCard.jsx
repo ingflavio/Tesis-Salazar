@@ -79,6 +79,7 @@ export default function ProfileCard({ profile, rol = 'user' }){
               initialValue={newValue}
               id={name}
               readOnly={notEditable}
+              errorMsg='la push nena'
             />})}
         <button className={classes.sumbitBtn}>
           guardar cambios
