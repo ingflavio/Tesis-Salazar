@@ -54,6 +54,7 @@ export const usersService = {
     "init_weight_kg": data.weight,
     "condition":  data.condition,
     "rol": data.rol
-  })
+  }),
+  
 
 } 

@@ -1,3 +1,5 @@
+import { validateNumber, validatePhone, validateEmail } from '../hooks/useValidateForm'
+
 const capitalize = (value) => value[0].toUpperCase() + value.slice(1)
 
 export const fieldsConfig = {
@@ -35,19 +37,22 @@ export const fieldsConfig = {
     label: 'edad',
     type: 'text', 
     placeholder: '',
-    parseValue: (value) => Number(value)
+    parseValue: (value) => Number(value),
+    validateFunc: (value, previousValue) => validateNumber({value, previousValue, increase: 1}),
   },
   phone: {
     name: 'phone',
     label: 'telefono',
     type: 'text',  
     placeholder: '',  
+    validateFunc: (value, ) => validatePhone(value),
   },
   email: {
     name: 'email',
     label: 'E-mail',
     type: 'text',  
-    placeholder: '',  
+    placeholder: '', 
+    validateFunc: (value, ) => validateEmail(value), 
   },
   sex: {
     name: 'sex',
@@ -64,7 +69,8 @@ export const fieldsConfig = {
     type: 'text',       
     placeholder: '',
     parseValue: (value) => Number(value.replace(',','')),
-    formatValue: (value) => `${String(value)[0]},${String(value).slice(1)}` 
+    formatValue: (value) => `${String(value)[0]},${String(value).slice(1)}`,
+    validateFunc: (value, previousValue) => validateNumber({value, previousValue, increase: 5, increaseAdjust: 100, increaseMasure: 'm'}), 
   },
   weight: {
     name: 'weight',
@@ -72,14 +78,16 @@ export const fieldsConfig = {
     type: 'text', 
     placeholder: '',
     parseValue: (value) => Number(value.replace(',','.')),
-    formatValue: (value) => String(value).replace('.',',')
+    formatValue: (value) => String(value).replace('.',','),
+    validateFunc: (value, previousValue) => validateNumber({value, previousValue, increase: 5, increaseAdjust: 100, increaseMasure: 'kg'}), 
   },
   fat: {
     name: 'fat',
     label: 'Porcentaje de grasa',
     type: 'text',  
     parseValue: (value) => Number(value.replace('%','')),
-    formatValue: (value) => String(value) + '%'
+    formatValue: (value) => String(value) + '%',
+    validateFunc: (value, previousValue) => validateNumber({value, previousValue, increase: 5, increaseMasure: '%'}), 
   },
   condition: {
     name: 'condition',
