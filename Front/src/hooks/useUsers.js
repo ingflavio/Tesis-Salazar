@@ -77,7 +77,9 @@ export const useUsers = () => {
       throw new Error('ID de usuario es requerido');
     }
     const response = await editProfile(profileData);
-    console.log(response)
+    if (response.status === 200){
+      return response.data
+    }
   };
 
   return {

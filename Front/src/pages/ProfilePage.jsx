@@ -6,12 +6,12 @@ import classes from '../styles/profile.module.scss'
 
 export default function ProfilePage(){
   const { session } = useSession()
-  const { user, getUser, resetUser, editProfile } = useUsers()
+  const { user, getUser, refetchUser, editProfile } = useUsers()
 
   const editUserProfile = async (data) => {
     const response = await editProfile(data)
     console.log(response)
-    resetUser()
+    refetchUser(session.id)
   }
 
   useEffect(() => {

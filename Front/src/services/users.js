@@ -56,18 +56,6 @@ export const usersService = {
     "rol": data.rol
   }),
   editProfile: (data) => {
-    console.log({
-      "firstName": data.name,
-      "lastName": data.lastName,
-      "email": data.email,
-      "phone": data.phone,
-      "age": data.age,
-      "height_Cm": data.height,
-      "last_weight_kg": data.weight,
-      "condition": data.condition,
-      "sex": data.sex.toUpperCase(),
-      "bodyFatPercentage": data.fat
-    })
     return apiClient.put(`users/${data.id}`,{
       "firstName": data.name,
       "lastName": data.lastName,
