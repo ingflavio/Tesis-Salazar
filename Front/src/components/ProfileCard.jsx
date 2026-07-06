@@ -3,16 +3,17 @@ import { fieldsConfig } from '../utils/fieldsConfig'
 import FormField from '../components/FormField'
 import classes from '../styles/ProfileCard.module.scss'
 import usePayemnts from '../hooks/usePayments'
+import useValidateForm from '../hooks/useValidateForm'
 
 export default function ProfileCard({ profile, rol = 'user' }){
+  const editableFields = ['phone', 'email', 'age', 'weight', 'height', 'fat','condition'] 
+  if(rol === 'admin') editableFields.push('name', 'lastName','sex')
+  const initalAlerts = Object.fromEntries(editableFields.map((field) => [field, '']))
+
+  const { alerts, validateFields } = useValidateForm(initalAlerts)
   const [ mode, setMode] = useState('profile')
   const { payments, fetchUserPayments } = usePayemnts()
   const refSavedChanges = useRef(false)
-
-  const editableFields = ['phone', 'email', 'age', 'weight', 'height', 'fat','condition'] 
-  if(rol === 'admin') editableFields.push('name', 'lastName','sex')
-
-  const errorMessages = Object.fromEntries(editableFields.map((field) => [field, '']))
 
   const changeMode = (event, value) => {
     event.preventDefault()
@@ -39,13 +40,25 @@ export default function ProfileCard({ profile, rol = 'user' }){
     fetchUserPayments(profile.id)
   }, [])
 
-  const handleSumbit = (event) => {
-    event.preventDefault()
-    refSavedChanges.current = true
-    const form = event.target
-    const data = Object.fromEntries(new FormData(form).entries())
-    console.log(data)
-  }
+const handleSumbit = (event) => {
+  event.preventDefault()
+  refSavedChanges.current = true
+  const form = event.target
+  const formData = new FormData(form)
+  const entries = Array.from(formData.entries()) 
+  const data = Object.fromEntries(entries)
+  
+  const validations = Object.fromEntries(entries.reduce((validationArray, [key, value]) => {
+    const validationFunc = fieldsConfig[key]?.validateFunc
+    if (validationFunc) {
+      return [...validationArray, [key, validationFunc(value, profile[key])]]
+    }
+    return validationArray
+  }, []))
+  
+  const valid = validateFields(validations)
+  if (valid) saveChanges(data)
+}
 
   const resetValues = () => {
     if(refSavedChanges.current) return
@@ -55,6 +68,10 @@ export default function ProfileCard({ profile, rol = 'user' }){
       const newValue = formatValue ? formatValue(profile[field]) : profile[field]
       if (newValue !== input.value) input.value = newValue
     }
+  }
+
+  const saveChanges = (data) => {
+    console.log(data)
   }
 
   return (
@@ -76,8 +93,8 @@ export default function ProfileCard({ profile, rol = 'user' }){
             const notEditable = checkReadOnly(name)
             const errorMsg = mode !== 'edit' 
               ? '' 
-              : Object.keys(errorMessages).includes(name) 
-                ? errorMessages[name] 
+              : Object.keys(alerts).includes(name) 
+                ? alerts[name] 
                 : ''
 
             return <FormField 
