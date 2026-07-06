@@ -105,12 +105,12 @@ export const fieldsConfig = {
 
 export const configArray = Object.entries(fieldsConfig).map(([,value]) => value)
 
-export const formatValues = (data) => configArray.map(([key, value]) => {
-  const formatValue = value.formatValue
-  return formatValue ? formatValue(data[key]) : data[key]
-})
+export const formatValues = (data) => Object.fromEntries(Object.entries(data).map(([key, value]) => {
+  const formatValue = fieldsConfig[key].formatValue
+  return [key ,formatValue ? formatValue(value) : value]
+}))
 
-export const parseValues = (data) => configArray.map(([key, value]) => {
-  const parseValue = value.parseValue
-  return parseValue ? parseValue(data[key]) : data[key]
-})
+export const parseValues = (data) => Object.fromEntries(Object.entries(data).map(([key, value]) => {
+  const parseValue = fieldsConfig[key].parseValue
+  return [key ,parseValue ? parseValue(value) : value]
+}))

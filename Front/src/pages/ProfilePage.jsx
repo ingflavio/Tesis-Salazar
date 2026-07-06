@@ -6,7 +6,13 @@ import classes from '../styles/profile.module.scss'
 
 export default function ProfilePage(){
   const { session } = useSession()
-  const { user, getUser } = useUsers()
+  const { user, getUser, resetUser, editProfile } = useUsers()
+
+  const editUserProfile = async (data) => {
+    const response = await editProfile(data)
+    console.log(response)
+    resetUser()
+  }
 
   useEffect(() => {
     if (session) getUser(session.id)
@@ -21,6 +27,6 @@ export default function ProfilePage(){
   }
 
   return <main className={classes.profilePage}>
-    <ProfileCard profile={formatProfile(user)}/>
+    <ProfileCard profile={formatProfile(user)} editCallback={editUserProfile}/>
   </main>
 }

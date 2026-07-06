@@ -9,7 +9,7 @@ const formatUser = (user) => {
       email: user.userDetails.email,
       phone: user.userDetails.phone,
       age: user.userDetails.age,
-      sex: user.userDetails.sex,
+      sex: user.userDetails.sex.toLowerCase(),
       height: user.userDetails.height_Cm,
       weight: user.userDetails.last_weight_kg,
       fat:user.userDetails.bodyFatPercentage,
@@ -55,6 +55,31 @@ export const usersService = {
     "condition":  data.condition,
     "rol": data.rol
   }),
-  
+  editProfile: (data) => {
+    console.log({
+      "firstName": data.name,
+      "lastName": data.lastName,
+      "email": data.email,
+      "phone": data.phone,
+      "age": data.age,
+      "height_Cm": data.height,
+      "last_weight_kg": data.weight,
+      "condition": data.condition,
+      "sex": data.sex.toUpperCase(),
+      "bodyFatPercentage": data.fat
+    })
+    return apiClient.put(`users/${data.id}`,{
+      "firstName": data.name,
+      "lastName": data.lastName,
+      "email": data.email,
+      "phone": data.phone,
+      "age": data.age,
+      "height_Cm": data.height,
+      "last_weight_kg": data.weight,
+      "condition": data.condition,
+      "sex": data.sex.toUpperCase(),
+      "bodyFatPercentage": data.fat
+    })
+  }
 
 } 

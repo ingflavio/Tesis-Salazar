@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
-import { fieldsConfig } from '../utils/fieldsConfig'
+import { fieldsConfig, parseValues } from '../utils/fieldsConfig'
 import FormField from '../components/FormField'
 import classes from '../styles/ProfileCard.module.scss'
 import usePayemnts from '../hooks/usePayments'
 import useValidateForm from '../hooks/useValidateForm'
 
-export default function ProfileCard({ profile, rol = 'user' }){
+export default function ProfileCard({ profile, editCallback, rol = 'user', }){
   const editableFields = ['phone', 'email', 'age', 'weight', 'height', 'fat','condition'] 
   if(rol === 'admin') editableFields.push('name', 'lastName','sex')
   const initalAlerts = Object.fromEntries(editableFields.map((field) => [field, '']))
@@ -14,6 +14,8 @@ export default function ProfileCard({ profile, rol = 'user' }){
   const [ mode, setMode] = useState('profile')
   const { payments, fetchUserPayments } = usePayemnts()
   const refSavedChanges = useRef(false)
+  const extraFields = []
+  
 
   const changeMode = (event, value) => {
     event.preventDefault()
@@ -46,6 +48,10 @@ const handleSumbit = (event) => {
   const form = event.target
   const formData = new FormData(form)
   const entries = Array.from(formData.entries()) 
+  for (const field of extraFields) {
+    const input = document.getElementById(field)
+    if (input) entries.push([field, input.value])
+  }
   const data = Object.fromEntries(entries)
   
   const validations = Object.fromEntries(entries.reduce((validationArray, [key, value]) => {
@@ -57,7 +63,10 @@ const handleSumbit = (event) => {
   }, []))
   
   const valid = validateFields(validations)
-  if (valid) saveChanges(data)
+  if (valid) {
+    const parsedData = parseValues(data)
+    editCallback(parsedData)
+  }
 }
 
   const resetValues = () => {
@@ -68,10 +77,6 @@ const handleSumbit = (event) => {
       const newValue = formatValue ? formatValue(profile[field]) : profile[field]
       if (newValue !== input.value) input.value = newValue
     }
-  }
-
-  const saveChanges = (data) => {
-    console.log(data)
   }
 
   return (
@@ -88,6 +93,7 @@ const handleSumbit = (event) => {
           {Object.entries(profile).map(([name, value]) => {
             const config = fieldsConfig[name] 
             if (!config) return
+            if (config.type !== 'text') extraFields.push(name)
             const formatValue = config.formatValue 
             const newValue = formatValue ? formatValue(value) : value
             const notEditable = checkReadOnly(name)

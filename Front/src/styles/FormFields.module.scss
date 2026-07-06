@@ -19,6 +19,11 @@
   color: vars.$neutral-900;
 }
 
+.fieldWrapper select:disabled {
+  visibility: hidden;
+  position: absolute;
+}
+
 .roundField {
   position:relative;
   border: 2px solid vars.$neutral-900;

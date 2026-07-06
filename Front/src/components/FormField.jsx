@@ -25,14 +25,12 @@ function TextField({id, name, label, placeholder, initialValue, onChange, readOn
 function SelectField({ id, name, label, options, initialValue, onChange, readOnly = false }){
   return <div className={classes.fieldWrapper}>
     <label htmlFor={name}>{label}</label>
-    {
-    !readOnly ? 
-      <select name={name} id={id} defaultValue={initialValue} onChange={onChange}>
-        {options.map((option) => <option value={option.value}>{option.label}</option>)}
-      </select>
-    :
-      readOnly && <label>{options.find((option) => option.value === initialValue).label}</label>
-    }
+    <select name={name} id={id} defaultValue={initialValue} 
+      disabled={readOnly} onChange={onChange}
+    >
+      {options.map((option) => <option value={option.value}>{option.label}</option>)}
+    </select>
+    { readOnly && <label>{options.find((option) => option.value === initialValue).label}</label> }
   </div>
 }
 

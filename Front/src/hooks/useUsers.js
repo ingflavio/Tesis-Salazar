@@ -39,6 +39,14 @@ export const useUsers = () => {
     reset: resetProfile
   } = useFetch(usersService.addProfile, [], { immediate: false });
 
+  // Hook para editar perfil
+  const {
+    loading: editLoading,
+    error: editError,
+    execute: editProfile,
+    reset: resetEdit
+  } = useFetch(usersService.editProfile, [], { immediate: false });
+
   // Función para obtener un usuario por ID
   const getUser = async (id) => {
     if (!id) {
@@ -61,6 +69,15 @@ export const useUsers = () => {
       throw new Error('ID de usuario es requerido');
     }
     return await addProfile(profileData);
+  };
+
+  // Función para agregar perfil a un usuario
+  const editUserProfile = async (profileData) => {
+    if (!profileData.id) {
+      throw new Error('ID de usuario es requerido');
+    }
+    const response = await editProfile(profileData);
+    console.log(response)
   };
 
   return {
@@ -92,15 +109,24 @@ export const useUsers = () => {
     addProfile: addUserProfile,
     resetProfile,
 
+    // Estado de edicion de perfil
+    editLoading,
+    editError,
+    editProfile: editUserProfile,
+    resetEdit,
+    
+
     // Utilidades
     isUsersLoading: usersLoading,
     isUserLoading: userLoading,
     isRegisterLoading: registerLoading,
     isProfileLoading: profileLoading,
+    isEditLoading: editLoading,
     hasUsersError: !!usersError,
     hasUserError: !!userError,
     hasRegisterError: !!registerError,
     hasProfileError: !!profileError,
+    hasEditError: !!editError,
   };
 };
 
