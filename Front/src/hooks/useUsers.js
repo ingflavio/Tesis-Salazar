@@ -80,6 +80,7 @@ export const useUsers = () => {
     if (response.status === 200){
       return response.data
     }
+    return false
   };
 
   return {

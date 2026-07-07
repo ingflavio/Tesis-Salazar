@@ -65,6 +65,7 @@ const handleSumbit = (event) => {
   const valid = validateFields(validations)
   if (valid) {
     const parsedData = parseValues(data)
+    setMode('profile')
     editCallback(parsedData)
   }
 }
