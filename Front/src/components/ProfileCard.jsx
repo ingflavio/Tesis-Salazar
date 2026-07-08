@@ -28,11 +28,6 @@ export default function ProfileCard({ profile, editCallback, rol = 'user', }){
     }
   }, [profile]) 
 
-  useEffect(() => {
-    console.log(payments)
-  }, [payments]) 
-
-
   const changeMode = (event, value) => {
     event.preventDefault()
     if (mode === value) return
