@@ -45,7 +45,7 @@ export default function ProfilePage(){
         </span>
     }
     <dialog ref={modal}>
-      <button onClick={() => closeModalForm()}>X</button>
+      <button className="closeBtn" onClick={() => closeModalForm()}>X</button>
       <PaymentsForm />
     </dialog>
   </main>

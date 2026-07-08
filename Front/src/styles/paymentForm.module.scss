@@ -1,0 +1,14 @@
+.fields_wrapper {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap:  5% 10%;
+
+  > div{
+    width: 100%;
+  }
+
+  > div:nth-child(3){
+    grid-column: span 2;
+  }
+}

@@ -125,10 +125,8 @@ const banks = [
   { label: 'Banco Exterior', value: '0115' },
   { label: 'Banco Caroní', value: '0128' },
   { label: 'Banesco', value: '0134' },
-  { label: 'Banco Sofitasa', value: '0137' },
   { label: 'Banco Plaza', value: '0138' },
   { label: 'Banco de la Gente Emprendedora', value: '0146' },
-  { label: 'Banco Fondo Común', value: '0151' },
   { label: '100% Banco', value: '0156' },
   { label: 'DelSur', value: '0157' },
   { label: 'Banco del Tesoro', value: '0163' },
@@ -140,9 +138,7 @@ const banks = [
   { label: 'Banco Internacional de Desarrollo', value: '0173' },
   { label: 'Banplus', value: '0174' },
   { label: 'Banco Bicentenario del Pueblo', value: '0175' },
-  { label: 'Banco de la Fuerza Armada Nacional Bolivariana', value: '0177' },
   { label: 'Banco Nacional de Crédito', value: '0191' },
-  { label: 'Instituto Municipal de Crédito Popular', value: '0601' },
 ];
 
 const paymentsFieldsConfig = {
@@ -163,7 +159,7 @@ const paymentsFieldsConfig = {
   bank:{
     name: 'bank',
     label: 'banco',
-    type: 'select', 
+    type: 'enum', 
     placeholder: '',      
     options: banks
   },
@@ -172,13 +168,7 @@ const paymentsFieldsConfig = {
     label: 'monto',
     type: 'text',  
     placeholder: '',  
-  },
-  'date':{
-    name: 'date',
-    label: 'fecha',
-    type: 'text',  
-    placeholder: '',  
-  },
+  }
 }
 
 export const paymentsConfigArray = Object.entries(paymentsFieldsConfig).map(([,value]) => value)
