@@ -4,6 +4,9 @@ export default function PaymentsTable({payments = [], rol = 'user'}) {
   return <table className={classes.paymentsTable}>
     <thead>
       <tr>
+        <th className={classes.uniqueCell}><button>Registrar pago</button></th>
+      </tr>
+      <tr>
         {rol === 'admin' && <th>Usuario</th>}
         <th>Cedula</th>
         <th>Telefono</th>
