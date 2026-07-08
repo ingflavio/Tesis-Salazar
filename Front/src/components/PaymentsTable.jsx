@@ -1,7 +1,6 @@
 import classes from '../styles/payments.module.scss'
 
 export default function PaymentsTable({payments = [], rol = 'user'}) {
-  console.table(payments)
   return <table className={classes.paymentsTable}>
     <thead>
       <tr>
