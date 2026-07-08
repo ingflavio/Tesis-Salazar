@@ -1,13 +1,16 @@
 // ProfilePage.jsx
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSession } from "../hooks/useSession"
 import useUsers from "../hooks/useUsers";
+import { useModalForm } from "../hooks/useModalForm";
 import ProfileCard from '../components/ProfileCard'
 import classes from '../styles/profile.module.scss'
+import PaymentsForm from "../components/PaymentForm";
 
 export default function ProfilePage(){
   const { session } = useSession()
   const { user, getUser, refetchUser, editProfile } = useUsers()
+  const { modal, showModalForm, closeModalForm } = useModalForm()
   const [showAlert, setShowAlert] = useState(false)
 
   const editUserProfile = async (data) => {
@@ -29,13 +32,21 @@ export default function ProfilePage(){
     return Object.fromEntries(entries)
   }
 
+
   return <main className={classes.profilePage}>
-    <ProfileCard profile={formatProfile(user)} editCallback={editUserProfile}/>
+    <ProfileCard profile={formatProfile(user)} 
+      editCallback={editUserProfile}
+      modalCallback={showModalForm}
+    />
     {
       showAlert && 
         <span className={classes.alertBubble}>
           Usuario actualizado
         </span>
     }
+    <dialog ref={modal}>
+      <button onClick={() => closeModalForm()}>X</button>
+      <PaymentsForm />
+    </dialog>
   </main>
 }

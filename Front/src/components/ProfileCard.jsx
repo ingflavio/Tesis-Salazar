@@ -6,7 +6,7 @@ import useValidateForm from '../hooks/useValidateForm'
 import classes from '../styles/ProfileCard.module.scss'
 import PaymentsTable from './PaymentsTable'
 
-export default function ProfileCard({ profile, editCallback, rol = 'user', }){
+export default function ProfileCard({ profile, editCallback, modalCallback, rol = 'user', }){
   const editableFields = ['phone', 'email', 'age', 'weight', 'height', 'fat','condition'] 
   if(rol === 'admin') editableFields.push('name', 'lastName','sex')
   const initalAlerts = Object.fromEntries(editableFields.map((field) => [field, '']))
@@ -45,6 +45,10 @@ export default function ProfileCard({ profile, editCallback, rol = 'user', }){
 
 const handleSumbit = (event) => {
   event.preventDefault()
+  mode === 'edit' ? saveChanges(event) : modalCallback('Registrar Pago', 'Registrar', rol)
+}
+
+const saveChanges = (event) => {
   refSavedChanges.current = true
   const form = event.target
   const formData = new FormData(form)
@@ -129,7 +133,7 @@ const handleSumbit = (event) => {
         }
         {
           mode === 'payments' &&
-          <PaymentsTable payments={payments} />
+          <PaymentsTable payments={payments} modalCallback={modalCallback}/>
         }
       </div>
     </form>

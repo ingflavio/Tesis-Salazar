@@ -10,7 +10,6 @@ export default function usePayments() {
   }
 
   const fetchUserPayments = (id) =>{
-    console.log('buscando pagos del usuario ' + id)
     const response = paymentsService.getPaymentsByUser(id)
     setPayments(response)
   }
