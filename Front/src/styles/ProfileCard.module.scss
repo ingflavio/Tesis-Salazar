@@ -16,6 +16,11 @@
   transition: width 0.5s ease, all 0.5s ease;
 }
 
+.paymentsMode {
+  width: clamp(300px, 95dvw, 1700px);
+  transition: width 0.5s ease, all 0.5s ease;
+}
+
 .profileCard label,
 .profileCard input,
 .profileCard button {

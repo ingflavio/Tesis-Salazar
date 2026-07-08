@@ -1,14 +1,20 @@
 import { useEffect, useRef, useState } from 'react'
 import { fieldsConfig, parseValues } from '../utils/fieldsConfig'
 import FormField from '../components/FormField'
-import classes from '../styles/ProfileCard.module.scss'
 import usePayemnts from '../hooks/usePayments'
 import useValidateForm from '../hooks/useValidateForm'
+import classes from '../styles/ProfileCard.module.scss'
+import PaymentsTable from './PaymentsTable'
 
 export default function ProfileCard({ profile, editCallback, rol = 'user', }){
   const editableFields = ['phone', 'email', 'age', 'weight', 'height', 'fat','condition'] 
   if(rol === 'admin') editableFields.push('name', 'lastName','sex')
   const initalAlerts = Object.fromEntries(editableFields.map((field) => [field, '']))
+  const buttons = [
+    { name: 'perfil', mode: 'profile'},
+    { name: 'editar', mode: 'edit'},
+    { name: 'pagos', mode: 'payments'}
+  ]
 
   const { alerts, validateFields } = useValidateForm(initalAlerts)
   const [ mode, setMode] = useState('profile')
@@ -16,6 +22,16 @@ export default function ProfileCard({ profile, editCallback, rol = 'user', }){
   const refSavedChanges = useRef(false)
   const extraFields = []
   
+  useEffect(() => {
+    if (profile) {
+      fetchUserPayments(profile.id)
+    }
+  }, [profile]) 
+
+  useEffect(() => {
+    console.log(payments)
+  }, [payments]) 
+
 
   const changeMode = (event, value) => {
     event.preventDefault()
@@ -27,20 +43,10 @@ export default function ProfileCard({ profile, editCallback, rol = 'user', }){
     setMode(value)
   }
 
-  const buttons = [
-    { name: 'perfil', mode: 'profile'},
-    { name: 'editar', mode: 'edit'},
-    { name: 'pagos', mode: 'finance'}
-  ]
-
   const checkReadOnly = (field) => {
     if (mode !== 'edit') return true
     return !editableFields.includes(field)
   }
-
-  useEffect(() => {
-    fetchUserPayments(profile.id)
-  }, [])
 
 const handleSumbit = (event) => {
   event.preventDefault()
@@ -80,8 +86,14 @@ const handleSumbit = (event) => {
     }
   }
 
+  const classTable = {
+    'profile': classes.profileCard,
+    'edit': `${classes.profileCard} ${classes.editMode }`,
+    'payments': `${classes.profileCard} ${classes.paymentsMode }`
+  }
+
   return (
-    <form className={`${classes.profileCard} ${mode === 'edit' ? classes.editMode : ''}`} onSubmit={(event) => handleSumbit(event)}>
+    <form className={classTable[mode]} onSubmit={(event) => handleSumbit(event)}>
       <div className={classes.buttonBar}>
         {buttons.map((button) => 
           <button key={button.mode} className={mode === button.mode ? classes.activeButton : ""}
@@ -89,8 +101,8 @@ const handleSumbit = (event) => {
           >{button.name}</button>
         )}
       </div>
-      <div className={mode !== 'finance' ? classes.fields_Wrapper : classes.paymentsList}>
-        {mode !== 'finance' && <>
+      <div className={mode !== 'payments' ? classes.fields_Wrapper : classes.paymentsList}>
+        {mode !== 'payments' && <>
           {Object.entries(profile).map(([name, value]) => {
             const config = fieldsConfig[name] 
             if (!config) return
@@ -121,12 +133,8 @@ const handleSumbit = (event) => {
         </> 
         }
         {
-          mode === 'finance' &&
-          <div>{
-            payments.map((payment) => {
-              <span>{payment}</span>
-            })  
-          }</div>
+          mode === 'payments' &&
+          <PaymentsTable payments={payments} />
         }
       </div>
     </form>

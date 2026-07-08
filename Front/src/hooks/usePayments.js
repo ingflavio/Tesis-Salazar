@@ -1,7 +1,7 @@
 import { useState } from "react";
 import paymentsService from "../services/payments";
 
-export default function usePayemnts() {
+export default function usePayments() {
   const [payments, setPayments] = useState()
 
   const fetchPayments = () =>{
@@ -10,6 +10,7 @@ export default function usePayemnts() {
   }
 
   const fetchUserPayments = (id) =>{
+    console.log('buscando pagos del usuario ' + id)
     const response = paymentsService.getPaymentsByUser(id)
     setPayments(response)
   }

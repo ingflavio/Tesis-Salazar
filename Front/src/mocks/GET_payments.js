@@ -2,7 +2,7 @@
 const payments = [
   {
     id: 1,
-    user: 25107117,
+    user: 20000001,
     cedula: 30281014,
     bank: 'banco nacional de credito',
     phone: '04122082050',
@@ -11,7 +11,7 @@ const payments = [
   },
   {
     id: 2,
-    user: 26304456,
+    user: 20000002,
     cedula: 26304456,
     bank: 'banco venezuela',
     phone: '04244376400',
@@ -20,7 +20,7 @@ const payments = [
   },
   {
     id: 3,
-    user: 26304456,
+    user: 20000002,
     cedula: 26304456,
     bank: 'banco venezuela',
     phone: '04244376400',
@@ -29,7 +29,7 @@ const payments = [
   },
   {
     id: 4,
-    user: 25107117,
+    user: 20000001,
     cedula: 30281014,
     bank: 'banco nacional de credito',
     phone: '04122082050',

@@ -1,0 +1,22 @@
+@use './variables.scss' as vars;
+
+.paymentsTable {
+  background-color: vars.$neutral-500;
+  grid-template-columns: repeat(5, 1fr); 
+  border: 2px solid vars.$neutral-500;
+  font-size: clamp(.6rem, 1.8dvw, 1.4rem);
+}
+
+.paymentsTable tbody, .paymentsTable thead {
+  grid-template-rows: 1fr;
+}
+
+.paymentsTable, .paymentsTable tbody, .paymentsTable thead {
+  gap: 2px;
+}
+
+.paymentsTable td, .paymentsTable th { 
+  background-color: vars.$neutral-100;
+  color: vars.$neutral-700;
+  text-transform: capitalize;
+}
