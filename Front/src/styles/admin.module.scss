@@ -164,6 +164,7 @@ div:has(div.route){
 
 @media screen and (max-width:850px) {
   .route {
+    grid-row: span 2;
     grid-template-columns: 50px 1fr;
   }
 

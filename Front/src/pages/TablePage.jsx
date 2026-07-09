@@ -93,7 +93,6 @@ function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, chan
             />
             </th>
           )}
-          <th>Acciones</th>
         </tr>
         <tr>
           {reducedFields.map((config) => {
@@ -107,7 +106,6 @@ function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, chan
               />
             </th>
         })}
-          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -132,17 +130,6 @@ function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, chan
               return <td className={className} key={key}>{content}</td>
               })
             }
-            <td>
-              <button onClick={() => editCallback(getFullPofile(profile))}>
-                <Icons icon="edit" />
-              </button>
-              <button onClick={() => deleteCallback(getFullPofile(profile))}>
-                <Icons icon="delete" />
-              </button>
-              <button onClick={() => showCallback(getFullPofile(profile))}>
-                <Icons icon="eye"/>
-              </button>
-            </td>
           </tr>
         })}
       </tbody>
