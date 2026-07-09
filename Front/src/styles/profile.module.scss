@@ -2,6 +2,7 @@
 @use './variables.scss' as vars;
 
 .profilePage {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -19,6 +20,12 @@
   border-radius: .8em;
   box-shadow: 0 0 15px 1px vars.$neutral-300;
   animation: messageAppear 3s ease forwards;
+}
+
+.logOut {
+  position: absolute;
+  top: 1dvh;
+  right: 1dvw;
 }
 
 @keyframes messageAppear {

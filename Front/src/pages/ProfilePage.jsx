@@ -8,7 +8,7 @@ import classes from '../styles/profile.module.scss'
 import PaymentsForm from "../components/PaymentForm";
 
 export default function ProfilePage(){
-  const { session } = useSession()
+  const { session, logOut } = useSession()
   const { user, getUser, refetchUser, editProfile } = useUsers()
   const { modal, showModalForm, closeModalForm } = useModalForm()
   const [showAlert, setShowAlert] = useState(false)
@@ -34,6 +34,7 @@ export default function ProfilePage(){
 
 
   return <main className={classes.profilePage}>
+    <button className={classes.logOut} onClick={logOut}>Cerrar Sesion</button>
     <ProfileCard profile={formatProfile(user)} 
       editCallback={editUserProfile}
       modalCallback={showModalForm}
