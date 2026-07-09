@@ -48,7 +48,6 @@ export default function AdminLayout() {
 
 
   const isDesktop = screen.width > 850 
-  console.log(user)
 
   return (
     <>
@@ -74,7 +73,7 @@ export default function AdminLayout() {
               </>
             }
             <div className={classes.hideWrapper}>
-              <h6> Jose Olival </h6>
+              {user && <h6> {user.name} </h6>}
               <i>Administrador</i>
               <AdminNav>
                 <button onClick={logOut}>
@@ -83,7 +82,7 @@ export default function AdminLayout() {
               </AdminNav>
             </div>
           </aside>
-        <Outlet />
+        {user && <Outlet context={{name: user.name}}/>}
       </div>
     </>
   )

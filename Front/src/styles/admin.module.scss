@@ -125,7 +125,11 @@ div:has(div.route){
   padding: 1dvw;
 }
 
-.adminPage h4, .adminPage h3{
+.adminPage h3{
+  color: vars.$neutral-600;
+}
+
+.adminPage h4 {
   color: vars.$neutral-500;
 }
 

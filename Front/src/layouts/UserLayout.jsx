@@ -6,6 +6,7 @@ import { useScreen } from '../hooks/useScreen.js';
 export function UserLayout() {
   const { session } = useSession()
   const screen = useScreen()  
+  console.log(session)
   if (!session) return <Navigate to='/login' replace />
   if (session.rol !== 'user') return <Navigate to='/login' replace />
 
