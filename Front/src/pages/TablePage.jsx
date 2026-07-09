@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useModalForm } from "../hooks/useModalForm";
-import Icons from "../components/Icons";
+import { useScreen } from "../hooks/useScreen";
 import classes from "../styles/userTable.module.scss";
 import { configArray, fieldsConfig } from "../utils/fieldsConfig";
 import useFilter from '../hooks/useFilter';
@@ -67,8 +67,6 @@ function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, chan
   })
   const reducedFields = profileColumns.filter((item) => fieldsToShow.includes(item.name))
   const sortedProfiles = sorter(reducedProfiles)
-
-  const getFullPofile = (reducedProfile) => profiles.find((profile) => profile.id === reducedProfile.id)
   
   const handleClick = (field, direction) => {
     setSortParams({ field: direction !== null ? field : null, direction: direction })
@@ -147,11 +145,23 @@ function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, chan
 }
 
 export default function TablePage() {
+  const {width} = useScreen()
   const { filters, filterFunc, changeFilterParams } = useFilter()
   const {formInfo, formValues, modalOpen, modal, showModalForm, closeModalForm} = useModalForm()
   const [filterShow, setFilterShow] = useState(false)
   const [formFields, setFormFields] = useState([])
   const fieldsToShow = ['id', 'name', 'lastName', 'solvency']
+  console.log(width)
+  if (width >= 1150){
+    fieldsToShow.splice(3, 0, 'email')
+  }
+  if (width >= 1400){
+    fieldsToShow.splice(3, 0, 'phone')
+  }
+  if (width >= 1600){
+    fieldsToShow.splice(5, 0, 'sex')
+  }
+
   const boleanFields = ['solvency']
   const {
     users,
@@ -321,7 +331,6 @@ export default function TablePage() {
             filterFunc = { filterFunc }
             changeFilterParams = { handleChangeFilter }  
             editCallback = {(profile)=> OpenModal('editar', profile)}
-            deleteCallback = {(profile) => deleteProfile(profile)}
             showCallback = {(profile) => OpenModal('mostrar', profile)}
             tfooterCallback = {() => OpenModal('registrar')}
           />
