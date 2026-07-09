@@ -26,7 +26,7 @@ function SelectField({ id, name, label, options, initialValue, onChange, readOnl
   return <div className={classes.fieldWrapper}>
     <label htmlFor={name}>{label}</label>
     <select name={name} id={id} defaultValue={initialValue} 
-      disabled={readOnly} onChange={onChange}
+      disabled={readOnly} onChange={(e) => onChange? onChange(e.target.value) : ''}
     >
       {options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
     </select>

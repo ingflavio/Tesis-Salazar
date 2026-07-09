@@ -162,7 +162,6 @@ export default function TablePage() {
   }
 
   const boleanFields = ['solvency']
-  const enumsFields = ['sex']
   const {
     users,
     registerUser,
@@ -272,10 +271,7 @@ export default function TablePage() {
         const parseQuery = query === 'true';
         changeFilterParams(parseQuery, field);
       }
-    }else if (enumsFields.includes(field)) {
-      //no se por que el select no devuelve como query el valor sino el event, esto servira por ahora
-      changeFilterParams(query.target.value, field) 
-    }  else {
+    } else {
       changeFilterParams(query, field);
     }
   }
