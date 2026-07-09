@@ -57,15 +57,17 @@ div:has(div.route){
 }
 
 .hideWrapper {
-  height: 94.5%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .hideWrapper nav {
   margin-top: 1em;
-  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  flex-grow: 1;
 }
 
 .links_list {
