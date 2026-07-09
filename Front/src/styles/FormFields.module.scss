@@ -19,6 +19,10 @@
   color: vars.$neutral-900;
 }
 
+.fieldWrapper span {
+  color: vars.$warn-500;
+}
+
 .fieldWrapper select:disabled {
   visibility: hidden;
   position: absolute;

@@ -1,6 +1,9 @@
-import { validateNumber, validatePhone, validateEmail } from '../hooks/useValidateForm'
+import { validateIncrease, validatePhone, validateEmail, validateNumber } from '../hooks/useValidateForm'
 
 const capitalize = (value) => value[0].toUpperCase() + value.slice(1)
+
+// ParseValue es para acomodarlo cuando lo enviamos al backend
+// format es para acomodarlo cuando lo mostramos al usuario
 
 export const fieldsConfig = {
   id: {
@@ -8,7 +11,8 @@ export const fieldsConfig = {
     label: 'cedula',
     type: 'text',
     placeholder: '',   
-    parseValue: (value) => Number(value) 
+    parseValue: (value) => Number(value),
+    validateFunc: (value) => validateNumber(value) 
   },
   name: {
     name: 'name',
@@ -38,7 +42,7 @@ export const fieldsConfig = {
     type: 'text', 
     placeholder: '',
     parseValue: (value) => Number(value),
-    validateFunc: (value, previousValue) => validateNumber({value, previousValue, increase: 1}),
+    validateFunc: (value, previousValue) => validateIncrease({value, previousValue, increase: 1}),
   },
   phone: {
     name: 'phone',
@@ -70,7 +74,7 @@ export const fieldsConfig = {
     placeholder: '',
     parseValue: (value) => Number(value.replace(',','')),
     formatValue: (value) => `${String(value)[0]},${String(value).slice(1)}`,
-    validateFunc: (value, previousValue) => validateNumber({value, previousValue, increase: 5, increaseAdjust: 100, increaseMasure: 'm'}), 
+    validateFunc: (value, previousValue) => validateIncrease({value, previousValue, increase: 5, increaseAdjust: 100, increaseMasure: 'm'}), 
   },
   weight: {
     name: 'weight',
@@ -79,7 +83,7 @@ export const fieldsConfig = {
     placeholder: '',
     parseValue: (value) => Number(value.replace(',','.')),
     formatValue: (value) => String(value).replace('.',','),
-    validateFunc: (value, previousValue) => validateNumber({value, previousValue, increase: 5, increaseAdjust: 100, increaseMasure: 'kg'}), 
+    validateFunc: (value, previousValue) => validateIncrease({value, previousValue, increase: 5, increaseAdjust: 100, increaseMasure: 'kg'}), 
   },
   fat: {
     name: 'fat',
@@ -87,7 +91,7 @@ export const fieldsConfig = {
     type: 'text',  
     parseValue: (value) => Number(value.replace('%','')),
     formatValue: (value) => String(value) + '%',
-    validateFunc: (value, previousValue) => validateNumber({value, previousValue, increase: 5, increaseMasure: '%'}), 
+    validateFunc: (value, previousValue) => validateIncrease({value, previousValue, increase: 5, increaseMasure: '%'}), 
   },
   condition: {
     name: 'condition',
@@ -141,13 +145,14 @@ const banks = [
   { label: 'Banco Nacional de Crédito', value: '0191' },
 ];
 
-const paymentsFieldsConfig = {
+export const paymentsFieldsConfig = {
   cedula:{
     name: 'cedula',
     label: 'cedula',
     type: 'text',
     placeholder: '',   
-    parseValue: (value) => Number(value) 
+    parseValue: (value) => Number(value), 
+    validateFunc: (value ) => validateNumber({value, name: 'La cedula'}),
   },
   phone:{
     name: 'phone',
@@ -168,6 +173,8 @@ const paymentsFieldsConfig = {
     label: 'monto',
     type: 'text',  
     placeholder: '',  
+    parseValue: (value) => Number(value),
+    validateFunc: (value ) => validateNumber({value, name: 'El monto'}),
   }
 }
 

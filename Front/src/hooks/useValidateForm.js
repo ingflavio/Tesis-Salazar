@@ -1,6 +1,13 @@
 import { useState } from "react"
 
-export function validateNumber ({value, previousValue, name, increase, increaseMasure = '', increaseAdjust=1, decreaseAllowed = true}) {
+export function validateNumber ({value, name, zeroAllowed = false, negativeAllowed= false}) {
+  if(isNaN(value)) return `${name} debe ser un numero`
+  else if (value == 0 && !zeroAllowed) return `${name} no puede ser 0`
+  else if (value <= 0 && !negativeAllowed) return `${name} no puede ser negativo`
+  else return true
+}
+
+export function validateIncrease ({value, previousValue, name, increase, increaseMasure = '', increaseAdjust=1, decreaseAllowed = true}) {
   const diference = value - previousValue
   const direction = diference > 0 ? 'incrementar' : 'reducir'
   if (diference < 0 && !decreaseAllowed) return `No puedes bajar tu ${name}, si tu ${name} tiene un valor incorrecto habla con un administrador`
@@ -37,5 +44,5 @@ export default function useValidateForm(initialAlerts) {
     return Object.entries(validations).every(field => field[1] === true)
   }
   
-  return { alerts, validateFields, validateNumber, validatePhone, validateEmail }
+  return { alerts, validateFields, validateIncrease, validatePhone, validateEmail }
 }
