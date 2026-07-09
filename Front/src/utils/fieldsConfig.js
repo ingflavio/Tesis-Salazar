@@ -65,7 +65,8 @@ export const fieldsConfig = {
     placeholder: '', 
     parseValue: (value) => value.toUpperCase(),
     formatValue: (value) => value.toLowerCase(),
-    options: [{ label: 'femenino', value: 'f' }, { label: 'masculino', value: 'm' }],
+    validateFunc: (value) =>  (value === 'f' || value === 'm') ? true : 'Debes elije un sexo', 
+    options: [{ label: '', value: null },{ label: 'femenino', value: 'f' }, { label: 'masculino', value: 'm' }],
   },
   height: {
     name: 'height',
