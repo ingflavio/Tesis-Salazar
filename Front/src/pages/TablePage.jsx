@@ -11,11 +11,6 @@ import useUsers from "../hooks/useUsers";
 import ProfileCard from "../components/ProfileCard";
 
 function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initialValues }) {
-  const fields = fieldsToRender.map((config) => {
-    return initialValues
-      ? <FormField key={config.name} config={config} initialValue={initialValues[config.name]} />
-      : <FormField key={config.name} config={config} />
-  })
 
   const SubmitFunc = (event) => {
     event.preventDefault()
@@ -33,24 +28,20 @@ function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initial
     onSubmit(data)
   }
 
-  return (
-    <form className={classes.profileForm} onSubmit={(event) => SubmitFunc(event)}>
-      <h2>{title}</h2>
-      <div className={classes.fieldWrapper}>
-        {
-          fields
-        }
-      </div>
-      { sumbitText &&
-        <button type="submit">
-          {sumbitText}
-        </button>
+  return <form className={classes.profileForm} onSubmit={(event) => SubmitFunc(event)}>
+    <h2>{title}</h2>
+    <div className={classes.fieldWrapper}>
+      {
+        fieldsToRender.map((config) => <FormField key={config.name} config={config} />)
       }
-    </form>
-  );
+    </div>
+    <button type="submit">
+      {sumbitText}
+    </button>
+  </form>
 }
 
-function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, changeFilterParams, editCallback, deleteCallback, openCallback,tfooterCallback }) {
+function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, changeFilterParams, openCallback,tfooterCallback }) {
   const [sortParams, setSortParams] = useState({ field: null, direction: null })  
   const { sorter } = useSorter(sortParams)
 
@@ -246,7 +237,7 @@ export default function TablePage() {
     const FieldsToExclude = []
     if (mode === 'register'){
       FieldsToExclude.push('solvency', 'password')
-      showModalForm('Registrar Cliente','Registrar', mode, profile)
+      showModalForm({text:'Registrar Cliente',submit:'Registrar', mode, profile})
     }else if (mode === 'open'){
       // FieldsToExclude.push('password')
       showModalForm({text:'Perfil completo del cliente', mode, profile: getFullProfile(profile.id)})
@@ -335,16 +326,15 @@ export default function TablePage() {
         </div>
       </main>
       <dialog ref={modal} onClose={() => closeModalForm()}>
+        <button className="closeBtn" onClick={() => modal.current.close()}>X</button>
         {modalOpen && formInfo.mode === 'open' 
-          ? <ProfileCard profile={formValues} rol="admin"/>
+          ? <ProfileCard profile={formValues} rol={"admin"}/>
           : formInfo.mode === 'register' 
           ? <div className={classes.dialogWraper}>  
-              <button onClick={() => modal.current.close()}>X</button>
               <ProfileForm 
                 title={formInfo.title} 
                 sumbitText={formInfo.submit}
                 fieldsToRender={formFields} 
-                initialValues={formValues} 
                 onSubmit={handleSubmit}
               />
             </div>

@@ -1,11 +1,11 @@
 import classes from '../styles/payments.module.scss'
 
-export default function PaymentsTable({payments = [], rol = 'user'}) {
+export default function PaymentsTable({payments = [], rol = 'user', context = 'user'}) {
   return <table className={classes.paymentsTable}>
     <thead>
-      <tr>
+      {rol === 'user' &&<tr>
         <th className={classes.uniqueCell}><button>Registrar pago</button></th>
-      </tr>
+      </tr>}
       <tr>
         {rol === 'admin' && <th>Usuario</th>}
         <th>Cedula</th>
@@ -18,7 +18,7 @@ export default function PaymentsTable({payments = [], rol = 'user'}) {
     <tbody>{
       payments.map((payment) => {
         return <tr key={payment.id}>
-          {rol === 'admin' && <th>{payment.user}</th>}
+          {context === 'all' && <th>{payment.user}</th>}
           <th>{payment.cedula}</th>
           <th>{payment.phone}</th>
           <th>{payment.bank}</th>

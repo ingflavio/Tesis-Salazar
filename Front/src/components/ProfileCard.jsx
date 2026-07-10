@@ -6,7 +6,7 @@ import useValidateForm from '../hooks/useValidateForm'
 import classes from '../styles/ProfileCard.module.scss'
 import PaymentsTable from './PaymentsTable'
 
-export default function ProfileCard({ profile, editCallback, modalCallback, rol = 'user', }){
+export default function ProfileCard({ profile, editCallback, modalCallback, rol = 'user', children}){
   const editableFields = ['phone', 'email', 'age', 'weight', 'height', 'fat','condition'] 
   if(rol === 'admin') editableFields.push('name', 'lastName','sex')
   const initalAlerts = Object.fromEntries(editableFields.map((field) => [field, '']))
@@ -91,6 +91,12 @@ const saveChanges = (event) => {
     'payments': `${classes.profileCard} ${classes.paymentsMode }`
   }
 
+  const tittleTable = {
+    'profile': 'Datos del usuario',
+    'edit': 'Editar datos usuario',
+    'payments': 'Registro de pagos del usuario'    
+  }
+
   return (
     <form className={classTable[mode]} onSubmit={(event) => handleSumbit(event)}>
       <div className={classes.buttonBar}>
@@ -101,7 +107,8 @@ const saveChanges = (event) => {
         )}
       </div>
       <div className={mode !== 'payments' ? classes.fields_Wrapper : classes.paymentsList}>
-        {rol === 'admin' && <h3>Datos del usuario</h3>}
+        {children}
+        {rol === 'admin' && <h3>{tittleTable[mode]}</h3>}
         {mode !== 'payments' && <>
           {Object.entries(profile).map(([name, value]) => {
             const config = fieldsConfig[name] 
@@ -134,7 +141,9 @@ const saveChanges = (event) => {
         }
         {
           mode === 'payments' &&
-          <PaymentsTable payments={payments} modalCallback={modalCallback} rol={rol}/>
+          <PaymentsTable payments={payments} modalCallback={modalCallback} 
+          rol={rol} 
+            />
         }
       </div>
     </form>

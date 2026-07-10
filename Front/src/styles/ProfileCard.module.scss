@@ -1,7 +1,7 @@
 @use './variables.scss' as vars;
 
 .profileCard {
-  width: clamp(300px, 80dvw, 430px);
+  width: clamp(300px, 80dvw, 450px);
   display: block;
   border-radius: 0;
   padding: 0;
@@ -79,6 +79,7 @@
 
 .fields_Wrapper > h3 {
   grid-column: span 2;
+  text-align: center;
 }
 
 // Nuevo wrapper para el botón submit con animación
@@ -133,4 +134,13 @@ input.showInput {
   grid-column: span 2;
   text-align: center;
   color: vars.$warn-500;
+}
+
+dialog:has(.profileCard) > button {
+  top: 5.5%;
+}
+
+dialog:has(.paymentsMode) > button {
+  top: 15%;
+  right: 1%;
 }
