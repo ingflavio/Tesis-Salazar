@@ -6,7 +6,7 @@ import useValidateForm from '../hooks/useValidateForm'
 import classes from '../styles/ProfileCard.module.scss'
 import PaymentsTable from './PaymentsTable'
 
-export default function ProfileCard({ profile, editCallback, modalCallback, rol = 'user', children}){
+export default function ProfileCard({ profile, editCallback, modalCallback, rol = 'user' }){
   const editableFields = ['phone', 'email', 'age', 'weight', 'height', 'fat','condition'] 
   if(rol === 'admin') editableFields.push('name', 'lastName','sex')
   const initalAlerts = Object.fromEntries(editableFields.map((field) => [field, '']))
@@ -43,44 +43,43 @@ export default function ProfileCard({ profile, editCallback, modalCallback, rol 
     return !editableFields.includes(field)
   }
 
-const handleSumbit = (event) => {
-  event.preventDefault()
-  mode === 'edit' ? saveChanges(event) : modalCallback('Registrar Pago', 'Registrar', rol)
-}
+  const handleSumbit = (event) => {
+    event.preventDefault()
+    mode === 'edit' ? saveChanges(event) : modalCallback('Registrar Pago', 'Registrar', rol)
+  }
 
-const saveChanges = (event) => {
-  refSavedChanges.current = true
-  const form = event.target
-  const formData = new FormData(form)
-  const entries = Array.from(formData.entries()) 
-  for (const field of extraFields) {
-    const input = document.getElementById(field)
-    if (input) entries.push([field, input.value])
-  }
-  const data = Object.fromEntries(entries)
-  
-  const validations = Object.fromEntries(entries.reduce((validationArray, [key, value]) => {
-    const validationFunc = fieldsConfig[key]?.validateFunc
-    if (validationFunc) {
-      return [...validationArray, [key, validationFunc(value, profile[key])]]
+  const saveChanges = (event) => {
+    refSavedChanges.current = true
+    const form = event.target
+    const formData = new FormData(form)
+    const entries = Array.from(formData.entries()) 
+    for (const field of extraFields) {
+      const input = document.getElementById(field)
+      if (input) entries.push([field, input.value])
     }
-    return validationArray
-  }, []))
+    const data = Object.fromEntries(entries)
+    
+    const validations = Object.fromEntries(entries.reduce((validationArray, [key, value]) => {
+      const validationFunc = fieldsConfig[key]?.validateFunc
+      if (validationFunc) {
+        return [...validationArray, [key, validationFunc(value, profile[key])]]
+      }
+      return validationArray
+    }, []))
   
-  const valid = validateFields(validations)
-  if (valid) {
-    const parsedData = parseValues(data)
-    setMode('profile')
-    editCallback(parsedData)
-  }
-}
+    const valid = validateFields(validations)
+    if (valid) {
+      const parsedData = parseValues(data)
+      setMode('profile')
+      editCallback(parsedData)
+    }
+  } 
 
   const resetValues = () => {
     if(refSavedChanges.current) return
     for (const field of editableFields){
       const input = document.getElementById(field)
-      const formatValue = fieldsConfig[field].formatValue
-      const newValue = formatValue ? formatValue(profile[field]) : profile[field]
+      const newValue = profile[field]
       if (newValue !== input.value) input.value = newValue
     }
   }
@@ -107,15 +106,12 @@ const saveChanges = (event) => {
         )}
       </div>
       <div className={mode !== 'payments' ? classes.fields_Wrapper : classes.paymentsList}>
-        {children}
         {rol === 'admin' && <h3>{tittleTable[mode]}</h3>}
         {mode !== 'payments' && <>
           {Object.entries(profile).map(([name, value]) => {
             const config = fieldsConfig[name] 
             if (!config) return
             if (config.type !== 'text') extraFields.push(name)
-            const formatValue = config.formatValue 
-            const newValue = formatValue ? formatValue(value) : value
             const notEditable = checkReadOnly(name)
             const errorMsg = mode !== 'edit' 
               ? '' 
@@ -127,7 +123,7 @@ const saveChanges = (event) => {
               className={notEditable ? '' : classes.showInput}
               key={`${name}-${mode}`}
               config={config} 
-              initialValue={newValue}
+              initialValue={value}
               id={name}
               readOnly={notEditable}
               errorMsg={errorMsg}

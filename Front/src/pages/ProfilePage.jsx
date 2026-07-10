@@ -6,6 +6,7 @@ import { useModalForm } from "../hooks/useModalForm";
 import ProfileCard from '../components/ProfileCard'
 import classes from '../styles/profile.module.scss'
 import PaymentsForm from "../components/PaymentForm";
+import { fieldsConfig } from "../utils/fieldsConfig";
 
 export default function ProfilePage(){
   const { session, logOut } = useSession()
@@ -27,9 +28,16 @@ export default function ProfilePage(){
   }, [session]) 
 
   const formatProfile = (user) => {
-    let entries = Object.entries({...user})
-    entries = entries.filter(([name,]) => name !== 'solvency')
-    return Object.fromEntries(entries)
+    const entries = Object.entries({...user})
+    const formatedEntries = entries.reduce((newEntries, [name, value]) => {
+      if(name !== 'solvency' && name !== 'rol'){
+        const formatValue = fieldsConfig[name].formatValue
+        const newValue = formatValue ? formatValue(value) : value
+        newEntries.push([name, newValue])
+      }
+      return newEntries
+    },[])
+    return Object.fromEntries(formatedEntries)
   }
 
 
