@@ -101,6 +101,7 @@ const saveChanges = (event) => {
         )}
       </div>
       <div className={mode !== 'payments' ? classes.fields_Wrapper : classes.paymentsList}>
+        {rol === 'admin' && <h3>Datos del usuario</h3>}
         {mode !== 'payments' && <>
           {Object.entries(profile).map(([name, value]) => {
             const config = fieldsConfig[name] 
@@ -133,7 +134,7 @@ const saveChanges = (event) => {
         }
         {
           mode === 'payments' &&
-          <PaymentsTable payments={payments} modalCallback={modalCallback}/>
+          <PaymentsTable payments={payments} modalCallback={modalCallback} rol={rol}/>
         }
       </div>
     </form>

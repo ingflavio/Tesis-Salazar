@@ -77,6 +77,10 @@
   }
 }
 
+.fields_Wrapper > h3 {
+  grid-column: span 2;
+}
+
 // Nuevo wrapper para el botón submit con animación
 .submitWrapper {
   grid-column: span 2;

@@ -58,12 +58,20 @@ $gap-distance: clamp(2px, 6dvh, 40px);
   text-transform: capitalize;
 }
 
+.userTable td.email {
+  text-transform: none;
+}
+
 .userTable label {
   color: vars.$neutral-900;
   font-weight: 400;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: .5em;
+}
+
+.userTable tbody tr {
+  cursor: pointer;
 }
 
 .userTable tr:nth-child(2n) td { 
@@ -108,6 +116,13 @@ th {
 .footerButton {
   color: vars.$neutral-100;
   padding: 1em;
+}
+
+// Dialog
+
+div:has(.adminPage) > dialog {
+  background-color: transparent;
+  border: none;
 }
 
 .dialogWraper {

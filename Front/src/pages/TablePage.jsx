@@ -8,6 +8,7 @@ import SortingButton from "../components/SortingButtons";
 import useSorter from "../hooks/useSorter";
 import FormField from "../components/FormField";
 import useUsers from "../hooks/useUsers";
+import ProfileCard from "../components/ProfileCard";
 
 function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initialValues }) {
   const fields = fieldsToRender.map((config) => {
@@ -49,7 +50,7 @@ function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initial
   );
 }
 
-function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, changeFilterParams, editCallback, deleteCallback, showCallback,tfooterCallback }) {
+function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, changeFilterParams, editCallback, deleteCallback, openCallback,tfooterCallback }) {
   const [sortParams, setSortParams] = useState({ field: null, direction: null })  
   const { sorter } = useSorter(sortParams)
 
@@ -110,10 +111,13 @@ function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, chan
         {sortedProfiles.map((profile, index) => {
           const profileToShow = {...profile}
           delete profileToShow['password']
-          return <tr key={index}>{
+          return <tr key={index} onClick={() => openCallback(profile)}>{
             Object.entries(profileToShow).map(([key, value]) => {
               let content 
               let className = ''
+              if (key == 'email') {
+                className = classes.email
+              }
               if(typeof value === 'boolean'){
                 [content, className] = value 
                 ? ['Solvente', classes.greenText] 
@@ -187,11 +191,10 @@ export default function TablePage() {
 
   const profiles = users ? formatProfiles(users) : []
 
-  const deleteProfile = () => {
-  }
-  
   const editProfile = () => {
   }
+
+  const getFullProfile = (id) => profiles.find((profile) => profile.id === id)
 
   const handleRegisterUser = async ({id, username, password}) => {
     try {
@@ -241,15 +244,12 @@ export default function TablePage() {
 
   const OpenModal = (mode, profile = null) => {
     const FieldsToExclude = []
-    if (mode === 'registrar'){
-      FieldsToExclude.push('solvency')
-      showModalForm('Registrar cliente','Registrar', mode)
-    }else if (mode === 'editar'){
+    if (mode === 'register'){
       FieldsToExclude.push('solvency', 'password')
-      showModalForm('Editar datos de un cliente','Guardar cambios', mode, profile)
-    }else if (mode === 'mostrar'){
-      FieldsToExclude.push('password')
-      showModalForm('Perfil completo del cliente',false, mode, profile)
+      showModalForm('Registrar Cliente','Registrar', mode, profile)
+    }else if (mode === 'open'){
+      // FieldsToExclude.push('password')
+      showModalForm({text:'Perfil completo del cliente', mode, profile: getFullProfile(profile.id)})
     }
     setFormFields(configArray.filter((config) =>  !FieldsToExclude.includes(config.name)))
   }
@@ -329,26 +329,27 @@ export default function TablePage() {
             profiles = {profiles} 
             filterFunc = { filterFunc }
             changeFilterParams = { handleChangeFilter }  
-            editCallback = {(profile)=> OpenModal('editar', profile)}
-            showCallback = {(profile) => OpenModal('mostrar', profile)}
-            tfooterCallback = {() => OpenModal('registrar')}
+            openCallback = {(profile) => OpenModal('open', profile)}
+            tfooterCallback = {() => OpenModal('register')}
           />
         </div>
       </main>
       <dialog ref={modal} onClose={() => closeModalForm()}>
-        <div className={classes.dialogWraper}>  
-          <button onClick={() => modal.current.close()}>X</button>
-          {
-            modalOpen &&
-            <ProfileForm 
-              title={formInfo.title} 
-              sumbitText={formInfo.submit}
-              fieldsToRender={formFields} 
-              initialValues={formValues} 
-              onSubmit={handleSubmit}
-            />
-          }
-        </div>
+        {modalOpen && formInfo.mode === 'open' 
+          ? <ProfileCard profile={formValues} rol="admin"/>
+          : formInfo.mode === 'register' 
+          ? <div className={classes.dialogWraper}>  
+              <button onClick={() => modal.current.close()}>X</button>
+              <ProfileForm 
+                title={formInfo.title} 
+                sumbitText={formInfo.submit}
+                fieldsToRender={formFields} 
+                initialValues={formValues} 
+                onSubmit={handleSubmit}
+              />
+            </div>
+          : <></>
+        }
       </dialog>       
     </>
   );
