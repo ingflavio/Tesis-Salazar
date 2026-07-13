@@ -1,9 +1,6 @@
 package com.tesis_gym.Services;
 
-import com.tesis_gym.Controllers.Dto.PayDto;
-import com.tesis_gym.Controllers.Dto.UserDetailsUpdate;
-import com.tesis_gym.Controllers.Dto.UserRegistrationDto;
-import com.tesis_gym.Controllers.Dto.UserDetailsDto;
+import com.tesis_gym.Controllers.Dto.*;
 import com.tesis_gym.Entities.Pay;
 import com.tesis_gym.Entities.Roles;
 import com.tesis_gym.Entities.UserAccount;
@@ -18,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ClientUserService {
@@ -110,6 +108,33 @@ public class ClientUserService {
         existingUser.setBodyFatPercentage(dto.bodyFatPercentage());
 
         return detailsRepository.save(existingUser);
+    }
+
+    private PayResponseDto mapToPayResponseDto(Pay pay) {
+        return new PayResponseDto(
+                pay.getId(),
+                pay.getUser().getCedula(),
+                pay.getUser().getName(),
+                pay.getBank(),
+                pay.getPhone(),
+                pay.getAmount(),
+                pay.getImage(),
+                pay.getPaymentDate()
+        );
+    }
+
+    public List<PayResponseDto> getPaymentsByCedula(Long cedula) {
+        List<Pay> payments = payRepository.findByUser_Cedula(cedula);
+        return payments.stream()
+                .map(this::mapToPayResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<PayResponseDto> getAllPayments() {
+        List<Pay> payments = (List<Pay>) payRepository.findAll();
+        return payments.stream()
+                .map(this::mapToPayResponseDto)
+                .collect(Collectors.toList());
     }
 
     public boolean verifyPassword(Long cedula, String rawPassword) {
