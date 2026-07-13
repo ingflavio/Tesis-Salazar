@@ -7,6 +7,9 @@ import classes from '../styles/ProfileCard.module.scss'
 import PaymentsTable from './PaymentsTable'
 
 export default function ProfileCard({ profile, editCallback, modalCallback, rol = 'user' }){
+  if (typeof profile === 'object'){
+    console.log("desde el card el numero es "+profile.phone)
+  }
   const editableFields = ['phone', 'email', 'age', 'weight', 'height', 'fat','condition'] 
   if(rol === 'admin') editableFields.push('name', 'lastName','sex')
   const initalAlerts = Object.fromEntries(editableFields.map((field) => [field, '']))
@@ -32,7 +35,7 @@ export default function ProfileCard({ profile, editCallback, modalCallback, rol 
     event.preventDefault()
     if (mode === value) return
     if (mode === 'edit' && value === 'profile') {
-      resetValues()
+      if(refSavedChanges.current) resetValues()
       refSavedChanges.current = false
     }
     setMode(value)
@@ -49,7 +52,6 @@ export default function ProfileCard({ profile, editCallback, modalCallback, rol 
   }
 
   const saveChanges = (event) => {
-    refSavedChanges.current = true
     const form = event.target
     const formData = new FormData(form)
     const entries = Array.from(formData.entries()) 
@@ -69,6 +71,7 @@ export default function ProfileCard({ profile, editCallback, modalCallback, rol 
   
     const valid = validateFields(validations)
     if (valid) {
+      refSavedChanges.current = true
       const parsedData = parseValues(data)
       setMode('profile')
       editCallback(parsedData)
@@ -76,7 +79,7 @@ export default function ProfileCard({ profile, editCallback, modalCallback, rol 
   } 
 
   const resetValues = () => {
-    if(refSavedChanges.current) return
+    alert('los valores seran resetados')
     for (const field of editableFields){
       const input = document.getElementById(field)
       const newValue = profile[field]
@@ -113,6 +116,7 @@ export default function ProfileCard({ profile, editCallback, modalCallback, rol 
             if (!config) return
             if (config.type !== 'text') extraFields.push(name)
             const notEditable = checkReadOnly(name)
+            console.log(name + ' : ' + value + ' ' + notEditable)
             const errorMsg = mode !== 'edit' 
               ? '' 
               : Object.keys(alerts).includes(name) 
@@ -121,7 +125,7 @@ export default function ProfileCard({ profile, editCallback, modalCallback, rol 
 
             return <FormField 
               className={notEditable ? '' : classes.showInput}
-              key={`${name}-${mode}`}
+              key={`${name}-${mode}-${value}`}
               config={config} 
               initialValue={value}
               id={name}

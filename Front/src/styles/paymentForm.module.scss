@@ -12,3 +12,10 @@
     grid-column: span 2;
   }
 }
+
+.fields_wrapper  select {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

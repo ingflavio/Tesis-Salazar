@@ -10,19 +10,23 @@ import { fieldsConfig } from "../utils/fieldsConfig";
 
 export default function ProfilePage(){
   const { session, logOut } = useSession()
-  const { user, getUser, refetchUser, editProfile } = useUsers()
+  const { user, getUser, editProfile } = useUsers()
   const { modal, showModalForm, closeModalForm } = useModalForm()
   const [showAlert, setShowAlert] = useState(false)
 
   const editUserProfile = async (data) => {
     const response = await editProfile(data)
+    console.log(response)
     if (typeof response === 'object'){
       setShowAlert(true)
       setTimeout(() => setShowAlert(false), 3000)
-      refetchUser(session.id)
-      location.reload()
+      getUser(session.id)
     }
   }
+
+  useEffect(()=> {
+    if (user) console.log("desde la pagina el numero es "+user.phone)
+  }, [user])
 
   useEffect(() => {
     if (session) getUser(session.id)

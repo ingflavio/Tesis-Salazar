@@ -12,7 +12,6 @@ export default function PaymentsForm({submit}) {
     const form = event.target
     const formData = new FormData(form)
     const entries = Array.from(formData.entries()) 
-    console.log(entries)
     const validations = Object.fromEntries(entries.reduce((validationArray, [key, value]) => {
       const validationFunc = paymentsFieldsConfig[key].validateFunc
       if (validationFunc) {
