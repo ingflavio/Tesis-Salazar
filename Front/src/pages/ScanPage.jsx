@@ -7,21 +7,27 @@ import useUsers from '../hooks/useUsers'
 import { useModalForm } from '../hooks/useModalForm'
 
 export function ScanPage(){
+  const navigate  = useNavigate()
   const { session } = useSession()
   const { user, getUser } = useUsers()
-  const {modal, modalOpen, showModalForm, closeModalForm} = useModalForm()
+  const {modal, modalOpen, formInfo, showModalForm, closeModalForm} = useModalForm()
   const video = useRef()
-  const navigate = useNavigate()
 
   const handleScanSuccess = (data) => {
     if (!user) return
     const [prefix, id] = data.split(':')
-    const solvency = false /*user.solvency*/
+    const solvency = user.solvency
     if (!solvency) {
-      showModalForm({})
+      showModalForm({text: `Disculpe, ${user.name} pero usted no puede hacer uso del bot asistente debido a que se encuentra insolvente`})
       return 
     } 
-    if (prefix == 'ss25') navigate("/chat", { state: { machine: id } });
+    if (prefix == 'ss25') {
+      navigate("/chat", { state: { machine: id } })
+    } else showModalForm({text: 'QR no valido'})
+  }
+
+  const goToPayment = () => {
+    navigate('/profile', {state: { mode: 'payments', modal: 'payments'}})
   }
 
   useEffect(() => {
@@ -46,8 +52,10 @@ export function ScanPage(){
         }
       </div>
     </main>
-   {modalOpen&& <dialog ref={modal} open={modalOpen}>
-        <h3>PAGUE LOS MALDITOS RIALES </h3>
+   {(user && modalOpen)  && <dialog className={classes.modal} ref={modal} open={modalOpen}>
+     <button className='closeBtn' onClick={() => closeModalForm()}>X</button>
+      <p>{formInfo.title}</p>
+      <button onClick={goToPayment}>Ir a Pagar</button>
     </dialog>}
   </>
 }

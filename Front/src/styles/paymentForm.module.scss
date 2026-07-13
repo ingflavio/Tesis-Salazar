@@ -13,6 +13,11 @@
   }
 }
 
+.fields_wrapper > div:has(select) {
+  display: flex;
+  flex-direction: column;
+}
+
 .fields_wrapper  select {
   max-width: 100%;
   overflow: hidden;

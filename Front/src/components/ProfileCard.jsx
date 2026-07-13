@@ -5,8 +5,10 @@ import usePayemnts from '../hooks/usePayments'
 import useValidateForm from '../hooks/useValidateForm'
 import classes from '../styles/ProfileCard.module.scss'
 import PaymentsTable from './PaymentsTable'
+import { useLocation } from "react-router";
 
 export default function ProfileCard({ profile, editCallback, modalCallback, rol = 'user' }){
+  const location = useLocation()
   const editableFields = ['phone', 'email', 'age', 'weight', 'height', 'fat','condition'] 
   if(rol === 'admin') editableFields.push('name', 'lastName','sex')
   const initalAlerts = Object.fromEntries(editableFields.map((field) => [field, '']))
@@ -17,11 +19,16 @@ export default function ProfileCard({ profile, editCallback, modalCallback, rol 
   ]
 
   const { alerts, validateFields } = useValidateForm(initalAlerts)
-  const [ mode, setMode] = useState('profile')
+  const [ mode, setMode] = useState(location.state ? location.state.mode : 'profile')
   const { payments, fetchUserPayments } = usePayemnts()
   const refSavedChanges = useRef(false)
   const extraFields = []
-  
+
+  if (location.state){
+    const modal = location.state.modal
+    if (modal) modalCallback('Registrar Pago', 'Registrar', rol)
+  }
+
   useEffect(() => {
     if (profile) {
       fetchUserPayments(profile.id)
