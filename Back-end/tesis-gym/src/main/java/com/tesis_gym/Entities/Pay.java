@@ -28,6 +28,10 @@ public class Pay {
     private String phone;
 
     @Column(nullable = false)
+    private String Reference_number;
+
+
+    @Column(nullable = false)
     private Double amount;
 
     private String image;
