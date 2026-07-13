@@ -2,25 +2,31 @@
 
 .scanPage {
   position: relative;
-  height: calc(100dvh - vars.$navigation-bar--height);
-}
-
-.scanPage video {
   height: 100%;
-  background-color: #011;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+
+  video {
+    background-color: #011;
+    width: 100%;          // Ancho completo por defecto
+    height: 100%;       
+  }
 }
 
-
-.scanPage div {
+.framing {
   position: absolute;
-  top: 33%;
-  left: 50dvw;
-  transform: translateX(-50%);
-  height: 33%;
+  width: clamp(200px, 33dvw, 300px);
+  aspect-ratio: 1;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
   display: grid;
   grid-template-columns: 1fr repeat(3, 5fr) 1fr;
   grid-template-rows: 1fr repeat(3, 5fr) 1fr;
   aspect-ratio: 1;
+  pointer-events: none; // Añadido para no interferir con el video
 }
 
 .filled {
