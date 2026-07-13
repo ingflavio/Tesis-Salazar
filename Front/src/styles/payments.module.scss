@@ -2,7 +2,7 @@
 
 .paymentsTable {
   background-color: vars.$neutral-500;
-  grid-template-columns: repeat(5, 1fr); 
+  grid-template-columns: repeat(6, 1fr); 
   border: 2px solid vars.$neutral-500;
   font-size: clamp(.6rem, 1.8dvw, 1.4rem);
 }
@@ -23,4 +23,12 @@
 
 .uniqueCell {
   grid-column: 1/-1;
+}
+
+th.acepted {
+  color: color-mix(in srgb, #282 70%, vars.$secondary-500 30%);;
+}
+
+th.pending {
+  color: vars.$warn-700
 }

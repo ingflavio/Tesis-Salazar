@@ -7,7 +7,8 @@ const payments = [
     bank: 'banco nacional de credito',
     phone: '04122082050',
     amount: 2800,
-    date: '02-07-2026'
+    date: '02-07-2026',
+    status: false
   },
   {
     id: 2,
@@ -16,7 +17,8 @@ const payments = [
     bank: 'banco venezuela',
     phone: '04244376400',
     amount: 2800,
-    date: '02-07-2026'
+    date: '02-07-2026',
+    status: false
   },
   {
     id: 3,
@@ -25,7 +27,8 @@ const payments = [
     bank: 'banco venezuela',
     phone: '04244376400',
     amount: 2800,
-    date: '02-06-2026'
+    date: '02-06-2026',
+    status: true
   },
   {
     id: 4,
@@ -34,7 +37,8 @@ const payments = [
     bank: 'banco nacional de credito',
     phone: '04122082050',
     amount: 2800,
-    date: '02-06-2026'
+    date: '02-06-2026',
+    status: true
   // },
   // {
   //   id: 5,
