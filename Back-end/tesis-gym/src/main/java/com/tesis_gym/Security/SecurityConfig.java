@@ -35,12 +35,12 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/login", "/api/users/register", "/api/utils/**").permitAll()
+                        .requestMatchers("/api/auth/login", "/api/users/register", "/api/utils/**","/swagger-ui/index.html#/").permitAll()
                         .requestMatchers("/api/admin/**").hasAuthority("Admin")
                         .requestMatchers("/api/machines/**").hasAuthority("Admin")
                         .requestMatchers("/api/users/**").authenticated()
 
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
