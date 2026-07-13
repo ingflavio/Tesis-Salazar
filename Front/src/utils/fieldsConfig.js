@@ -42,7 +42,7 @@ export const fieldsConfig = {
     type: 'text', 
     placeholder: '',
     parseValue: (value) => Number(value),
-    validateFunc: (value, previousValue) => validateIncrease({value, previousValue, increase: 1}),
+    // validateFunc: (value, previousValue) => validateIncrease({value, previousValue, increase: 1}),
   },
   phone: {
     name: 'phone',
@@ -84,7 +84,7 @@ export const fieldsConfig = {
     placeholder: '',
     parseValue: (value) => Number(value.replace(',','.')),
     formatValue: (value) => String(value).replace('.',','),
-    validateFunc: (value, previousValue) => validateIncrease({value, previousValue, increase: 5, increaseAdjust: 100, increaseMasure: 'kg'}), 
+    // validateFunc: (value, previousValue) => validateIncrease({value, previousValue, increase: 5, increaseAdjust: 100, increaseMasure: 'kg'}), 
   },
   fat: {
     name: 'fat',

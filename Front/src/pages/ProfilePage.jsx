@@ -20,6 +20,7 @@ export default function ProfilePage(){
       setShowAlert(true)
       setTimeout(() => setShowAlert(false), 3000)
       refetchUser(session.id)
+      location.reload()
     }
   }
 

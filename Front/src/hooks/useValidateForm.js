@@ -16,7 +16,7 @@ export function validateIncrease ({value, previousValue, name, increase, increas
 }
 
 export function validatePhone(value) {
-  const regex = /^04(26|24|16|14)\d{7}$/;
+  const regex = /^04(26|24|16|14|12|22)\d{7}$/;
   return regex.test(value) ? true : 'teléfono inválido';
 }
 

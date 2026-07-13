@@ -60,7 +60,7 @@ export default function ProfileCard({ profile, editCallback, modalCallback, rol 
     const data = Object.fromEntries(entries)
     
     const validations = Object.fromEntries(entries.reduce((validationArray, [key, value]) => {
-      const validationFunc = fieldsConfig[key]?.validateFunc
+      const validationFunc = editableFields.includes(key) ? fieldsConfig[key]?.validateFunc : null
       if (validationFunc) {
         return [...validationArray, [key, validationFunc(value, profile[key])]]
       }

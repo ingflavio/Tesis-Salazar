@@ -73,7 +73,7 @@ export default function AdminLayout() {
               </>
             }
             <div className={classes.hideWrapper}>
-              {user && <h6> {user.name} </h6>}
+              {user && <h6> Alejandra Hernandez </h6>}
               <i>Administrador</i>
               <AdminNav>
                 <button onClick={logOut}>

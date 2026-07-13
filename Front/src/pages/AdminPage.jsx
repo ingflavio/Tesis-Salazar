@@ -130,7 +130,7 @@ export default function AdminPage() {
     {name: 'febrero', activos: 13, inactivos: 11, totales:24}, 
     {name: 'marzo', activos: 20, inactivos: 11, totales:31}, 
     {name: 'abril', activos: 27, inactivos: 8, totales:35}, 
-    {name: 'mayo', activos: 26, inactivos: 14, totales:40}, 
+    // {name: 'mayo', activos: 26, inactivos: 14, totales:40}, 
   ]
 
   const lines = [
@@ -146,7 +146,7 @@ export default function AdminPage() {
   
   return (
     <main className={classes.adminPage}>
-      <h3>Buenos dias {name}</h3>
+      <h3>Buenos dias <span style={{fontWeight:'400'}}>Alejandra Hernandez</span></h3>
       <div className={classes.dashboard}>
         <section>
           <h4>Usuarios</h4>
