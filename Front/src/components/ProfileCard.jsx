@@ -7,9 +7,6 @@ import classes from '../styles/ProfileCard.module.scss'
 import PaymentsTable from './PaymentsTable'
 
 export default function ProfileCard({ profile, editCallback, modalCallback, rol = 'user' }){
-  if (typeof profile === 'object'){
-    console.log("desde el card el numero es "+profile.phone)
-  }
   const editableFields = ['phone', 'email', 'age', 'weight', 'height', 'fat','condition'] 
   if(rol === 'admin') editableFields.push('name', 'lastName','sex')
   const initalAlerts = Object.fromEntries(editableFields.map((field) => [field, '']))
@@ -79,7 +76,6 @@ export default function ProfileCard({ profile, editCallback, modalCallback, rol 
   } 
 
   const resetValues = () => {
-    alert('los valores seran resetados')
     for (const field of editableFields){
       const input = document.getElementById(field)
       const newValue = profile[field]
@@ -116,7 +112,6 @@ export default function ProfileCard({ profile, editCallback, modalCallback, rol 
             if (!config) return
             if (config.type !== 'text') extraFields.push(name)
             const notEditable = checkReadOnly(name)
-            console.log(name + ' : ' + value + ' ' + notEditable)
             const errorMsg = mode !== 'edit' 
               ? '' 
               : Object.keys(alerts).includes(name) 

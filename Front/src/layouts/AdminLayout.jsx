@@ -38,7 +38,6 @@ export default function AdminLayout() {
   const { user, getUser } = useUsers()
 
   useEffect( () => {
-    // console.log(session)
     if(session) getUser(session.id)
   }, [session]) 
   if (!session) {

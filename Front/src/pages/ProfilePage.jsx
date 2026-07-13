@@ -16,17 +16,12 @@ export default function ProfilePage(){
 
   const editUserProfile = async (data) => {
     const response = await editProfile(data)
-    console.log(response)
     if (typeof response === 'object'){
       setShowAlert(true)
       setTimeout(() => setShowAlert(false), 3000)
       getUser(session.id)
     }
   }
-
-  useEffect(()=> {
-    if (user) console.log("desde la pagina el numero es "+user.phone)
-  }, [user])
 
   useEffect(() => {
     if (session) getUser(session.id)

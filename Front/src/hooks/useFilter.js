@@ -13,14 +13,12 @@ export default function useFilter(){
   const filterFunc = (object) => {
     const checkList = []
     for (const filter of filters) {
-      // console.log(filter)
       const value = object[filter.field]
       const type = typeof value
       if (type === 'string') checkList.push(filterString(value, filter.query))
       else if (type === 'number') checkList.push(filterNumber(value, filter.query))
       else if (type === 'boolean') checkList.push(filterBoolean(value, filter.query))
     }
-      // console.log(checkList)
     if (checkList.length === 0) return true
     return checkList.every((item) => item)
   } 
