@@ -27,13 +27,33 @@ public class ClientUserController {
         return ResponseEntity.ok(userService.registerAccount(dto));
     }
 
-    @PostMapping("/{cedula}/details")
-    public ResponseEntity<UserDetails> completeDetails(@PathVariable Long cedula, @Valid @RequestBody UserDetailsDto dto) {
+    @GetMapping("/me")
+    public ResponseEntity<UserAccount> getMyProfile(@RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.substring(7);
+        Long cedula = Long.valueOf(jwtService.getCedulaFromToken(token));
+
+        return ResponseEntity.ok(userService.getUserAccountByCedula(cedula));
+    }
+
+
+    @PostMapping("/details")
+    public ResponseEntity<UserDetails> completeDetails(
+            @RequestHeader("Authorization") String authHeader,
+            @Valid @RequestBody UserDetailsDto dto) {
+        String token = authHeader.substring(7);
+        Long cedula = Long.valueOf(jwtService.getCedulaFromToken(token));
+
         return ResponseEntity.ok(userService.completeDetails(cedula, dto));
     }
 
-    @PutMapping("/{cedula}")
-    public ResponseEntity<UserDetails> update(@PathVariable Long cedula, @Valid @RequestBody UserDetailsUpdate dto) {
+    @PutMapping("/details")
+    public ResponseEntity<UserDetails> update(
+            @RequestHeader("Authorization") String authHeader,
+            @Valid @RequestBody UserDetailsUpdate dto) {
+
+        String token = authHeader.substring(7);
+        Long cedula = Long.valueOf(jwtService.getCedulaFromToken(token));
+
         return ResponseEntity.ok(userService.updateUser(cedula, dto));
     }
 
