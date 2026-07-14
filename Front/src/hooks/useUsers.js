@@ -1,4 +1,3 @@
-// useUsers.js
 import { useFetch } from './useFetch';
 import { userService } from '../services/user';
 import { adminService } from '../services/admin';
@@ -118,19 +117,6 @@ export const useUsers = () => {
     editError,
     editProfile: editUserProfile,
     resetEdit,
-    
-
-    // Utilidades
-    isUsersLoading: usersLoading,
-    isUserLoading: userLoading,
-    isRegisterLoading: registerLoading,
-    isProfileLoading: profileLoading,
-    isEditLoading: editLoading,
-    hasUsersError: !!usersError,
-    hasUserError: !!userError,
-    hasRegisterError: !!registerError,
-    hasProfileError: !!profileError,
-    hasEditError: !!editError,
   };
 };
 
