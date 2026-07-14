@@ -1,5 +1,7 @@
 import { apiClient } from "./api";
 
+const CONTROLLER_URL = '/admin/'
+
 const formatUser = (user) => {
   if(user.userDetails){
     return {
@@ -28,46 +30,15 @@ const formatUser = (user) => {
   }
 }   
 
-export const usersService = {
+export const adminService = {
   getUsers: async () => {
-    const response = await apiClient.get('users')
+    const response = await apiClient.get(`${CONTROLLER_URL}users`)
     return response.data.map(formatUser)
   },
   getUser: async (id) => {
-    const response = await apiClient.get(`users/${id}`)
+    const response = await apiClient.get(`${CONTROLLER_URL}users/${id}`)
     const user = await response.data
     return formatUser(user)
   },
-  registerUser: ({ id, username, password, rol }) => apiClient.post(`users/register`,{
-    "cedula": id,
-    "name": username,
-    "password": password,
-    "rol": rol[0].toUpperCase() + rol.slice(1) 
-  }),
-  addProfile: (data) => apiClient.post(`users/${data.id}/details`,{
-    "firstName": data.name,
-    "lastName": data.lastName,
-    "email": data.email,
-    "phone": data.phone,
-    "age": data.age,
-    "height_Cm": data.height,
-    "init_weight_kg": data.weight,
-    "condition":  data.condition,
-    "rol": data.rol
-  }),
-  editProfile: (data) => {
-    return apiClient.put(`users/${data.id}`,{
-      "firstName": data.name,
-      "lastName": data.lastName,
-      "email": data.email,
-      "phone": data.phone,
-      "age": data.age,
-      "height_Cm": data.height,
-      "last_weight_kg": data.weight,
-      "condition": data.condition,
-      "sex": data.sex.toUpperCase(),
-      "bodyFatPercentage": data.fat
-    })
-  }
-
+  getPayments: () => apiClient.get(`${CONTROLLER_URL}/payments`),
 } 
