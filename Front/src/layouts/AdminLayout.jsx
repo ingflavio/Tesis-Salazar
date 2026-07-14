@@ -1,33 +1,46 @@
-import { Outlet, Navigate, Link } from 'react-router';
-import { useEffect } from 'react';
+import { Outlet, Navigate, Link, useLocation } from 'react-router';
+// import { useEffect } from 'react';
 import { useScreen } from '../hooks/useScreen.js';
 import { useSession } from '../hooks/useSession.js';
 import Icons from '../components/Icons.jsx';
 import classes from '../styles/admin.module.scss'
-import useUsers from '../hooks/useUsers.js';
+import { useEffect, useState } from 'react';
+// import useUsers from '../hooks/useUsers.js';
 
 function AdminNav({ children }) {
+  const location = useLocation()
+  const [pathname, setPathname] = useState(location.pathname)
+
+  useEffect(()=>{
+    setPathname(location.pathname)
+  },[location.pathname])
+  const links = [
+    {
+      text: 'inicio',
+      path: '/admin',
+      icon: 'home'
+    },
+    {
+      text: 'clientes',
+      path: '/admin/table',
+      icon: 'user'
+    },
+    {
+      text: 'finanzas',
+      path: '/admin/finance',
+      icon: 'finance'
+    }
+  ]
+
   return <nav>
-    <ul className={classes.links_list}>
-      <li className={classes.link}>
-        <Link to={'/admin'}>
-          <Icons icon='home' />
-          inicio
+    <ul className={classes.links_list}>{
+      links.map((link) => <li className={`${pathname == link.path ? classes.selected_link : ""} ${classes.link}`} key={link.path}>
+        <Link to={link.path}>
+          <Icons icon={link.icon} />
+          {link.text}
         </Link>
-      </li>
-      <li className={classes.link}>
-        <Link to={'/admin/table'}>
-          <Icons icon='user' />
-          Clientes
-        </Link>
-      </li>
-      <li className={classes.link}>
-        <Link to={'/admin/finance'}>
-          <Icons icon='finance' />
-          Finanzas
-        </Link>
-      </li>
-    </ul>
+      </li>)
+    }</ul>
     {children} 
   </nav>
 }
@@ -35,11 +48,11 @@ function AdminNav({ children }) {
 export default function AdminLayout() {
   const screen = useScreen()  
   const { session, logOut } = useSession()
-  const { user, getUser } = useUsers()
+  // const { user, getUser } = useUsers()
 
-  useEffect( () => {
-    if(session) getUser(session.id)
-  }, [session]) 
+  // useEffect( () => {
+  //   if(session) getUser(session.id)
+  // }, [session]) 
   if (!session) {
     return <Navigate to='/login' replace />
   }
@@ -72,7 +85,7 @@ export default function AdminLayout() {
               </>
             }
             <div className={classes.hideWrapper}>
-              {user && <h6> Alejandra Hernandez </h6>}
+              {/* {user && <h6> Alejandra Hernandez </h6>} */}
               <i>Administrador</i>
               <AdminNav>
                 <button onClick={logOut}>
@@ -81,7 +94,7 @@ export default function AdminLayout() {
               </AdminNav>
             </div>
           </aside>
-        {user && <Outlet context={{name: user.name}}/>}
+        {/*user &&*/ <Outlet /*context={{name: user.name}}*/ />}
       </div>
     </>
   )

@@ -85,6 +85,17 @@ div:has(div.route){
 
 .link {
   color: vars.$neutral-100;
+  padding: .2em;
+}
+
+.selected_link {
+  color: vars.$primary-500;
+  background-color: vars.$neutral-100;
+  border-radius: .5em;
+}
+
+.selected_link > a > svg{
+  fill: vars.$primary-500;
 }
 
 .link a {
