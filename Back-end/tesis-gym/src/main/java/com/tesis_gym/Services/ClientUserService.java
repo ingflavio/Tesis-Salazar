@@ -195,6 +195,7 @@ public class ClientUserService {
                 .bank(payDto.bank())
                 .phone(payDto.phone())
                 .amount(payDto.amount())
+                .Reference_number(payDto.Reference_number())
                 .image(payDto.image())
                 .build();
         payRepository.save(payment);
