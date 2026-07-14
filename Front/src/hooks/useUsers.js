@@ -1,6 +1,7 @@
 // useUsers.js
 import { useFetch } from './useFetch';
-import { usersService } from '../services/users';
+import { userService } from '../services/user';
+import { adminService } from '../services/admin';
 
 export const useUsers = () => {
   // Hook para obtener todos los usuarios
@@ -11,7 +12,7 @@ export const useUsers = () => {
     execute: fetchUsers,
     refetch: refetchUsers,
     reset: resetUsers
-  } = useFetch(usersService.getUsers, [], { immediate: false });
+  } = useFetch(adminService.getUsers, [], { immediate: false });
 
   // Hook para obtener un usuario específico
   const {
@@ -21,7 +22,7 @@ export const useUsers = () => {
     execute: fetchUser,
     refetch: refetchUser,
     reset: resetUser
-  } = useFetch(usersService.getUser, [], { immediate: false });
+  } = useFetch(adminService.getUser, [], { immediate: false });
 
   // Hook para registrar un usuario
   const {
@@ -29,7 +30,7 @@ export const useUsers = () => {
     error: registerError,
     execute: registerUser,
     reset: resetRegister
-  } = useFetch(usersService.registerUser, [], { immediate: false });
+  } = useFetch(userService.registerUser, [], { immediate: false });
 
   // Hook para agregar perfil
   const {
@@ -37,7 +38,7 @@ export const useUsers = () => {
     error: profileError,
     execute: addProfile,
     reset: resetProfile
-  } = useFetch(usersService.addProfile, [], { immediate: false });
+  } = useFetch(userService.addProfile, [], { immediate: false });
 
   // Hook para editar perfil
   const {
@@ -45,7 +46,7 @@ export const useUsers = () => {
     error: editError,
     execute: editProfile,
     reset: resetEdit
-  } = useFetch(usersService.editProfile, [], { immediate: false });
+  } = useFetch(userService.editProfile, [], { immediate: false });
 
   // Función para obtener un usuario por ID
   const getUser = async (id) => {
