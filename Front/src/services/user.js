@@ -25,6 +25,7 @@ export const userService = {
     "bank": data.bank,
     "phone": data.phone,
     "amount": data.amount,
+    "image": data.image,
     // "refence": data.phone
   }),
   editProfile: (data) => {
