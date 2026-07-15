@@ -1,6 +1,7 @@
 @use './variables.scss' as vars;
 
 .paymentsTable {
+  width: 100%;
   background-color: vars.$neutral-500;
   grid-template-columns: repeat(6, 1fr); 
   border: 2px solid vars.$neutral-500;

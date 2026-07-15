@@ -166,8 +166,7 @@ export const paymentsFieldsConfig = {
     name: 'bank',
     label: 'banco',
     type: 'enum', 
-    placeholder: '',      
-    options: banks
+    placeholder: '', 
   },
   amount:{
     name: 'amount',

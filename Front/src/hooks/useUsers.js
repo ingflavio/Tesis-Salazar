@@ -33,9 +33,10 @@ export const useUsers = () => {
 
   // Hook para obtener el perfil del usuario
   const {
+    data: profile,
     loading: profileLoading,
     error: profileError,
-    execute: addProfile,
+    execute: getProfile,
     reset: resetProfile
   } = useFetch(userService.getProfile, [], { immediate: false });
 
@@ -43,7 +44,7 @@ export const useUsers = () => {
   const {
     loading: sendProfileLoading,
     error: sendProfileError,
-    execute: addSendProfile,
+    execute: addProfile,
     reset: resetSendProfile
   } = useFetch(userService.addProfile, [], { immediate: false });
 
@@ -115,15 +116,16 @@ export const useUsers = () => {
     resetRegister,
 
     // Estado de perfil
+    profile,
     profileLoading,
     profileError,
-    addProfile: addUserProfile,
+    getProfile,
     resetProfile,
 
     // estado del envio del perfil
     sendProfileLoading,
     sendProfileError,
-    addSendProfile,
+    addProfile: addUserProfile,
     resetSendProfile,
 
     // Estado de edicion de perfil

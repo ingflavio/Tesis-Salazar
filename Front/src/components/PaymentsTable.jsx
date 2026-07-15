@@ -1,6 +1,8 @@
 import classes from '../styles/payments.module.scss'
 
 export default function PaymentsTable({payments = [], rol = 'user', context = 'user'}) {
+  console.log(payments)
+  if (!payments) return <h3>Cargando pagos</h3>
   return <table className={classes.paymentsTable}>
     <thead>
       {rol === 'user' &&<tr>

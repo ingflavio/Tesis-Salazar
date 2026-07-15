@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { fieldsConfig, parseValues } from '../utils/fieldsConfig'
 import FormField from '../components/FormField'
-import usePayemnts from '../hooks/usePayments'
+import usePayments from '../hooks/usePayments'
 import useValidateForm from '../hooks/useValidateForm'
 import classes from '../styles/ProfileCard.module.scss'
 import PaymentsTable from './PaymentsTable'
@@ -20,7 +20,7 @@ export default function ProfileCard({ profile, editCallback, modalCallback, rol 
 
   const { alerts, validateFields } = useValidateForm(initalAlerts)
   const [ mode, setMode] = useState(location.state ? location.state.mode : 'profile')
-  const { payments, fetchUserPayments } = usePayemnts()
+  const { paymentsByUser: payments , fetchPaymentsByUser: fetchPayments } = usePayments()
   const refSavedChanges = useRef(false)
   const extraFields = []
 
@@ -31,7 +31,7 @@ export default function ProfileCard({ profile, editCallback, modalCallback, rol 
 
   useEffect(() => {
     if (profile) {
-      fetchUserPayments(profile.id)
+      fetchPayments()
     }
   }, [profile]) 
 
@@ -144,8 +144,8 @@ export default function ProfileCard({ profile, editCallback, modalCallback, rol 
         {
           mode === 'payments' &&
           <PaymentsTable payments={payments} modalCallback={modalCallback} 
-          rol={rol} 
-            />
+            rol={rol}
+          />
         }
       </div>
     </form>

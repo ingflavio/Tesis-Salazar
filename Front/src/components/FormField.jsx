@@ -28,7 +28,7 @@ function SelectField({ id, name, label, options, initialValue, onChange, readOnl
     <select name={name} id={id} defaultValue={initialValue} 
       disabled={readOnly} onChange={(e) => onChange? onChange(e.target.value) : ''}
     >
-      {options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+      {options && options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
     </select>
     { readOnly && <label>{options.find((option) => option.value === initialValue).label}</label> }
   </div>

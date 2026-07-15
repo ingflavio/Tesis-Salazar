@@ -10,22 +10,21 @@ import { fieldsConfig } from "../utils/fieldsConfig";
 
 export default function ProfilePage(){
   const { session, logOut } = useSession()
-  const { user, getUser, editProfile } = useUsers()
+  const { profile, getProfile, editProfile } = useUsers()
   const { modal, showModalForm, closeModalForm } = useModalForm()
   const [showAlert, setShowAlert] = useState(false)
-  
 
   const editUserProfile = async (data) => {
     const response = await editProfile(data)
     if (typeof response === 'object'){
       setShowAlert(true)
       setTimeout(() => setShowAlert(false), 3000)
-      getUser(session.id)
+      getProfile()
     }
   }
 
   useEffect(() => {
-    if (session) getUser(session.id)
+    if (session) getProfile()
   }, [session]) 
 
   const formatProfile = (user) => {
@@ -44,7 +43,7 @@ export default function ProfilePage(){
 
   return <main className={classes.profilePage}>
     <button className={classes.logOut} onClick={logOut}>Cerrar Sesion</button>
-    <ProfileCard profile={formatProfile(user)} 
+    <ProfileCard profile={formatProfile(profile)} 
       editCallback={editUserProfile}
       modalCallback={showModalForm}
     />
@@ -56,7 +55,7 @@ export default function ProfilePage(){
     }
     <dialog ref={modal}>
       <button className="closeBtn" onClick={() => closeModalForm()}>X</button>
-      <PaymentsForm />
+      <PaymentsForm/>
     </dialog>
   </main>
 }

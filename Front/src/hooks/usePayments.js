@@ -28,10 +28,9 @@ export const usePayments = () => {
 
   // Hook para enviar pagos
   const {
-    data: sendPayments,
     loading: sendPaymentsLoading,
     error: sendPaymentsError,
-    execute: fetchSendPayments,
+    execute: sendPayment,
     refetch: refetchSendPayments,
     reset: resetSendPayments
   } = useFetch(userService.sendPay, [], { immediate: false });
@@ -64,10 +63,9 @@ export const usePayments = () => {
     resetpaymentsByUser,
 
     // Estado de envio de pagos
-    sendPayments,
     sendPaymentsError,
     sendPaymentsLoading,
-    fetchSendPayments,
+    sendPayment,
     refetchSendPayments,
     resetSendPayments,
 
