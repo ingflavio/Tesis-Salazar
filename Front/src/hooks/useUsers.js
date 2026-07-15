@@ -31,12 +31,20 @@ export const useUsers = () => {
     reset: resetRegister
   } = useFetch(userService.registerUser, [], { immediate: false });
 
-  // Hook para agregar perfil
+  // Hook para obtener el perfil del usuario
   const {
     loading: profileLoading,
     error: profileError,
     execute: addProfile,
     reset: resetProfile
+  } = useFetch(userService.getProfile, [], { immediate: false });
+
+  // Hook para agregar perfil
+  const {
+    loading: sendProfileLoading,
+    error: sendProfileError,
+    execute: addSendProfile,
+    reset: resetSendProfile
   } = useFetch(userService.addProfile, [], { immediate: false });
 
   // Hook para editar perfil
@@ -111,6 +119,12 @@ export const useUsers = () => {
     profileError,
     addProfile: addUserProfile,
     resetProfile,
+
+    // estado del envio del perfil
+    sendProfileLoading,
+    sendProfileError,
+    addSendProfile,
+    resetSendProfile,
 
     // Estado de edicion de perfil
     editLoading,
