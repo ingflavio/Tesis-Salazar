@@ -2,23 +2,30 @@
   width: 100%;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap:  5% 10%;
-
-  > div{
+  gap: .5em 1em;
+  
+  > div {
+    overflow: hidden;
     width: 100%;
+    min-width: 0; // Importante para evitar overflow
   }
 
-  > div:nth-child(3){
+  > div:nth-child(3),
+  div:nth-child(5) {
     grid-column: span 2;
   }
 }
 
+// Mejor manejo del selector
 .fields_wrapper > div:has(select) {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
-.fields_wrapper  select {
+.fields_wrapper select {
+  width: 100%;
+  min-width: 0;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;

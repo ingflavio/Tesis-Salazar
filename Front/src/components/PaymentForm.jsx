@@ -44,9 +44,13 @@ export default function PaymentsForm() {
     <h3>Registrar Pago</h3>
     <div className={classes.fields_wrapper}>{
       paymentsConfigArray.map((config) => {
-        if (config.name === 'banks'){
+        if (config.name === 'bank'){
           const newConfig = {...config} 
-          config.options = banks || []
+          let newOptions = []
+          if (banks) {
+            newOptions = banks.map(config.formatOption) 
+          }
+          newConfig.options = newOptions
           return <FormField key={config.name} config={newConfig} errorMsg={alerts[config.name]}/>
         }
         return <FormField key={config.name} config={config} errorMsg={alerts[config.name]}/>

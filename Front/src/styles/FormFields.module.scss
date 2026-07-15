@@ -2,7 +2,7 @@
 
 .fieldWrapper label{
   color: vars.$neutral-900;
-  text-transform:capitalize ;
+  height: auto;
 }
 
 .fieldWrapper label{
@@ -64,7 +64,7 @@ label.up {
 
 .fieldWrapper select {
   background-color: vars.$neutral-100;
-  border: 1px solid vars.$neutral-900;
+  border: 1px solid vars.$neutral-500;
 }
 
 
