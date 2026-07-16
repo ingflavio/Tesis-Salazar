@@ -8,13 +8,22 @@ import { useEffect } from "react";
 export default function PaymentsForm() {
   const { sendPayment, banks, fetchBanks } = usePayments()
   const initialAlerts = Object.fromEntries(paymentsConfigArray.map((config) => [config.name, '']))
-  const { alerts, validateFields } = useValidateForm(initialAlerts)
+  const { alerts, changeAlert, onChange, validateFields } = useValidateForm(initialAlerts)
 
   useEffect(() => {
     fetchBanks()
   }, []) 
 
-  const handleSubmit = (event) => {
+  const fileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault()
     const form = event.target
     const formData = new FormData(form)
@@ -27,6 +36,13 @@ export default function PaymentsForm() {
       return validationArray
     }, []))
 
+    const input = document.getElementById('image')
+    const file = input.files[0] 
+    if (!file){
+      validations['image'] = 'Es necesario subir una captura del comprobante'
+    }else {
+      validations['image'] = true
+    }
     const valid = validateFields(validations)
     if (valid) {
       const data = Object.fromEntries(entries.map(([key, value]) => {
@@ -36,7 +52,9 @@ export default function PaymentsForm() {
         } 
         return [key, value]
       }))
-      console.log(data)
+      const base64String = await fileToBase64(input.files[0]);
+      data['image'] = base64String
+      sendPayment(data)
     }
   }
 
@@ -51,9 +69,22 @@ export default function PaymentsForm() {
             newOptions = banks.map(config.formatOption) 
           }
           newConfig.options = newOptions
-          return <FormField key={config.name} config={newConfig} errorMsg={alerts[config.name]}/>
+          return <FormField key={config.name} config={newConfig} errorMsg={alerts[config.name]}/> 
+        } else if (config.name === 'image') {
+          return <FormField 
+            key={config.name} 
+            config={config} 
+            onChange={(value) => onChange(value, config.name, config.validateFunc)}
+            errorMsg={alerts[config.name]}
+            changeAlert={(newAlert) => changeAlert('image', newAlert)}
+          />
         }
-        return <FormField key={config.name} config={config} errorMsg={alerts[config.name]}/>
+        return <FormField 
+          key={config.name} 
+          config={config} 
+          onChange={(value) => onChange(value, config.name, config.validateFunc)}
+          errorMsg={alerts[config.name]}
+        />
       })
     }</div>
     <button>Registrar</button>

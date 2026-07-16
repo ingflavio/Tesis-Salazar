@@ -53,20 +53,23 @@ function NumberField({id, name, label, placeholder, initialValue, max, min }) {
   )
 }
 
-function FileField({id, name, label, onChange}) {
+// En FormField.jsx - Modificar FileField
+function FileField({id, name, label, onChange, errorMsg, changeAlert}) {
   const [fileName, setFileName] = useState('Seleccionar archvo');
-  const [errorMsg, setErrorMsg] = useState('');
   const fileInputRef = useRef(null);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       if (!['jpg', 'jpeg', 'png'].includes(file.type.split('/')[1])) {
-        setErrorMsg('El archivo debe ser una imagen')
+        changeAlert('El archivo debe ser una imagen')
         return
       }
+      if (errorMsg !== ''){
+        changeAlert('')
+      }
       setFileName(file.name);
-      if (errorMsg !== '') setErrorMsg('')
+      if (errorMsg !== '') changeAlert('')
       onChange?.(file);
     } else {
       setFileName('Seleccionar archvo');
@@ -103,8 +106,7 @@ function FileField({id, name, label, onChange}) {
     </div>
   );
 }
-
-export default function FormField({ config, initialValue, onChange = null, id='', readOnly = false, className = '', errorMsg = '' }) {
+export default function FormField({ config, initialValue, onChange = null, id='', readOnly = false, className = '', errorMsg = '', changeAlert= null }) {
   if (!config) return null;
   
   const { type, name, label, options, ...rest } = config;
@@ -127,6 +129,10 @@ export default function FormField({ config, initialValue, onChange = null, id=''
     id: id || name,
     ...rest,
   };
+
+  if (changeAlert) {
+    commonProps['changeAlert'] = changeAlert
+  }
 
   if (type === 'boolean') {
     return (
@@ -156,7 +162,6 @@ export default function FormField({ config, initialValue, onChange = null, id=''
       initialValue={initialValue}
       onChange={onChange}
       className={className}
-
     />
   );
 }

@@ -67,6 +67,9 @@ label.up {
   border: 1px solid vars.$neutral-500;
 }
 
+.fieldWrapper:has(select) > label:last-child {
+  color: vars.$neutral-600;
+}
 
 .checkGroup {
   display: grid;

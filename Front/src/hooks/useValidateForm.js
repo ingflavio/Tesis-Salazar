@@ -29,6 +29,19 @@ export function validateEmail(value){
 export default function useValidateForm(initialAlerts) {
   const [alerts, setAlerts] = useState(initialAlerts)
 
+  const changeAlert = (key, newAlert) => {
+    const newAlerts = {...alerts}
+    newAlerts[key] = newAlert
+    setAlerts(newAlerts)
+  }
+
+  const onChange = (value, key, validateFunc) => {
+    if (alerts[key] !== ''){
+      const newAlert = validateFunc(value)
+      changeAlert(key, newAlert)
+    }
+  }
+
   const validateFields = (validations) => {
     // Cambiar las alertas para reflejar el nuevo estado
     const newAlerts = {...alerts}
@@ -44,5 +57,5 @@ export default function useValidateForm(initialAlerts) {
     return Object.entries(validations).every(field => field[1] === true)
   }
   
-  return { alerts, validateFields, validateIncrease, validatePhone, validateEmail }
+  return { alerts, onChange, changeAlert, validateFields, validateIncrease, validatePhone, validateEmail }
 }
