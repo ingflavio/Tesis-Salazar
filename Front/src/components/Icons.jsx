@@ -168,7 +168,7 @@ export function Icons({icon}) {
     'chat': <ChatIcon />,
     'gear': <GearIcon />,
     'profile': <ProfileIcon />,
-    'qrScan': <QRScanIcon />,
+    'qrscan': <QRScanIcon />,
     'qr': <QrIcon />,
     'send': <SendIcon />,
     'delete': <DeleteIcon />,

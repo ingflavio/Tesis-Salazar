@@ -9,17 +9,14 @@ export function NavigationBar({admin = false}) {
   
   return(
     <nav className={classes.navigationBar}>
-      {
-        admin && 
-        <Link to={'/admin'}>
-          <Icons icon='gear'/>
-          {isDesktop && <span>Administracion</span>}
-        </Link>
-      }
-
       <Link to={'/scan'}>
-          <Icons icon='qr'/>
+          <Icons icon='qrscan'/>
           {isDesktop && <span>escanear QR</span>}
+      </Link>
+
+      <Link to={'/qr'}>
+          <Icons icon='qr'/>
+          {isDesktop && <span>QR de Entrada</span>}
       </Link>
 
       <Link to={'/'}>
