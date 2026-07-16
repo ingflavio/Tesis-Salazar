@@ -1,3 +1,27 @@
+dialog:has(.payment_form){
+  border-radius: clamp(20px, 4dvw, 30px);
+}
+
+.payment_form {
+  width: clamp(300px, 60dvw,400px);
+}
+
+.payment_form h3 {
+  font-size: 32px;
+}
+
+.payment_form label,
+.payment_form input,
+.payment_form select, 
+.payment_form option  {
+  font-size: 16px;
+}
+
+.payment_form button {
+  font-size: 20px;
+}
+
+
 .fields_wrapper {
   width: 100%;
   display: grid;

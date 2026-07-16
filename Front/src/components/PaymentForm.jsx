@@ -58,7 +58,7 @@ export default function PaymentsForm() {
     }
   }
 
-  return <form onSubmit={(event) => handleSubmit(event)}>
+  return <form className={classes.payment_form} onSubmit={(event) => handleSubmit(event)}>
     <h3>Registrar Pago</h3>
     <div className={classes.fields_wrapper}>{
       paymentsConfigArray.map((config) => {
