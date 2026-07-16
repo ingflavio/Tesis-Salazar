@@ -1,3 +1,4 @@
+// api.js
 import axios from 'axios';
 import { API_URL } from '../utils/constants';
 
@@ -16,11 +17,8 @@ export const formatUser = (user) => {
       height: user.userDetails.height_Cm,
       weight: user.userDetails.last_weight_kg,
       fat:user.userDetails.bodyFatPercentage,
-      // first_weight: user.userDetails.init_weight_kg,
       condition: user.userDetails.condition,
       solvency: user.userDetails.solvent,
-      // registration_date: user.userDetails.registration_date,
-      // expiration_date: user.userDetails.expiration_date,
       rol: user.rol.toLowerCase()
     }
   }
@@ -31,7 +29,6 @@ export const formatUser = (user) => {
   }
 } 
 
-// Instancia de axios con configuraciones globales
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10000,
@@ -43,9 +40,17 @@ export const apiClient = axios.create({
 // Interceptor para añadir token automáticamente
 apiClient.interceptors.request.use(
   (config) => {
-    const token = JSON.parse(localStorage.getItem('session')).token;
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    try {
+      const sessionData = localStorage.getItem('session');
+      if (sessionData) {
+        const session = JSON.parse(sessionData);
+        if (session?.token) {
+          config.headers.Authorization = `Bearer ${session.token}`;
+        }
+      }
+    } catch (error) {
+      // Si hay error al leer localStorage, simplemente no añadir token
+      console.warn('Error al leer sesión:', error);
     }
     return config;
   },
@@ -56,9 +61,9 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      // Redirigir a login o refrescar token
-      localStorage.removeItem('authToken');
+    // Solo manejar 401 si hay token (para no interferir con login)
+    if (error.response?.status === 401 && localStorage.getItem('session')) {
+      localStorage.removeItem('session');
       window.location.href = '/login';
     }
     return Promise.reject(error);
