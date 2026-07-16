@@ -29,13 +29,21 @@ export const userService = {
     "password": password,
     "rol": rol[0].toUpperCase() + rol.slice(1) 
   }),
-  sendPay: (data) => apiClient.post(`${CONTROLLER_URL}/details`,{
+  sendPay: (data) => {
+    console.log({
     "bank": data.bank,
     "phone": data.phone,
+    "Reference_number": data.reference_number,
     "amount": data.amount,
-    "image": data.image,
-    // "refence": data.phone
-  }),
+    "image": data.image
+  })
+    apiClient.post(`${CONTROLLER_URL}pay`,{
+    "bank": data.bank,
+    "phone": data.phone,
+    "Reference_number": data.reference_number,
+    "amount": data.amount,
+    "image": data.image
+  })},
   editProfile: (data) => {
     return apiClient.put(`${CONTROLLER_URL}details`,{
       "firstName": data.name,

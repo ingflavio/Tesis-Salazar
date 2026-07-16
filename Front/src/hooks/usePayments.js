@@ -3,7 +3,6 @@ import { useFetch } from './useFetch';
 import { userService } from '../services/user';
 import { adminService } from '../services/admin';
 import { utilsService } from '../services/utils';
-// 
 
 export const usePayments = () => {
   // Hook para obtener todos los pagos

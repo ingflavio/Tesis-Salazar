@@ -139,8 +139,8 @@ export const paymentsFieldsConfig = {
     placeholder: '',  
     validateFunc: (value, ) => validatePhone(value),
   },
-  Reference_number:{
-    name: 'Reference_number',
+  reference_number:{
+    name: 'reference_number',
     label: 'Referencia',
     type: 'text',  
     placeholder: '',  
