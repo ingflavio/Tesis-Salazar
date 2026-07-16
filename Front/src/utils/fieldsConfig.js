@@ -164,7 +164,7 @@ export const paymentsFieldsConfig = {
   image:{
     name: 'image',
     label: 'Captura del comprobante',
-    type: 'field',  
+    type: 'file',  
     placeholder: '',  
     parseValue: (value) => Number(value),
   }

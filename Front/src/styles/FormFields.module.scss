@@ -96,6 +96,79 @@ label.up {
   min-height: 50px;
 }
 
+.fieldWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  label {
+    font-weight: 500;
+    color: #333;
+  }
+}
+
+.fileInputContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 12px 16px;
+  background: #f9f9f9;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: vars.$primary-500;
+    background: #f0f7ff;
+  }
+}
+
+.fileName {
+  flex: 1;
+  color: #666;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fileButton {
+  padding: 8px 20px;
+  background: vars.$primary-500;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &:hover {
+    background: darken(vars.$primary-500, 10%);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.hiddenInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
 /* Ocultamos el track nativo y personalizamos */
 input[type="range"] {
   position: absolute;

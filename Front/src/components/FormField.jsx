@@ -1,3 +1,4 @@
+import { useState, useRef } from 'react';
 import CheckGroup from './CheckGroup';
 import DobleSlider from './DobleSlider';
 import RoundField from "./RoundField";
@@ -52,6 +53,57 @@ function NumberField({id, name, label, placeholder, initialValue, max, min }) {
   )
 }
 
+function FileField({id, name, label, onChange}) {
+  const [fileName, setFileName] = useState('Seleccionar archvo');
+  const [errorMsg, setErrorMsg] = useState('');
+  const fileInputRef = useRef(null);
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (!['jpg', 'jpeg', 'png'].includes(file.type.split('/')[1])) {
+        setErrorMsg('El archivo debe ser una imagen')
+        return
+      }
+      setFileName(file.name);
+      if (errorMsg !== '') setErrorMsg('')
+      onChange?.(file);
+    } else {
+      setFileName('Seleccionar archvo');
+      onChange?.(null);
+    }
+  };
+
+  const handleButtonClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  return (
+    <div className={classes.fieldWrapper}>
+      {label && <label htmlFor={id}>{label}</label>}
+      <div className={classes.fileInputContainer}>
+        <button 
+          type="button" 
+          className={classes.fileButton}
+          onClick={handleButtonClick}
+        >
+          {fileName}
+        </button>
+        <input 
+          ref={fileInputRef}
+          type="file" 
+          name={name}
+          id={id}
+          accept='image/png, image/jpeg, image/jpg'
+          className={classes.hiddenInput}
+          onChange={handleFileChange}
+        />
+      </div>
+      {errorMsg && <span className={classes.errorMsg}>{errorMsg}</span>}
+    </div>
+  );
+}
+
 export default function FormField({ config, initialValue, onChange = null, id='', readOnly = false, className = '', errorMsg = '' }) {
   if (!config) return null;
   
@@ -62,6 +114,7 @@ export default function FormField({ config, initialValue, onChange = null, id=''
     round: RoundField,
     number: NumberField, 
     slider: DobleSlider,
+    file: FileField,
   };
 
   const Component = componentMap[type] || TextField; 
