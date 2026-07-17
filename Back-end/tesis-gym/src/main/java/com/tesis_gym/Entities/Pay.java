@@ -30,6 +30,9 @@ public class Pay {
     @Column(nullable = false)
     private String Reference_number;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PaymentStatus status = PaymentStatus.PENDING;
 
     @Column(nullable = false)
     private Double amount;

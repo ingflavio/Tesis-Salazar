@@ -1,6 +1,8 @@
 package com.tesis_gym.Controllers.Dto;
 
 import com.tesis_gym.Entities.Banks;
+import com.tesis_gym.Entities.PaymentStatus;
+
 import java.time.LocalDateTime;
 
 public record PayResponseDto(
@@ -11,5 +13,6 @@ public record PayResponseDto(
         String phone,
         Double amount,
         String image,
+        PaymentStatus status,
         LocalDateTime paymentDate
 ) {}
