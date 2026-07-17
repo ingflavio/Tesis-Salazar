@@ -35,7 +35,7 @@ export const userService = {
     "phone": data.phone,
     "Reference_number": data.reference_number,
     "amount": data.amount,
-    "image": data.image
+    "image": '123'
   }),
   editProfile: (data) => {
     return apiClient.put(`${CONTROLLER_URL}details`,{

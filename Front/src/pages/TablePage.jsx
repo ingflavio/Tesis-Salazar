@@ -236,19 +236,18 @@ export default function TablePage() {
   const OpenModal = (mode, profile = null) => {
     const FieldsToExclude = []
     if (mode === 'register'){
-      FieldsToExclude.push('solvency', 'password')
+      FieldsToExclude.push('solvency')
       showModalForm({text:'Registrar Cliente',submit:'Registrar', mode, profile})
     }else if (mode === 'open'){
-      // FieldsToExclude.push('password')
       showModalForm({text:'Perfil completo del cliente', mode, profile: getFullProfile(profile.id)})
     }
     setFormFields(configArray.filter((config) =>  !FieldsToExclude.includes(config.name)))
   }
 
   const handleSubmit = async (profile) => {
-    if (formInfo.mode === 'registrar'){
+    if (formInfo.mode === 'register'){
       await registerClient(profile)
-    }else if (formInfo.mode === 'editar'){
+    }else if (formInfo.mode === 'edit'){
       editProfile(profile)
     }
     closeModalForm()
