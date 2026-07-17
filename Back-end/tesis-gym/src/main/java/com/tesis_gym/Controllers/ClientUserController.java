@@ -64,7 +64,7 @@ public class ClientUserController {
 
         String token = authHeader.substring(7);
         Long cedula = Long.valueOf(jwtService.getCedulaFromToken(token));
-        return ResponseEntity.ok(userService.paySubscription(cedula, payDto));
+        return ResponseEntity.ok(userService.PaySubscription(cedula,payDto));
     }
 
     @PostMapping("/verify-password")

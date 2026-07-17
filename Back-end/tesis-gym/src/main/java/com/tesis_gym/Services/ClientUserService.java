@@ -1,10 +1,7 @@
 package com.tesis_gym.Services;
 
 import com.tesis_gym.Controllers.Dto.*;
-import com.tesis_gym.Entities.Pay;
-import com.tesis_gym.Entities.Roles;
-import com.tesis_gym.Entities.UserAccount;
-import com.tesis_gym.Entities.UserDetails;
+import com.tesis_gym.Entities.*;
 import com.tesis_gym.Repository.PayRepository;
 import com.tesis_gym.Repository.UserAccountRepository;
 import com.tesis_gym.Repository.UserDetailsRepository;
@@ -119,6 +116,7 @@ public class ClientUserService {
                 pay.getPhone(),
                 pay.getAmount(),
                 pay.getImage(),
+                pay.getStatus(),
                 pay.getPaymentDate()
         );
     }
@@ -151,16 +149,75 @@ public class ClientUserService {
         accountRepository.deleteById(cedula);
     }
 
-    public UserDetails paySubscription(Long cedula) {
-        UserDetails user = getUserByCedula(cedula);
+    public UserDetails PaySubscription(Long cedula, PayDto payDto) {
+        UserAccount account = accountRepository.findById(cedula)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+
+        UserDetails userDetails = getUserByCedula(cedula);
         Date now = new Date();
 
-        user.setRegistration_date(now);
-        user.setExpiration_date(calculateExpirationDate(now));
-        user.setSolvent(true);
+        Pay payment = Pay.builder()
+                .user(account)
+                .bank(payDto.bank())
+                .phone(payDto.phone())
+                .Reference_number(payDto.Reference_number())
+                .amount(payDto.amount())
+                .image(payDto.image())
+                .status(PaymentStatus.PENDING) // Siempre entra como pendiente
+                .build();
+        payRepository.save(payment);
 
-        return detailsRepository.save(user);
+        // LÓGICA DE DÍAS: Damos 1 día de gracia
+        Calendar cal = Calendar.getInstance();
+
+        // Si ya estaba vencido, contamos desde hoy. Si aún le quedaban días, sumamos a su fecha actual.
+        if (userDetails.getExpiration_date() != null && userDetails.getExpiration_date().after(now)) {
+            cal.setTime(userDetails.getExpiration_date());
+        } else {
+            cal.setTime(now);
+            userDetails.setRegistration_date(now); // Reiniciamos su fecha de inicio
+        }
+
+        cal.add(Calendar.DAY_OF_YEAR, 1); // +1 Día de gracia
+
+        userDetails.setExpiration_date(cal.getTime());
+        userDetails.setSolvent(true);
+
+        return detailsRepository.save(userDetails);
     }
+
+    public PayResponseDto verifyPayment(Long paymentId, PaymentStatus newStatus) {
+        Pay payment = payRepository.findById(paymentId)
+                .orElseThrow(() -> new RuntimeException("Pago no encontrado"));
+
+        if (payment.getStatus() != PaymentStatus.PENDING) {
+            throw new RuntimeException("Este pago ya fue procesado");
+        }
+
+        payment.setStatus(newStatus);
+        payRepository.save(payment);
+
+        UserDetails userDetails = payment.getUser().getUserDetails();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(userDetails.getExpiration_date());
+
+        if (newStatus == PaymentStatus.ACCEPTED) {
+            cal.add(Calendar.DAY_OF_YEAR, 29);
+            userDetails.setExpiration_date(cal.getTime());
+            userDetails.setSolvent(true);
+            detailsRepository.save(userDetails);
+
+        } else if (newStatus == PaymentStatus.DENIED) {
+            cal.add(Calendar.DAY_OF_YEAR, -1);
+            userDetails.setExpiration_date(cal.getTime());
+            boolean isSolvent = !new Date().after(userDetails.getExpiration_date());
+            userDetails.setSolvent(isSolvent);
+            detailsRepository.save(userDetails);
+        }
+
+        return mapToPayResponseDto(payment);
+    }
+
 
 
     public List<UserAccount> getAllAdmins() {
