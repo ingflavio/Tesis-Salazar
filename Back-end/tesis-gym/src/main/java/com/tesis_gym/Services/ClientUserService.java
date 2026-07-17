@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -264,6 +265,33 @@ public class ClientUserService {
 
         return detailsRepository.save(userDetails);
     }
+
+    public UserAccount updateUserByAdmin(Long cedula, AdminUserUpdateDto dto) {
+        UserAccount account = accountRepository.findById(cedula)
+                .orElseThrow(() -> new RuntimeException("Cuenta de usuario no encontrada"));
+        account.setName(dto.name());
+        account.setRol(dto.rol());
+        accountRepository.save(account);
+        Optional<UserDetails> detailsOpt = detailsRepository.findById(cedula);
+        if (detailsOpt.isPresent()) {
+            UserDetails details = detailsOpt.get();
+            if (dto.firstName() != null) details.setFirstName(dto.firstName());
+            if (dto.lastName() != null) details.setLastName(dto.lastName());
+            if (dto.email() != null) details.setEmail(dto.email());
+            if (dto.phone() != null) details.setPhone(dto.phone());
+            if (dto.age() != null) details.setAge(dto.age());
+            if (dto.height_Cm() != null) details.setHeight_Cm(dto.height_Cm());
+            if (dto.last_weight_kg() != null) details.setLast_weight_kg(dto.last_weight_kg());
+            if (dto.condition() != null) details.setCondition(dto.condition());
+            if (dto.sex() != null) details.setSex(dto.sex());
+            if (dto.bodyFatPercentage() != null) details.setBodyFatPercentage(dto.bodyFatPercentage());
+
+            detailsRepository.save(details);
+        }
+
+        return accountRepository.findById(cedula).get();
+    }
+
 
 
     private Date calculateExpirationDate(Date startDate) {
