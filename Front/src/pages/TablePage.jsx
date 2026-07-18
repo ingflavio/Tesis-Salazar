@@ -162,7 +162,8 @@ export default function TablePage() {
     registerUser,
     addProfile,
     fetchUsers,
-    refetchUsers
+    refetchUsers,
+    adminEditUserProfile
   } = useUsers();
   
   useEffect(() => {
@@ -181,9 +182,6 @@ export default function TablePage() {
   })
 
   const profiles = users ? formatProfiles(users) : []
-
-  const editProfile = () => {
-  }
 
   const getFullProfile = (id) => profiles.find((profile) => profile.id === id)
 
@@ -233,6 +231,12 @@ export default function TablePage() {
     await refetchUsers();
   }
 
+  const editProfile = async (data) => {
+    const user = await adminEditUserProfile(data)
+    console.log(user)
+    showModalForm({text:'Perfil completo del cliente', mode: 'open', profile: user})
+  }
+
   const OpenModal = (mode, profile = null) => {
     const FieldsToExclude = []
     if (mode === 'register'){
@@ -248,7 +252,7 @@ export default function TablePage() {
     if (formInfo.mode === 'register'){
       await registerClient(profile)
     }else if (formInfo.mode === 'edit'){
-      editProfile(profile)
+      addProfile(profile)
     }
     closeModalForm()
   }
@@ -327,7 +331,9 @@ export default function TablePage() {
       <dialog ref={modal} onClose={() => closeModalForm()}>
         <button className="closeBtn" onClick={() => modal.current.close()}>X</button>
         {modalOpen && formInfo.mode === 'open' 
-          ? <ProfileCard profile={formValues} rol={"admin"}/>
+          ? <ProfileCard profile={formValues} rol={"admin"}
+              editCallback={editProfile}
+            />
           : formInfo.mode === 'register' 
           ? <div className={classes.dialogWraper}>  
               <ProfileForm 

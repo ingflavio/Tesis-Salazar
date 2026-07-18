@@ -52,14 +52,10 @@ export default function ProfileCard({ profile, editCallback, modalCallback, rol 
     mode === 'edit' ? saveChanges(event) : modalCallback('Registrar Pago', 'Registrar', rol)
   }
 
-  const saveChanges = (event) => {
+  const saveChanges = async (event) => {
     const form = event.target
     const formData = new FormData(form)
     const entries = Array.from(formData.entries()) 
-    for (const field of extraFields) {
-      const input = document.getElementById(field)
-      if (input) entries.push([field, input.value])
-    }
     const data = Object.fromEntries(entries)
     
     const validations = Object.fromEntries(entries.reduce((validationArray, [key, value]) => {
@@ -74,8 +70,8 @@ export default function ProfileCard({ profile, editCallback, modalCallback, rol 
     if (valid) {
       refSavedChanges.current = true
       const parsedData = parseValues(data)
+      await editCallback(parsedData)
       setMode('profile')
-      editCallback(parsedData)
     }
   } 
 

@@ -92,7 +92,7 @@ export const fieldsConfig = {
     type: 'text',  
     parseValue: (value) => Number(value.replace('%','')),
     formatValue: (value) => String(value) + '%',
-    validateFunc: (value, previousValue) => validateIncrease({value, previousValue, increase: 5, increaseMasure: '%'}), 
+    validateFunc: (value, previousValue) => validateIncrease({value: value.replace('%',''), previousValue, increase: 5, increaseMasure: '%'}), 
   },
   condition: {
     name: 'condition',

@@ -52,6 +52,11 @@ $gap-distance: clamp(2px, 6dvh, 40px);
   gap: 2px;
 }
 
+.userTable thead tr th div > div {
+  display: grid;
+  grid-template-columns: 1fr auto ;
+}
+
 .userTable td, .userTable th { 
   background-color: vars.$neutral-100;
   color: vars.$neutral-700;

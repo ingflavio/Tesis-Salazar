@@ -16,6 +16,20 @@ export const adminService = {
     const payments = await apiClient.get(`${CONTROLLER_URL}payments`)
     return payments.data.map((payment) => formatPay(payment))
   },
+  editProfile:(data) => apiClient.put(`${CONTROLLER_URL}users/${data.id}`,{
+    "name": data.name + ' ' + data.lastName,
+    "rol": "User",
+    "firstName": data.name,
+    "lastName": data.lastName,
+    "email": data.email,
+    "phone": data.phone,
+    "age": data.age,
+    "height_Cm": data.height,
+    "last_weight_kg": data.weight,
+    "condition": data.condition,
+    "sex": data.sex,
+    "bodyFatPercentage": data.fat
+  }),
   verifyPayments:(id, status) => apiClient.put(`${CONTROLLER_URL}payments/${id}/verify?status=${status}`),
   getAdmins: () => apiClient.get(`${CONTROLLER_URL}admins`),
 } 

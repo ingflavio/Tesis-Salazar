@@ -23,7 +23,13 @@ export default function ProfilePage(){
   }
 
   const editUserProfile = async (data) => {
-    const response = await editProfile(data)
+    const fullData = { ...data };
+    for (const key in profile) {
+      if (!(key in fullData)) {
+        fullData[key] = profile[key];
+      }
+    }
+    const response = await editProfile(fullData)
     if (typeof response === 'object'){
       showAlert('Usuario Actualizado')
     }

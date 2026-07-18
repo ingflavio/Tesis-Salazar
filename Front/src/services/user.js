@@ -21,6 +21,8 @@ export const userService = {
     "height_Cm": data.height,
     "init_weight_kg": data.weight,
     "condition":  data.condition,
+    "sex": data.sex,
+    "bodyFatPercentage": data.fat,
     "rol": data.rol
   }),
   registerUser: ({ id, username, password, rol }) => apiClient.post(`${CONTROLLER_URL}register`,{
