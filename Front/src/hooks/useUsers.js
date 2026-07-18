@@ -1,6 +1,7 @@
 import { useFetch } from './useFetch';
 import { userService } from '../services/user';
 import { adminService } from '../services/admin';
+import { useState } from 'react';
 
 export const useUsers = () => {
   // Hook para obtener todos los usuarios
@@ -55,6 +56,25 @@ export const useUsers = () => {
     execute: editProfile,
     reset: resetEdit
   } = useFetch(userService.editProfile, [], { immediate: false });
+  
+  // Hook para obtener el perfil del usuario
+  const {
+    data: admins,
+    loading: adminsLoading,
+    error: adminsError,
+    execute: getAdmins,
+    reset: resetAdmins
+  } = useFetch(adminService.getAdmins, [], { immediate: false });
+
+
+  // Hook para obtener el perfil del usuario
+  const [admin, setAdmin] = useState()
+  const {
+    loading: adminLoading,
+    error: adminError,
+    execute: getAdmin,
+    reset: resetAdmin
+  } = useFetch(adminService.getAdmins, [], { immediate: false });
 
   // Función para obtener un usuario por ID
   const getUser = async (id) => {
@@ -91,6 +111,34 @@ export const useUsers = () => {
     }
     return false
   };
+
+  //funcion para obtener un admin
+  const getAdminById = async (id) => {
+  if (!id) {
+    throw new Error('ID de usuario es requerido');
+  }
+  try {
+    // Primero obtén la lista completa de admins
+    const response = await getAdmins();
+    
+    if (response && response.status === 200 && response.data) {
+      // Busca el admin por ID en la lista
+      const foundAdmin = response.data.find((admin) => admin.id === id || admin.cedula === id);
+      
+      if (foundAdmin) {
+        setAdmin(foundAdmin);
+        return foundAdmin;
+      }
+    }
+    
+    setAdmin(null);
+    return null;
+  } catch (error) {
+    console.error('Error al obtener admin:', error);
+    setAdmin(null);
+    return false;
+  }
+}
 
   return {
     // Estado de usuarios (todos)
@@ -133,6 +181,20 @@ export const useUsers = () => {
     editError,
     editProfile: editUserProfile,
     resetEdit,
+
+    //Estado de obtener admins 
+    admin,
+    adminLoading,
+    adminsError,
+    getAdmin: getAdminById,
+    resetAdmin,
+
+    //Estado de obtener admins 
+    admins,
+    adminsLoading,
+    adminError,
+    getAdmins,
+    resetAdmins
   };
 };
 

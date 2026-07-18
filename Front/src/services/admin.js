@@ -16,4 +16,5 @@ export const adminService = {
     const payments = await apiClient.get(`${CONTROLLER_URL}/payments`)
     return payments.map((payment) => formatPay(payment))
   },
+  getAdmins: () => apiClient.get(`${CONTROLLER_URL}admins`),
 } 

@@ -5,7 +5,7 @@ import { useSession } from '../hooks/useSession.js';
 import Icons from '../components/Icons.jsx';
 import classes from '../styles/admin.module.scss'
 import { useEffect, useState } from 'react';
-// import useUsers from '../hooks/useUsers.js';
+import useUsers from '../hooks/useUsers.js';
 
 function AdminNav({ children }) {
   const location = useLocation()
@@ -48,15 +48,16 @@ function AdminNav({ children }) {
 export default function AdminLayout() {
   const screen = useScreen()  
   const { session, logOut } = useSession()
-  // const { user, getUser } = useUsers()
+  const { admin, getAdmin } = useUsers()
 
-  // useEffect( () => {
-  //   if(session) getUser(session.id)
-  // }, [session]) 
+  useEffect( () => {
+    if(session) getAdmin(session.id)
+  }, [session]) 
+
   if (!session) {
     return <Navigate to='/login' replace />
   }
-  if (session.rol.toLowerCase() !== 'admin') return <Navigate to='/' replace />
+  if (session.rol !== 'admin') return <Navigate to='/' replace />
 
 
   const isDesktop = screen.width > 850 
@@ -85,7 +86,7 @@ export default function AdminLayout() {
               </>
             }
             <div className={classes.hideWrapper}>
-              {/* {user && <h6> Alejandra Hernandez </h6>} */}
+              {admin && <h6> {admin.name} </h6>}
               <i>Administrador</i>
               <AdminNav>
                 <button onClick={logOut}>
@@ -94,7 +95,7 @@ export default function AdminLayout() {
               </AdminNav>
             </div>
           </aside>
-        {/*user &&*/ <Outlet /*context={{name: user.name}}*/ />}
+        {admin && <Outlet context={{name: admin.name}} />}
       </div>
     </>
   )
