@@ -78,14 +78,14 @@ label.up {
   column-gap: .5em;
 }
 
-.checkGroup:has(div)
-
 .checkGroup label {
   color:  vars.$neutral-900;
 }
 
+
 .checkGroup  div label {
   font-weight: 400;
+  padding-left: .5em;
 }
 
 .range_container {
