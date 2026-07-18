@@ -1,9 +1,11 @@
 package com.tesis_gym.Controllers;
 
+import com.tesis_gym.Controllers.Dto.AdminUserUpdateDto;
 import com.tesis_gym.Controllers.Dto.PayResponseDto;
 import com.tesis_gym.Entities.PaymentStatus;
 import com.tesis_gym.Entities.UserAccount;
 import com.tesis_gym.Services.ClientUserService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,6 +37,14 @@ public class AdminController {
             @RequestParam PaymentStatus status) { // Pasa ACCEPTED o DENIED en la URL
 
         return ResponseEntity.ok(userService.verifyPayment(paymentId, status));
+    }
+
+    @PutMapping("/users/{cedula}")
+    public ResponseEntity<UserAccount> updateUserByAdmin(
+            @PathVariable Long cedula,
+            @Valid @RequestBody AdminUserUpdateDto dto) {
+
+        return ResponseEntity.ok(userService.updateUserByAdmin(cedula, dto));
     }
 
 
