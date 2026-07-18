@@ -77,10 +77,6 @@ dialog:has(.payment_form){
   justify-content: space-between;
 }
 
-.btnWrapper:has(button:nth-child(2)) > button {
-  font-size: 1.2em;
-}
-
 .btnWrapper > button:nth-child(2) {
   background-color: vars.$warn-500;
 }
