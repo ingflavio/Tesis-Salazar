@@ -1,3 +1,5 @@
+@use './variables.scss' as vars;
+
 dialog:has(.payment_form){
   border-radius: clamp(20px, 4dvw, 30px);
 }
@@ -54,4 +56,31 @@ dialog:has(.payment_form){
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.readOnly.fields_wrapper > div {
+  grid-column: span 1;
+}
+
+.readOnly.fields_wrapper > div > input {
+  border: none;
+}
+
+.btnWrapper {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.btnWrapper:has(button:nth-child(2)) {
+  font-size: 1.2em;
+  justify-content: space-between;
+}
+
+.btnWrapper:has(button:nth-child(2)) > button {
+  font-size: 1.2em;
+}
+
+.btnWrapper > button:nth-child(2) {
+  background-color: vars.$warn-500;
 }

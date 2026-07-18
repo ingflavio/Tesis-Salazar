@@ -33,3 +33,7 @@ th.acepted {
 th.pending {
   color: vars.$warn-700
 }
+
+.paymentsTable tfoot th {
+  grid-column: 1/-1;
+}

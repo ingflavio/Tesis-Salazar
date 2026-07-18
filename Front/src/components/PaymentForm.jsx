@@ -5,8 +5,8 @@ import useValidateForm from "../hooks/useValidateForm"
 import usePayments from "../hooks/usePayments";
 import { useEffect } from "react";
 
-export default function PaymentsForm({alertCallback}) {
-  const { sendPayment, banks, fetchBanks } = usePayments()
+export default function PaymentsForm({ alertCallback, values = null, title = 'Registrar pago', sumbit = '', mode = 'register', secondSumbit = null}) {
+  const { sendPayment, verifyPayment, banks, fetchBanks } = usePayments()
   const initialAlerts = Object.fromEntries(paymentsConfigArray.map((config) => [config.name, '']))
   const { alerts, changeAlert, onChange, validateFields } = useValidateForm(initialAlerts)
 
@@ -23,8 +23,7 @@ export default function PaymentsForm({alertCallback}) {
     });
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault()
+  const registerPayment = async (event) => {
     const form = event.target
     const formData = new FormData(form)
     const entries = Array.from(formData.entries()) 
@@ -57,16 +56,36 @@ export default function PaymentsForm({alertCallback}) {
       const response = await sendPayment(data)
       if (response.status === 200){
         alertCallback('Pago registrado', true)
+        return response.data.id
       } else {
         alertCallback('Fallo al registrar el pago', false)
       }
     }
   }
 
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    if (mode === 'register'){
+      registerPayment(event)
+    } else if (mode === 'verify') {
+      //
+    } else if (mode === 'admin register') {
+      const id = registerPayment(event)
+      //
+    }
+  }
+
   return <form className={classes.payment_form} onSubmit={(event) => handleSubmit(event)}>
-    <h3>Registrar Pago</h3>
-    <div className={classes.fields_wrapper}>{
+    <h3>{title}</h3>
+    <div className={`${classes.fields_wrapper} ${values !== null ? classes.readOnly : ''}`}>{
       paymentsConfigArray.map((config) => {
+        const readOnlyProps = values !== null 
+        ? {
+          initialValue: values[config.name],
+          readOnly: true
+        }
+        :
+        {}
         if (config.name === 'bank'){
           const newConfig = {...config} 
           let newOptions = []
@@ -74,24 +93,34 @@ export default function PaymentsForm({alertCallback}) {
             newOptions = banks.map(config.formatOption) 
           }
           newConfig.options = newOptions
-          return <FormField key={config.name} config={newConfig} errorMsg={alerts[config.name]}/> 
-        } else if (config.name === 'image') {
-          return <FormField 
-            key={config.name} 
-            config={config} 
-            onChange={(value) => onChange(value, config.name, config.validateFunc)}
+          return <FormField key={config.name} config={newConfig} 
             errorMsg={alerts[config.name]}
-            changeAlert={(newAlert) => changeAlert('image', newAlert)}
-          />
+            {...readOnlyProps}/> 
+        } else if (config.name === 'image') {
+          if (values === null){
+            return <FormField 
+              key={config.name} 
+              config={config} 
+              onChange={(value) => onChange(value, config.name, config.validateFunc)}
+              errorMsg={alerts[config.name]}
+              changeAlert={(newAlert) => changeAlert('image', newAlert)}
+            />
+          } else {
+            return 
+          }
         }
         return <FormField 
           key={config.name} 
           config={config} 
           onChange={(value) => onChange(value, config.name, config.validateFunc)}
           errorMsg={alerts[config.name]}
+          {...readOnlyProps}
         />
       })
     }</div>
-    <button>Registrar</button>
+    <div className={classes.btnWrapper}>
+      {sumbit !== '' && <button>{sumbit}</button>}
+      {secondSumbit !== null && <button>{secondSumbit}</button>}
+    </div>
   </form>
 }

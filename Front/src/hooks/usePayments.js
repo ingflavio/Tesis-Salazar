@@ -44,6 +44,25 @@ export const usePayments = () => {
     reset: resetBanks
   } = useFetch(utilsService.getBanks, [], { immediate: false });
 
+  // Hook para verificar el pago
+  const {
+    execute: verifyPayment,
+  } = useFetch(adminService.verifyPayments, [], { immediate: false });
+
+  // Función para agregar perfil a un usuario
+  const verifyPaymentById = async (id, status) => {
+    if (!id || !status) {
+      throw new Error('ID del pago y el estado es requerido');
+    }
+    const response = await verifyPayment(id, status);
+    if (response.status === 200){
+      return response.data
+    }
+    return false
+  };
+
+
+
   return {
     // Estado de pagos
     payments,
@@ -74,8 +93,10 @@ export const usePayments = () => {
     banksError,
     fetchBanks,
     refetchBanks,
-    resetBanks
+    resetBanks,
 
+    //Verificar pago
+    verifyPayment: verifyPaymentById
   }
 };
 

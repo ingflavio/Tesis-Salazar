@@ -1,7 +1,7 @@
 import classes from '../styles/payments.module.scss'
 import { formatBank } from '../utils/fieldsConfig'
 
-export default function PaymentsTable({payments = [], rol = 'user', context = 'user'}) {
+export default function PaymentsTable({payments = [], rol = 'user', modalCallback = null, tfootCallback }) {
   if (!payments) return <h3>Cargando pagos</h3>
   return <table className={classes.paymentsTable}>
     <thead>
@@ -20,8 +20,8 @@ export default function PaymentsTable({payments = [], rol = 'user', context = 'u
     </thead>
     <tbody>{
       payments.map((payment, index) => {
-        return <tr key={index}>
-          {context === 'all' && <th>{payment.user}</th>}
+        return <tr key={index} onClick={rol === 'admin' ? () => modalCallback(payment): null}>
+          {rol === 'admin'  && <th>{payment.user}</th>}
           <th>{payment.cedula}</th>
           <th>{payment.phone}</th>
           <th>{formatBank(payment.bank)}</th>
@@ -31,5 +31,11 @@ export default function PaymentsTable({payments = [], rol = 'user', context = 'u
         </tr>
       })
     }</tbody>
+    {
+      rol === 'admin' &&
+      <tfoot><tr><th>
+        <button onClick={tfootCallback}>Registrar Pago</button>  
+      </th></tr></tfoot>
+    }
   </table>
 }

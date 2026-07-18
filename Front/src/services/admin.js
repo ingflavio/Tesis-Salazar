@@ -13,8 +13,9 @@ export const adminService = {
     return formatUser(user)
   },
   getPayments: async () => {
-    const payments = await apiClient.get(`${CONTROLLER_URL}/payments`)
-    return payments.map((payment) => formatPay(payment))
+    const payments = await apiClient.get(`${CONTROLLER_URL}payments`)
+    return payments.data.map((payment) => formatPay(payment))
   },
+  verifyPayments:(id, status) => apiClient.get(`${CONTROLLER_URL}payments/${id}/verify?status=${status}`),
   getAdmins: () => apiClient.get(`${CONTROLLER_URL}admins`),
 } 
