@@ -45,3 +45,15 @@
     font-weight: 500;
   }
 }
+
+.QrPage {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.QrPage > img {
+  width: clamp(235px, 90%,335px);
+  object-fit: contain;
+  border-radius: 20px;
+}

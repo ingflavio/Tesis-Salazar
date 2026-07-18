@@ -7,9 +7,11 @@ import ProfileCard from '../components/ProfileCard'
 import classes from '../styles/profile.module.scss'
 import PaymentsForm from "../components/PaymentForm";
 import { fieldsConfig } from "../utils/fieldsConfig";
+import { useLocation } from "react-router";
 
 export default function ProfilePage(){
   const { session, logOut } = useSession()
+  const location = useLocation()
   const { profile, getProfile, editProfile } = useUsers()
   const { modal, showModalForm, closeModalForm } = useModalForm()
   const [alert, setAlert] = useState('')
@@ -26,6 +28,15 @@ export default function ProfilePage(){
       showAlert('Usuario Actualizado')
     }
   }
+    useEffect(() => {
+    if (location.state?.modal) {
+      const timer = setTimeout(() => {
+        showModalForm({text:'Registrar Pago', sumbit:'Registrar', rol:'user'})
+      }, 0);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [location.state, showModalForm])
 
   useEffect(() => {
     if (session) getProfile()
