@@ -29,6 +29,11 @@ function AdminNav({ children }) {
       text: 'finanzas',
       path: '/admin/finance',
       icon: 'finance'
+    },
+    {
+      text: 'Escaner de Qr',
+      path: '/admin/scan',
+      icon: 'qr'
     }
   ]
 

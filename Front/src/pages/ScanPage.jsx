@@ -6,23 +6,36 @@ import { useSession } from '../hooks/useSession'
 import useUsers from '../hooks/useUsers'
 import { useModalForm } from '../hooks/useModalForm'
 
-export function ScanPage(){
+export function ScanPage({rol = 'user'}){
   const navigate  = useNavigate()
   const { session } = useSession()
-   const { profile, getProfile, } = useUsers()
+   const { profile, getProfile } = useUsers()
    const video = useRef()
    const {modal, modalOpen, formInfo, showModalForm, closeModalForm} = useModalForm()
    
    const handleScanSuccess = (data) => {
-     if (!profile) return
-     const [prefix, id] = data.split(':')
-     const solvency = profile.solvency
-     if (solvency) {
-       showModalForm({text: `Disculpe, ${profile.name} pero usted no puede hacer uso del bot asistente debido a que se encuentra insolvente`})
+    const [prefix, msg] = data.split(':')
+    console.log(prefix, msg)
+    if (rol === 'admin') {
+      if (prefix == 'ss25') {
+        if (msg == 'OK') {
+          showModalForm({text: 'Usuario solvente'})
+        } else {
+          showModalForm({text: 'Usuario no solvente'})
+        }
+      } else showModalForm({text: 'QR no valido'})
+    }
+    if (!profile) return
+    const solvency = profile.solvency
+    if (solvency) {
+      showModalForm({
+        text: `Disculpe, ${profile.name} pero usted no puede hacer uso del bot asistente debido a que se encuentra insolvente`,
+        mode: 'insolvency'
+      })
       return 
     } 
     if (prefix == 'ss25') {
-      navigate("/chat", { state: { machine: id } })
+      navigate("/chat", { state: { machine: msg } })
     } else showModalForm({text: 'QR no valido'})
   }
   const { startWebcam, stopScan } = useScanner(video, handleScanSuccess)
@@ -33,7 +46,7 @@ export function ScanPage(){
   }
 
   useEffect(() => {
-    if (session) getProfile()
+    if (session && rol === 'user') getProfile()
   }, [session]) 
 
 
@@ -53,10 +66,10 @@ export function ScanPage(){
         }
       </div>
     </main>
-   {(profile && modalOpen)  && <dialog className={classes.modal} ref={modal} open={modalOpen}>
+   {(modalOpen)  && <dialog className={classes.modal} ref={modal} open={modalOpen}>
      <button className='closeBtn' onClick={() => closeModalForm()}>X</button>
       <p>{formInfo.title}</p>
-      <button onClick={goToPayment}>Ir a Pagar</button>
+      {formInfo.mode === 'insolvency' && <button onClick={goToPayment}>Ir a Pagar</button>}
     </dialog>}
   </>
 }

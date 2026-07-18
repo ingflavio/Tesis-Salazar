@@ -27,6 +27,7 @@ function App() {
         <Route index element={<AdminPage />} />
         <Route path='table' element={<TablePage />} />
         <Route path='finance' element={<FinancePage />} />
+        <Route path='scan' element={<ScanPage rol="admin" />} />
       </Route>
       <Route path='login' element={<LoginPage />} />
       <Route path='*' element={<NotFOundPage />} />
