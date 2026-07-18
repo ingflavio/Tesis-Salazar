@@ -2,7 +2,6 @@ import classes from '../styles/payments.module.scss'
 import { formatBank } from '../utils/fieldsConfig'
 
 export default function PaymentsTable({payments = [], rol = 'user', context = 'user'}) {
-  console.log(payments)
   if (!payments) return <h3>Cargando pagos</h3>
   return <table className={classes.paymentsTable}>
     <thead>
@@ -20,8 +19,8 @@ export default function PaymentsTable({payments = [], rol = 'user', context = 'u
       </tr>
     </thead>
     <tbody>{
-      payments.map((payment) => {
-        return <tr key={payment.id}>
+      payments.map((payment, index) => {
+        return <tr key={index}>
           {context === 'all' && <th>{payment.user}</th>}
           <th>{payment.cedula}</th>
           <th>{payment.phone}</th>

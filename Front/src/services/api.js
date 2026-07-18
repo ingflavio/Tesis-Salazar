@@ -31,12 +31,12 @@ export const formatUser = (user) => {
 
 export const formatPay = (payment) => {
   return {
-    usuarios: payment.userName,
+    user: payment.userName,
     cedula: payment.cedula,
     phone: payment.phone,
     bank: payment.bank,
     amount: payment.amount,
-    date: payment.paymentDate.split(':')[0].replace('T00','').split('-').reverse().join('/'),
+    date: payment.paymentDate.split(':')[0].split('T')[0].split('-').reverse().join('/'),
     status: payment.status === 'ACCEPTED' 
   }
 } 

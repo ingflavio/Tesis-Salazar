@@ -12,14 +12,18 @@ export default function ProfilePage(){
   const { session, logOut } = useSession()
   const { profile, getProfile, editProfile } = useUsers()
   const { modal, showModalForm, closeModalForm } = useModalForm()
-  const [showAlert, setShowAlert] = useState(false)
+  const [alert, setAlert] = useState('')
+
+  const showAlert = (alert) => {
+    setAlert(alert)
+    setTimeout(() => setAlert(''), 3000)
+    getProfile()
+  }
 
   const editUserProfile = async (data) => {
     const response = await editProfile(data)
     if (typeof response === 'object'){
-      setShowAlert(true)
-      setTimeout(() => setShowAlert(false), 3000)
-      getProfile()
+      showAlert('Usuario Actualizado')
     }
   }
 
@@ -40,7 +44,6 @@ export default function ProfilePage(){
     return Object.fromEntries(formatedEntries)
   }
 
-
   return <main className={classes.profilePage}>
     <button className={classes.logOut} onClick={logOut}>Cerrar Sesion</button>
     <ProfileCard profile={formatProfile(profile)} 
@@ -48,14 +51,17 @@ export default function ProfilePage(){
       modalCallback={showModalForm}
     />
     {
-      showAlert && 
+      alert !== '' && 
         <span className={classes.alertBubble}>
-          Usuario actualizado
+          {alert}
         </span>
     }
     <dialog ref={modal}>
       <button className="closeBtn" onClick={() => closeModalForm()}>X</button>
-      <PaymentsForm/>
+      <PaymentsForm alertCallback={(msg, succes) => {
+        showAlert(msg)
+        if (succes) closeModalForm()
+      }}/>
     </dialog>
   </main>
 }

@@ -5,7 +5,7 @@ import useValidateForm from "../hooks/useValidateForm"
 import usePayments from "../hooks/usePayments";
 import { useEffect } from "react";
 
-export default function PaymentsForm() {
+export default function PaymentsForm({alertCallback}) {
   const { sendPayment, banks, fetchBanks } = usePayments()
   const initialAlerts = Object.fromEntries(paymentsConfigArray.map((config) => [config.name, '']))
   const { alerts, changeAlert, onChange, validateFields } = useValidateForm(initialAlerts)
@@ -54,7 +54,12 @@ export default function PaymentsForm() {
       }))
       const base64String = await fileToBase64(input.files[0]);
       data['image'] = base64String
-      sendPayment(data)
+      const response = await sendPayment(data)
+      if (response.status === 200){
+        alertCallback('Pago registrado', true)
+      } else {
+        alertCallback('Fallo al registrar el pago', false)
+      }
     }
   }
 
