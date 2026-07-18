@@ -8,7 +8,7 @@ const capitalize = (value) => value[0].toUpperCase() + value.slice(1)
 export const fieldsConfig = {
   id: {
     name: 'id',
-    label: 'cedula',
+    label: 'Cedula',
     type: 'text',
     placeholder: '',   
     parseValue: (value) => Number(value),
@@ -16,7 +16,7 @@ export const fieldsConfig = {
   },
   name: {
     name: 'name',
-    label: 'nombre',
+    label: 'Nombre',
     type: 'text', 
     placeholder: '',      
     parseValue: (value) => value.toLowerCase(),
@@ -24,7 +24,7 @@ export const fieldsConfig = {
   },
   lastName: {
     name: 'lastName',
-    label: 'apellido',
+    label: 'Apellido',
     type: 'text',  
     placeholder: '',  
     parseValue: (value) => value.toLowerCase(),
@@ -38,7 +38,7 @@ export const fieldsConfig = {
   },
   age: {
     name: 'age',
-    label: 'edad',
+    label: 'Edad',
     type: 'text', 
     placeholder: '',
     parseValue: (value) => Number(value),
@@ -46,7 +46,7 @@ export const fieldsConfig = {
   },
   phone: {
     name: 'phone',
-    label: 'telefono',
+    label: 'Telefono',
     type: 'text',  
     placeholder: '',  
     validateFunc: (value, ) => validatePhone(value),
@@ -60,7 +60,7 @@ export const fieldsConfig = {
   },
   sex: {
     name: 'sex',
-    label: 'sexo',
+    label: 'Sexo',
     type: 'enum',       
     placeholder: '', 
     parseValue: (value) => value.toUpperCase(),
@@ -70,7 +70,7 @@ export const fieldsConfig = {
   },
   height: {
     name: 'height',
-    label: 'altura',
+    label: 'Altura',
     type: 'text',       
     placeholder: '',
     parseValue: (value) => Number(value.replace(',','')),
@@ -79,7 +79,7 @@ export const fieldsConfig = {
   },
   weight: {
     name: 'weight',
-    label: 'peso',
+    label: 'Peso',
     type: 'text', 
     placeholder: '',
     parseValue: (value) => Number(value.replace(',','.')),
@@ -96,7 +96,7 @@ export const fieldsConfig = {
   },
   condition: {
     name: 'condition',
-    label: 'condición',
+    label: 'Condición',
     type: 'text',  
     placeholder: '',  
   },
