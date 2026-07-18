@@ -9,32 +9,33 @@ import { useModalForm } from '../hooks/useModalForm'
 export function ScanPage(){
   const navigate  = useNavigate()
   const { session } = useSession()
-  const { user, getUser } = useUsers()
-  const {modal, modalOpen, formInfo, showModalForm, closeModalForm} = useModalForm()
-  const video = useRef()
-
-  const handleScanSuccess = (data) => {
-    if (!user) return
-    const [prefix, id] = data.split(':')
-    const solvency = user.solvency
-    if (!solvency) {
-      showModalForm({text: `Disculpe, ${user.name} pero usted no puede hacer uso del bot asistente debido a que se encuentra insolvente`})
+   const { profile, getProfile, } = useUsers()
+   const video = useRef()
+   const {modal, modalOpen, formInfo, showModalForm, closeModalForm} = useModalForm()
+   
+   const handleScanSuccess = (data) => {
+     if (!profile) return
+     const [prefix, id] = data.split(':')
+     const solvency = profile.solvency
+     if (solvency) {
+       showModalForm({text: `Disculpe, ${profile.name} pero usted no puede hacer uso del bot asistente debido a que se encuentra insolvente`})
       return 
     } 
     if (prefix == 'ss25') {
       navigate("/chat", { state: { machine: id } })
     } else showModalForm({text: 'QR no valido'})
   }
-
+  const { startWebcam, stopScan } = useScanner(video, handleScanSuccess)
+  
   const goToPayment = () => {
+    stopScan()
     navigate('/profile', {state: { mode: 'payments', modal: 'payments'}})
   }
 
   useEffect(() => {
-    if (session) getUser(session.id)
+    if (session) getProfile()
   }, [session]) 
 
-  const { startWebcam } = useScanner(video, handleScanSuccess)
 
   startWebcam()
 
@@ -52,7 +53,7 @@ export function ScanPage(){
         }
       </div>
     </main>
-   {(user && modalOpen)  && <dialog className={classes.modal} ref={modal} open={modalOpen}>
+   {(profile && modalOpen)  && <dialog className={classes.modal} ref={modal} open={modalOpen}>
      <button className='closeBtn' onClick={() => closeModalForm()}>X</button>
       <p>{formInfo.title}</p>
       <button onClick={goToPayment}>Ir a Pagar</button>
