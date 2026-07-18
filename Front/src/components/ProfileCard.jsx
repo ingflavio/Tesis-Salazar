@@ -18,13 +18,17 @@ export default function ProfileCard({ profile, editCallback, modalCallback, rol 
 
   const { alerts, validateFields } = useValidateForm(initalAlerts)
   const [ mode, setMode] = useState(location.state ? location.state.mode : 'profile')
-  const { paymentsByUser: payments , fetchPaymentsByUser: fetchPayments } = usePayments()
+  const { paymentsByUser: payments, fetchPaymentsByUser: userFetchPayments, fetchPayments: adminFetchPayments  } = usePayments()
   const refSavedChanges = useRef(false)
   const extraFields = []
 
   useEffect(() => {
     if (profile) {
-      fetchPayments()
+      if (rol === 'user'){
+        userFetchPayments()
+      }else if (rol === 'admin') {
+        adminFetchPayments()
+      }
     }
   }, [profile]) 
 
@@ -136,7 +140,7 @@ export default function ProfileCard({ profile, editCallback, modalCallback, rol 
         }
         {
           mode === 'payments' &&
-          <PaymentsTable payments={payments} modalCallback={modalCallback} 
+          <PaymentsTable payments={ rol === 'user' ? payments : payments.filter((payment) => payment)} modalCallback={modalCallback} 
             rol={rol}
           />
         }

@@ -1,7 +1,7 @@
 import React, { useRef } from "react"
 import classes from '../styles/FormFields.module.scss'
 
-export default function CheckGroup({options, name, label, id, onChange = null, defaultChecked}) {
+export default function CheckGroup({options, name, label, id, onChange = null, defaultChecked, readOnly = false}) {
   const checkedRef = useRef(null) 
 
   const handleClick = (button) => {
@@ -21,20 +21,25 @@ export default function CheckGroup({options, name, label, id, onChange = null, d
     }
   }
 
-  return <fieldset className={classes.checkGroup}>
+  return <div className={classes.checkGroup + ' ' + classes.fieldWrapper}>
     {label && <label htmlFor={name}>{label}</label>}
-    {options.map((option) => (
-      <React.Fragment key={option.label}>
-        <input 
-          type="radio" 
-          id={`${id}-${option.value}`} 
-          name={name} 
-          value={option.value}
-          defaultChecked={option.value === defaultChecked}
-          onClick={(event) => handleClick(event.target)}
-        />
-        <label htmlFor={`${id}-${option.value}`}>{option.label}</label>
-      </React.Fragment>
-    ))}
-  </fieldset>
+    <div>{
+      readOnly ?
+      <label>{options.find((option) => option.value === defaultChecked).label}</label>
+      :
+      options.map((option) => (
+        <React.Fragment key={option.label}>
+          <input 
+            type="radio" 
+            id={`${id}-${option.value}`} 
+            name={name} 
+            value={option.value}
+            defaultChecked={option.value === defaultChecked}
+            onClick={(event) => handleClick(event.target)}
+          />
+          <label htmlFor={`${id}-${option.value}`}>{option.label}</label>
+        </React.Fragment>
+      ))
+    }</div>
+  </div>
 }
