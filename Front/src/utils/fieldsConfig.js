@@ -120,7 +120,7 @@ export const parseValues = (data) => Object.fromEntries(Object.entries(data).map
   return [key ,parseValue ? parseValue(value) : value]
 }))
 
-const formatBank = (bank) => {
+export const formatBank = (bank) => {
   let name = bank
   name = name.toLowerCase()
   name = name.split('_').map((word) => {
@@ -128,7 +128,7 @@ const formatBank = (bank) => {
       ? word[0].toUpperCase() + word.slice(1)
       : word
   }).join(' ')
-  return { label: name, value: bank }
+  return name
 }
 
 export const paymentsFieldsConfig = {
@@ -150,7 +150,7 @@ export const paymentsFieldsConfig = {
     name: 'bank',
     label: 'Banco',
     type: 'enum',
-    formatOption: formatBank, 
+    formatOption: (bank) => ({ label: formatBank(bank), value: bank }), 
     placeholder: '', 
   },
   amount:{

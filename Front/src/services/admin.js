@@ -1,4 +1,4 @@
-import { apiClient, formatUser } from "./api";
+import { apiClient, formatUser, formatPay } from "./api";
 
 const CONTROLLER_URL = '/admin/'  
 
@@ -12,5 +12,8 @@ export const adminService = {
     const user = await response.data
     return formatUser(user)
   },
-  getPayments: () => apiClient.get(`${CONTROLLER_URL}/payments`),
+  getPayments: async () => {
+    const payments = await apiClient.get(`${CONTROLLER_URL}/payments`)
+    return payments.map((payment) => formatPay(payment))
+  },
 } 

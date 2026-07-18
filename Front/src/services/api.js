@@ -29,6 +29,18 @@ export const formatUser = (user) => {
   }
 } 
 
+export const formatPay = (payment) => {
+  return {
+    usuarios: payment.userName,
+    cedula: payment.cedula,
+    phone: payment.phone,
+    bank: payment.bank,
+    amount: payment.amount,
+    date: payment.paymentDate.split(':')[0].replace('T00','').split('-').reverse().join('/'),
+    status: payment.status === 'ACCEPTED' 
+  }
+} 
+
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10000,

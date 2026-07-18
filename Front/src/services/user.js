@@ -1,11 +1,11 @@
-import { apiClient, formatUser } from "./api";
+import { apiClient, formatUser, formatPay } from "./api";
 
 const CONTROLLER_URL = '/users/'
 
 export const userService = {
   myPayments:  async () =>  {
     const response = await apiClient.get(`${CONTROLLER_URL}my-payments`)
-    return response.data
+    return response.data.map((payment) => formatPay(payment))
   },
   getProfile:  async () =>  {
     const response = await apiClient.get(`${CONTROLLER_URL}me`)
