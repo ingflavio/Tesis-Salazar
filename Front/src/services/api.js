@@ -31,6 +31,7 @@ export const formatUser = (user) => {
 
 export const formatPay = (payment) => {
   return {
+    id: payment.id,
     user: payment.userName,
     cedula: payment.cedula,
     phone: payment.phone,

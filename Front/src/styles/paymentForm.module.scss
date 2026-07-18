@@ -80,3 +80,34 @@ dialog:has(.payment_form){
 .btnWrapper > button:nth-child(2) {
   background-color: vars.$warn-500;
 }
+
+
+.alertBubble {
+  background-color: vars.$neutral-100;
+  font-size: calc(.8 * vars.$title-size);
+  position: absolute;
+  bottom: 15dvh;
+  padding: .5em;
+  border-radius: .8em;
+  box-shadow: 0 0 15px 1px vars.$neutral-300;
+  animation: messageAppear 3s ease forwards;
+}
+
+@keyframes messageAppear {
+  0% {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  20% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  80% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+}

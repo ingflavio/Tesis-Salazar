@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import usePayments from "../hooks/usePayments"
 import PaymentsTable from "../components/PaymentsTable"
 import classes from '../styles/finances.module.scss'
@@ -7,15 +7,12 @@ import PaymentsForm from "../components/PaymentForm"
 
 export default function FinancePage() {
   const { payments, fetchPayments } = usePayments()
+    const [alert, setAlert] = useState('')
   const { formInfo, formValues, modalOpen, modal, showModalForm, closeModalForm } = useModalForm()
 
   useEffect(() => {
     fetchPayments()
   }, [])
-
-  useEffect(() => {
-    console.log(payments)
-  }, [payments])
 
   const OpenPaymentInfo = (payment) => {
     showModalForm({
@@ -30,11 +27,17 @@ export default function FinancePage() {
   const OpenPaymentRegister = () => {
     showModalForm({
       text: 'Registrar Pago',
-      mode: 'show',
+      mode: 'register admin',
       submit: 'Registrar'
     })
   }
 
+  const showAlert = (newAlert, succes) => {
+    if (succes) closeModalForm()
+    setAlert(newAlert)
+    fetchPayments()
+    setTimeout(() => setAlert(''), 3000)
+  }
   
 
   return <main className={classes.financePage}>
@@ -42,14 +45,22 @@ export default function FinancePage() {
       modalCallback={(payment) => OpenPaymentInfo(payment)}
       tfootCallback={OpenPaymentRegister}
     />    
-    <dialog ref={modal}>
+    <dialog ref={modal} open={modalOpen}>
       <button className="closeBtn" onClick={closeModalForm}>X</button>
       <PaymentsForm title={formInfo.title} 
         values={formValues}
         sumbit={formInfo.submit}
         secondSumbit={formInfo.secondSubmit}
+        mode={formInfo.mode}
+        alertCallback={showAlert}
         rol='admin'
       />
     </dialog>
+    {
+      alert !== '' && 
+      <span className={classes.alertBubble}>
+        {alert}
+      </span>
+    }
   </main>
 }

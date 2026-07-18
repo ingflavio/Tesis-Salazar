@@ -32,10 +32,10 @@ export default function PaymentsTable({payments = [], rol = 'user', modalCallbac
       })
     }</tbody>
     {
-      rol === 'admin' &&
-      <tfoot><tr><th>
-        <button onClick={tfootCallback}>Registrar Pago</button>  
-      </th></tr></tfoot>
+      // rol === 'admin' &&
+      // <tfoot><tr><th>
+      //   <button onClick={tfootCallback}>Registrar Pago</button>  
+      // </th></tr></tfoot>
     }
   </table>
 }

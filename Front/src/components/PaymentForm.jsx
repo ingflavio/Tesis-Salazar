@@ -23,7 +23,7 @@ export default function PaymentsForm({ alertCallback, values = null, title = 'Re
     });
   };
 
-  const registerPayment = async (event) => {
+  const registerPayment = async (event, end = true) => {
     const form = event.target
     const formData = new FormData(form)
     const entries = Array.from(formData.entries()) 
@@ -55,7 +55,7 @@ export default function PaymentsForm({ alertCallback, values = null, title = 'Re
       data['image'] = base64String
       const response = await sendPayment(data)
       if (response.status === 200){
-        alertCallback('Pago registrado', true)
+        alertCallback('Pago registrado', end)
         return response.data.id
       } else {
         alertCallback('Fallo al registrar el pago', false)
@@ -67,11 +67,24 @@ export default function PaymentsForm({ alertCallback, values = null, title = 'Re
     event.preventDefault()
     if (mode === 'register'){
       registerPayment(event)
-    } else if (mode === 'verify') {
-      //
+    } else if (mode === 'show') {
+      const button = event.nativeEvent.submitter;
+      const text = button.value === 'ACCEPTED' 
+        ? 'Pago Verificado'
+        : 'Pago Denegado'
+      try {
+        verifyPayment(values.id, button.value)
+        alertCallback(text, true)
+      }catch (er){
+        console.log('error verificando: ', er)
+      }
     } else if (mode === 'admin register') {
-      const id = registerPayment(event)
-      //
+      try {
+        const id = await registerPayment(event, false)
+        verifyPayment(id, 'ACCEPTED')
+      } catch (er){ 
+        console.log('error al registrar pago: ', er)
+      }
     }
   }
 
@@ -119,8 +132,8 @@ export default function PaymentsForm({ alertCallback, values = null, title = 'Re
       })
     }</div>
     <div className={classes.btnWrapper}>
-      {sumbit !== '' && <button>{sumbit}</button>}
-      {secondSumbit !== null && <button>{secondSumbit}</button>}
+      {sumbit !== '' && <button type="submit" value='ACCEPTED'>{sumbit}</button>}
+      {secondSumbit !== null && <button type="submit" value='DENIED'>{secondSumbit}</button>}
     </div>
   </form>
 }
