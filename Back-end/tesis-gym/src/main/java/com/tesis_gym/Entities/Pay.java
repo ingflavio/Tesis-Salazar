@@ -44,6 +44,8 @@ public class Pay {
 
     @PrePersist
     protected void onCreate() {
-        this.paymentDate = LocalDateTime.now();
+        if (this.paymentDate == null) {
+            this.paymentDate = LocalDateTime.now();
+        }
     }
 }
