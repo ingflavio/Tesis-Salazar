@@ -30,7 +30,7 @@ public class DataSeedConfig {
                 // 1. CREAR 3 ADMINISTRADORES
                 // ==========================================
                 String[][] admins = {
-                        {"123", "adminjuan"},
+                        {"123", "juan gonzales"},
                         {"12345", "adminmaria"},
                         {"123456", "admincarlos"}
                 };
@@ -39,7 +39,7 @@ public class DataSeedConfig {
                     UserAccount admin = UserAccount.builder()
                             .cedula(Long.parseLong(ad[0]))
                             .name(ad[1])
-                            .password(passwordEncoder.encode(ad[1] + "123")) // username + 123
+                            .password(passwordEncoder.encode("admin123")) // username + 123
                             .rol(Roles.Admin)
                             .build();
                     accountRepository.save(admin);
