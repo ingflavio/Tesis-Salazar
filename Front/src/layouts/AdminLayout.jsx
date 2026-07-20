@@ -14,6 +14,7 @@ function AdminNav({ children }) {
   useEffect(()=>{
     setPathname(location.pathname)
   },[location.pathname])
+  
   const links = [
     {
       text: 'inicio',
@@ -91,7 +92,7 @@ export default function AdminLayout() {
               </>
             }
             <div className={classes.hideWrapper}>
-              {admin && <h6> {admin.name} </h6>}
+              {admin && <h6 style={{textTransform: 'capitalize'}}> {admin.name} </h6>}
               <i>Administrador</i>
               <AdminNav>
                 <button onClick={logOut}>

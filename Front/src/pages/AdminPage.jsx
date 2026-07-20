@@ -146,7 +146,7 @@ export default function AdminPage() {
   
   return (
     <main className={classes.adminPage}>
-      <h3>Buenos dias <span style={{fontWeight:'400'}}>{name}</span></h3>
+      <h3>Buenos dias <span style={{fontWeight:'400', textTransform: 'capitalize'}}>{name}</span></h3>
       <div className={classes.dashboard}>
         <section>
           <h4>Usuarios</h4>
