@@ -105,7 +105,7 @@ function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, chan
           const profileToShow = {...profile}
           delete profileToShow['password']
           return <tr key={index} onClick={() => openCallback(profile)}>
-            <td>{index}</td>
+            <td>{index + 1}</td>
             {
             Object.entries(profileToShow).map(([key, value]) => {
               let content 
