@@ -81,10 +81,10 @@ public class ClientUserService {
             UserDetails details = account.getUserDetails();
             if (details != null && details.getExpiration_date() != null) {
                 boolean isSolvent = !currentDate.after(details.getExpiration_date());
+                detailsRepository.save(details);
 
                 if (details.getSolvent() == null || details.getSolvent() != isSolvent) {
                     details.setSolvent(isSolvent);
-                    detailsRepository.save(details);
                 }
             }
         }
