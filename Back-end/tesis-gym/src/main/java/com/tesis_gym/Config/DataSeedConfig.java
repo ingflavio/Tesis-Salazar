@@ -134,6 +134,14 @@ public class DataSeedConfig {
                             .build();
                     accountRepository.save(user);
 
+                    boolean solvency = false;
+                    if (i < 25) {
+                        solvency = true;
+
+                    }else {
+                        solvency = false;
+                    }
+
                     // UserDetails para todos
                     UserDetails details = UserDetails.builder()
                             .account(user)
@@ -146,10 +154,10 @@ public class DataSeedConfig {
                             .init_weight_kg(weight)
                             .last_weight_kg(weight)
                             .condition("Ninguna")
-                            .solvent(true)
+                            .solvent(solvency)
                             .registration_date(now)
                             .expiration_date(cal.getTime())
-                            .sex(sex) // Ahora es String
+                            .sex(sex) 
                             .bodyFatPercentage(fat)
                             .build();
                     detailsRepository.save(details);
@@ -159,7 +167,7 @@ public class DataSeedConfig {
                         Pay pago1 = Pay.builder()
                                 .user(user)
                                 .bank(Banks.BANCO_DE_VENEZUELA)
-                                .phone("0414000000" + i)
+                                .phone(phone)
                                 .Reference_number("REF00" + i)
                                 .amount(20.0)
                                 .status(PaymentStatus.ACCEPTED)
