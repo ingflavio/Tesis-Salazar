@@ -129,7 +129,7 @@ export default function AdminPage() {
     {name: 'enero', activos: 15, inactivos: 5, totales:20},
     {name: 'febrero', activos: 13, inactivos: 11, totales:24}, 
     {name: 'marzo', activos: 20, inactivos: 11, totales:31}, 
-    {name: 'abril', activos: 27, inactivos: 8, totales:35}, 
+    {name: 'abril', activos: 26, inactivos: 14, totales:40}, 
     // {name: 'mayo', activos: 26, inactivos: 14, totales:40}, 
   ]
 
