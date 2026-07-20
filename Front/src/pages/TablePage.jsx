@@ -75,6 +75,7 @@ function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, chan
     <table className={classes.userTable}>
       <thead>
         <tr>
+          <th>n</th>
           {reducedFields.map((value) => <th key={value.name}>
             {value.label}
             <SortingButton 
@@ -85,6 +86,7 @@ function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, chan
           )}
         </tr>
         <tr>
+          <th>20</th>
           {reducedFields.map((config) => {
             const noLabelConfig = {...config} 
             noLabelConfig['placeholder'] = config['label']
@@ -102,7 +104,9 @@ function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, chan
         {sortedProfiles.map((profile, index) => {
           const profileToShow = {...profile}
           delete profileToShow['password']
-          return <tr key={index} onClick={() => openCallback(profile)}>{
+          return <tr key={index} onClick={() => openCallback(profile)}>
+            <td>{index}</td>
+            {
             Object.entries(profileToShow).map(([key, value]) => {
               let content 
               let className = ''
@@ -182,6 +186,7 @@ export default function TablePage() {
   })
 
   const profiles = users ? formatProfiles(users) : []
+  console.log(users)
 
   const getFullProfile = (id) => profiles.find((profile) => profile.id === id)
 

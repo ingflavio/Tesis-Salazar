@@ -38,7 +38,7 @@ $gap-distance: clamp(2px, 6dvh, 40px);
 
 .userTable {
   background-color: vars.$neutral-500;
-  grid-template-columns: repeat(4, 1fr); 
+  grid-template-columns: auto repeat(4, 1fr); 
   border: 2px solid vars.$neutral-500;
   margin: 2dvw 0;
   font-size: clamp(10px, 2.8dvw, 20px);
@@ -177,20 +177,20 @@ td, th {
 @media screen and (min-width: 1150px) {
   
   .userTable {
-    grid-template-columns: repeat(5, 1fr); 
+    grid-template-columns: auto repeat(5, 1fr); 
   }
 }
 
 @media screen and (min-width: 1400px) {
   
   .userTable {
-    grid-template-columns: repeat(6, 1fr); 
+    grid-template-columns: auto repeat(6, 1fr); 
   }
 }
 
 @media screen and (min-width: 1600px) {
   
   .userTable {
-    grid-template-columns: repeat(7, 1fr); 
+    grid-template-columns: auto repeat(7, 1fr); 
   }
 }
