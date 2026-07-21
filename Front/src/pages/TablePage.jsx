@@ -349,13 +349,17 @@ export default function TablePage() {
             tfooterCallback = {() => OpenModal('register')}
           />
           <div className={classes.paginationButton}>
-            <button onClick={() => setPage(0)}>{"<"}</button>
+            <button className={classes.pageButton} 
+              onClick={() => setPage(0)}
+            >{"<"}</button>
             {pages.map((pageNumber) =>{
-              return <button
+              return <button className={`${classes.pageButton} ${page === pageNumber ? classes.selectedPage : ''}`}
                 onClick={() => setPage(pageNumber)}
               >{pageNumber+1}</button>
             })}
-            <button onClick={() => setPage(pages[pages.length-1])}>{">"}</button>
+            <button className={classes.pageButton} 
+              onClick={() => setPage(pages[pages.length-1])}
+            >{">"}</button>
           </div>
         </div>
       </main>

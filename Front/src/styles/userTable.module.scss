@@ -174,6 +174,15 @@ td, th {
   margin-left: 2.5dvw;
 }
 
+.pageButton {
+  border-radius: 0;
+  background-color: vars.$neutral-500;
+}
+
+.selectedPage {
+  background-color: vars.$primary-500;
+}
+
 @media screen and (min-width: 1150px) {
   
   .userTable {
