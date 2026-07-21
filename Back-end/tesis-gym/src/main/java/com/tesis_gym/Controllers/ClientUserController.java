@@ -7,6 +7,7 @@ import com.tesis_gym.Security.JwtService;
 import com.tesis_gym.Services.ClientUserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,14 +58,15 @@ public class ClientUserController {
         return ResponseEntity.ok(userService.updateUser(cedula, dto));
     }
 
-    @PostMapping("/pay")
+    @PostMapping(value = "/pay", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> pay(
             @RequestHeader("Authorization") String authHeader,
-            @Valid @RequestBody PayDto payDto) {
+            @Valid @ModelAttribute PayDto payDto) { // NUEVO: @ModelAttribute en lugar de @RequestBody
 
         String token = authHeader.substring(7);
         Long cedula = Long.valueOf(jwtService.getCedulaFromToken(token));
-        return ResponseEntity.ok(userService.PaySubscription(cedula,payDto));
+
+        return ResponseEntity.ok(userService.PaySubscription(cedula, payDto));
     }
 
     @PostMapping("/verify-password")

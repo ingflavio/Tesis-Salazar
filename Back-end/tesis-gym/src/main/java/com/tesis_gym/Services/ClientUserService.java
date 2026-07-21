@@ -9,10 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -109,18 +111,25 @@ public class ClientUserService {
     }
 
     private PayResponseDto mapToPayResponseDto(Pay pay) {
+
+        String imageUrl = pay.getImage() != null ? "/comprobantes/" + pay.getImage() : null;
+
         return new PayResponseDto(
                 pay.getId(),
                 pay.getUser().getCedula(),
                 pay.getUser().getName(),
                 pay.getBank(),
                 pay.getPhone(),
+                pay.getReference_number(),
                 pay.getAmount(),
-                pay.getImage(),
-                pay.getStatus(),
-                pay.getPaymentDate()
+                imageUrl,
+                pay.getPaymentDate(),
+                pay.getStatus()
+
+
         );
     }
+
 
     public List<PayResponseDto> getPaymentsByCedula(Long cedula) {
         List<Pay> payments = payRepository.findByUser_Cedula(cedula);
@@ -157,35 +166,66 @@ public class ClientUserService {
         UserDetails userDetails = getUserByCedula(cedula);
         Date now = new Date();
 
+        String imageName = null;
+        if (payDto.image() != null && !payDto.image().isEmpty()) {
+            try {
+                // 1. Crear la carpeta si no existe
+                Path directoryPath = Paths.get("Comprobantes_de_pago");
+                if (!Files.exists(directoryPath)) {
+                    Files.createDirectories(directoryPath);
+                }
+
+                // 2. Generar un nombre único (ej: 550e8400-e29b-41d4-a716-446655440000.jpg)
+                String originalFileName = payDto.image().getOriginalFilename();
+                String extension = "";
+                if (originalFileName != null && originalFileName.contains(".")) {
+                    extension = originalFileName.substring(originalFileName.lastIndexOf("."));
+                } else {
+                // Por si acaso el navegador no envía la extensión, le ponemos .jpg por defecto
+                extension = ".jpg";
+            }
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+                imageName = userDetails.getCedula().toString() + "_" + payDto.Reference_number() + "_" + sdf.format(now) + extension;
+
+
+
+                Path filePath = directoryPath.resolve(imageName);
+                Files.copy(payDto.image().getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+            } catch (Exception e) {
+                throw new RuntimeException("Error al guardar la imagen: " + e.getMessage());
+            }
+        }
+
         Pay payment = Pay.builder()
                 .user(account)
                 .bank(payDto.bank())
                 .phone(payDto.phone())
                 .Reference_number(payDto.Reference_number())
                 .amount(payDto.amount())
-                .image(payDto.image())
-                .status(PaymentStatus.PENDING) // Siempre entra como pendiente
+                .image(imageName)
+                .status(PaymentStatus.PENDING)
                 .build();
         payRepository.save(payment);
 
-        // LÓGICA DE DÍAS: Damos 1 día de gracia
+        // ... (Tu lógica de días de gracia que ya tenías se mantiene intacta)
         Calendar cal = Calendar.getInstance();
-
-        // Si ya estaba vencido, contamos desde hoy. Si aún le quedaban días, sumamos a su fecha actual.
         if (userDetails.getExpiration_date() != null && userDetails.getExpiration_date().after(now)) {
             cal.setTime(userDetails.getExpiration_date());
         } else {
             cal.setTime(now);
-            userDetails.setRegistration_date(now); // Reiniciamos su fecha de inicio
+            userDetails.setRegistration_date(now);
         }
 
-        cal.add(Calendar.DAY_OF_YEAR, 1); // +1 Día de gracia
-
+        cal.add(Calendar.DAY_OF_YEAR, 1);
         userDetails.setExpiration_date(cal.getTime());
         userDetails.setSolvent(true);
 
         return detailsRepository.save(userDetails);
     }
+
+
 
     public PayResponseDto verifyPayment(Long paymentId, PaymentStatus newStatus) {
         Pay payment = payRepository.findById(paymentId)
@@ -242,29 +282,6 @@ public class ClientUserService {
                 .orElseThrow(() -> new RuntimeException("User account not found"));
     }
 
-    public UserDetails paySubscription(Long cedula, PayDto payDto) {
-
-        UserAccount account = accountRepository.findById(cedula)
-                .orElseThrow(() -> new RuntimeException("Account not found"));
-
-        UserDetails userDetails = getUserByCedula(cedula);
-        Pay payment = Pay.builder()
-                .user(account)
-                .bank(payDto.bank())
-                .phone(payDto.phone())
-                .amount(payDto.amount())
-                .Reference_number(payDto.Reference_number())
-                .image(payDto.image())
-                .build();
-        payRepository.save(payment);
-
-        Date now = new Date();
-        userDetails.setRegistration_date(now);
-        userDetails.setExpiration_date(calculateExpirationDate(now));
-        userDetails.setSolvent(true);
-
-        return detailsRepository.save(userDetails);
-    }
 
     public UserAccount updateUserByAdmin(Long cedula, AdminUserUpdateDto dto) {
         UserAccount account = accountRepository.findById(cedula)
@@ -291,6 +308,7 @@ public class ClientUserService {
 
         return accountRepository.findById(cedula).get();
     }
+
 
 
 
