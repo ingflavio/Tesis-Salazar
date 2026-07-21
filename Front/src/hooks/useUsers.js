@@ -63,7 +63,7 @@ export const useUsers = () => {
     execute: AdminEdit
   } = useFetch(adminService.editProfile, [], { immediate: false });
   
-  // Hook para obtener el perfil del usuario
+  // Hook para obtener a los admins
   const {
     data: admins,
     loading: adminsLoading,
@@ -121,31 +121,44 @@ export const useUsers = () => {
 
   //funcion para obtener un admin
   const getAdminById = async (id) => {
-  if (!id) {
-    throw new Error('ID de usuario es requerido');
-  }
-  try {
-    // Primero obtén la lista completa de admins
-    const response = await getAdmins();
-    
-    if (response && response.status === 200 && response.data) {
-      // Busca el admin por ID en la lista
-      const foundAdmin = response.data.find((admin) => admin.id === id || admin.cedula === id);
-      
-      if (foundAdmin) {
-        setAdmin(foundAdmin);
-        return foundAdmin;
-      }
+    if (!id) {
+      throw new Error('ID de usuario es requerido');
     }
-    
-    setAdmin(null);
-    return null;
-  } catch (error) {
-    console.error('Error al obtener admin:', error);
-    setAdmin(null);
-    return false;
+    try {
+      // Primero obtén la lista completa de admins
+      const response = await getAdmins();
+      
+      if (response && response.status === 200 && response.data) {
+        // Busca el admin por ID en la lista
+        const foundAdmin = response.data.find((admin) => admin.id === id || admin.cedula === id);
+        
+        if (foundAdmin) {
+          setAdmin(foundAdmin);
+          return foundAdmin;
+        }
+      }
+      
+      setAdmin(null);
+      return null;
+    } catch (error) {
+      console.error('Error al obtener admin:', error);
+      setAdmin(null);
+      return false;
+    }
   }
-}
+
+
+  // Función para editar perfil a un usuario
+  const adminEditUserProfile = async (profileData) => {
+    if (!profileData.id) {
+      throw new Error('ID de usuario es requerido');
+    }
+    const response = await AdminEdit(profileData);
+    if (response.status === 200){
+      return formatUser(response.data)
+    }
+    return false
+  };
 
   return {
     // Estado de usuarios (todos)
@@ -188,6 +201,9 @@ export const useUsers = () => {
     editError,
     editProfile: editUserProfile,
     resetEdit,
+
+    // editar usuario siendo admin
+    AdminEdit: adminEditUserProfile,
 
     //Estado de obtener admins 
     admin,

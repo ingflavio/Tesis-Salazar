@@ -179,7 +179,7 @@ export default function TablePage() {
     addProfile,
     fetchUsers,
     refetchUsers,
-    adminEditUserProfile
+    AdminEdit,
   } = useUsers();
   
   useEffect(() => {
@@ -251,9 +251,8 @@ export default function TablePage() {
   }
 
   const editProfile = async (data) => {
-    const user = await adminEditUserProfile(data)
-    console.log(user)
-    showModalForm({text:'Perfil completo del cliente', mode: 'open', profile: user})
+    const response = await AdminEdit(data)
+    showModalForm({text:'Perfil completo del cliente', mode: 'open', profile: response})
   }
 
   const OpenModal = (mode, profile = null) => {
