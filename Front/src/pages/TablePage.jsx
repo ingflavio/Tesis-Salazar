@@ -198,9 +198,8 @@ export default function TablePage() {
   })
 
   const profiles = users ? formatProfiles(users) : []
-  console.log(profiles)
 
-  const length = Math.round(profiles.length / 20)
+  const length = Math.ceil(profiles.length / 20)
   const pages = [...Array(length).keys()]
 
   const getFullProfile = (id) => profiles.find((profile) => profile.id === id)
@@ -353,7 +352,7 @@ export default function TablePage() {
               onClick={() => setPage(0)}
             >{"<"}</button>
             {pages.map((pageNumber) =>{
-              return <button className={`${classes.pageButton} ${page === pageNumber ? classes.selectedPage : ''}`}
+              return <button key={pageNumber} className={`${classes.pageButton} ${page === pageNumber ? classes.selectedPage : ''}`}
                 onClick={() => setPage(pageNumber)}
               >{pageNumber+1}</button>
             })}

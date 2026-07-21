@@ -12,19 +12,6 @@ export const userService = {
     const user = response.data
     return formatUser(user)
   },
-  addProfile: (data) => apiClient.post(`${CONTROLLER_URL}${data.id}/details`,{
-    "firstName": data.name,
-    "lastName": data.lastName,
-    "email": data.email,
-    "phone": data.phone,
-    "age": data.age,
-    "height_Cm": data.height,
-    "init_weight_kg": data.weight,
-    "condition":  data.condition,
-    "sex": data.sex,
-    "bodyFatPercentage": data.fat,
-    "rol": data.rol
-  }),
   registerUser: ({ id, username, password, rol }) => apiClient.post(`${CONTROLLER_URL}register`,{
     "cedula": id,
     "name": username,

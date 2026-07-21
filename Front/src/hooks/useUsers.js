@@ -48,7 +48,7 @@ export const useUsers = () => {
     error: sendProfileError,
     execute: addProfile,
     reset: resetSendProfile
-  } = useFetch(userService.addProfile, [], { immediate: false });
+  } = useFetch(adminService.addProfile, [], { immediate: false });
 
   // Hook para editar perfil
   const {
@@ -58,7 +58,7 @@ export const useUsers = () => {
     reset: resetEdit
   } = useFetch(userService.editProfile, [], { immediate: false });
 
-  // Hook para editar perfil
+  // Hook para editar perfil (siendo admin)
   const {
     execute: AdminEdit
   } = useFetch(adminService.editProfile, [], { immediate: false });
@@ -103,7 +103,8 @@ export const useUsers = () => {
     if (!profileData.id) {
       throw new Error('ID de usuario es requerido');
     }
-    return await addProfile(profileData);
+    const response = await addProfile(profileData);
+    return response
   };
 
   // Función para editar perfil a un usuario
@@ -114,18 +115,6 @@ export const useUsers = () => {
     const response = await editProfile(profileData);
     if (response.status === 200){
       return response.data
-    }
-    return false
-  };
-
-  // Función para editar perfil a un usuario
-  const adminEditUserProfile = async (profileData) => {
-    if (!profileData.id) {
-      throw new Error('ID de usuario es requerido');
-    }
-    const response = await AdminEdit(profileData);
-    if (response.status === 200){
-      return formatUser(response.data)
     }
     return false
   };
@@ -213,9 +202,6 @@ export const useUsers = () => {
     adminError,
     getAdmins,
     resetAdmins,
-
-    // editar perfil de usuario siendo admin
-    adminEditUserProfile,
   };
 };
 
