@@ -160,6 +160,7 @@ export default function TablePage() {
   const {formInfo, formValues, modalOpen, modal, showModalForm, closeModalForm} = useModalForm()
   const [filterShow, setFilterShow] = useState(false)
   const [formFields, setFormFields] = useState([])
+  const [page, setPage] = useState(0)
   const fieldsToShow = ['id', 'name', 'lastName', 'solvency']
   if (width >= 1150){
     fieldsToShow.splice(3, 0, 'email')
@@ -197,6 +198,10 @@ export default function TablePage() {
   })
 
   const profiles = users ? formatProfiles(users) : []
+  console.log(profiles)
+
+  const length = Math.round(profiles.length / 20)
+  const pages = [...Array(length).keys()]
 
   const getFullProfile = (id) => profiles.find((profile) => profile.id === id)
 
@@ -337,12 +342,21 @@ export default function TablePage() {
             profileColumns= {configArray}
             profiles = {profiles} 
             filterFunc = { filterFunc }
-            first={20}
+            first={page * 20}
             amount={20}
             changeFilterParams = { handleChangeFilter }  
             openCallback = {(profile) => OpenModal('open', profile)}
             tfooterCallback = {() => OpenModal('register')}
           />
+          <div className={classes.paginationButton}>
+            <button onClick={() => setPage(0)}>{"<"}</button>
+            {pages.map((pageNumber) =>{
+              return <button
+                onClick={() => setPage(pageNumber)}
+              >{pageNumber+1}</button>
+            })}
+            <button onClick={() => setPage(pages[pages.length-1])}>{">"}</button>
+          </div>
         </div>
       </main>
       <dialog ref={modal} onClose={() => closeModalForm()}>
