@@ -41,7 +41,7 @@ function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initial
   </form>
 }
 
-function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, changeFilterParams, openCallback,tfooterCallback }) {
+function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, changeFilterParams, openCallback,tfooterCallback, first = 0, amount = null }) {
   const [sortParams, setSortParams] = useState({ field: null, direction: null })  
   const { sorter } = useSorter(sortParams)
 
@@ -59,6 +59,17 @@ function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, chan
   })
   const reducedFields = profileColumns.filter((item) => fieldsToShow.includes(item.name))
   const sortedProfiles = sorter(reducedProfiles)
+
+  const reduce = (array, first = 0, length = null) => {
+    const lastIndex = !length ? 
+      array.length - 1 : 
+      first ? 
+        first + length:
+        length
+    
+    return [...array].slice(first, lastIndex)
+  }
+
   
   const handleClick = (field, direction) => {
     setSortParams({ field: direction !== null ? field : null, direction: direction })
@@ -75,7 +86,7 @@ function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, chan
     <table className={classes.userTable}>
       <thead>
         <tr>
-          <th>n</th>
+          <th>n°</th>
           {reducedFields.map((value) => <th key={value.name}>
             {value.label}
             <SortingButton 
@@ -86,7 +97,7 @@ function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, chan
           )}
         </tr>
         <tr>
-          <th>20</th>
+          <th></th>
           {reducedFields.map((config) => {
             const noLabelConfig = {...config} 
             noLabelConfig['placeholder'] = config['label']
@@ -101,11 +112,11 @@ function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, chan
         </tr>
       </thead>
       <tbody>
-        {sortedProfiles.map((profile, index) => {
+        {reduce(sortedProfiles, first, amount).map((profile, index) => {
           const profileToShow = {...profile}
           delete profileToShow['password']
           return <tr key={index} onClick={() => openCallback(profile)}>
-            <td>{index + 1}</td>
+            <td>{index + 1 + first}</td>
             {
             Object.entries(profileToShow).map(([key, value]) => {
               let content 
@@ -186,7 +197,6 @@ export default function TablePage() {
   })
 
   const profiles = users ? formatProfiles(users) : []
-  console.log(users)
 
   const getFullProfile = (id) => profiles.find((profile) => profile.id === id)
 
@@ -327,6 +337,8 @@ export default function TablePage() {
             profileColumns= {configArray}
             profiles = {profiles} 
             filterFunc = { filterFunc }
+            first={20}
+            amount={20}
             changeFilterParams = { handleChangeFilter }  
             openCallback = {(profile) => OpenModal('open', profile)}
             tfooterCallback = {() => OpenModal('register')}
