@@ -9,30 +9,45 @@ import useSorter from "../hooks/useSorter";
 import FormField from "../components/FormField";
 import useUsers from "../hooks/useUsers";
 import ProfileCard from "../components/ProfileCard";
+import useValidateForm from "../hooks/useValidateForm";
 
-function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initialValues }) {
+function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText,}) {
+  const initialAlerts = Object.entries(fieldsToRender).map(([key, ]) => [key, ''])
+  const { alerts, validateFields } = useValidateForm(initialAlerts)
 
   const SubmitFunc = (event) => {
     event.preventDefault()
     const formData = new FormData(event.target)
     const entries = formData.entries()
+
     const parsedEntries = entries.map(([name, value]) => {
       const parseValue = fieldsConfig[name].parseValue
       const newValue = parseValue ? parseValue(value) : value
       return [name, newValue]
     })
+
     const data = Object.fromEntries(parsedEntries)
-    if (initialValues){
-      data['solvency'] = initialValues['solvency']
+    const validations = Object.fromEntries(parsedEntries.reduce((validationArray, [key, value]) => {
+      const validationFunc =  fieldsConfig[key].validateFunc
+      if (validationFunc) {
+        console.log(value)
+        return [...validationArray, [key, validationFunc(value)]]
+      }
+      return validationArray
+    }, []))
+    
+  
+    const valid = validateFields(validations)
+    if (valid) {
+      onSubmit(data)
     }
-    onSubmit(data)
   }
 
   return <form className={classes.profileForm} onSubmit={(event) => SubmitFunc(event)}>
     <h2>{title}</h2>
     <div className={classes.fieldWrapper}>
       {
-        fieldsToRender.map((config) => <FormField key={config.name} config={config} />)
+        fieldsToRender.map((config) => <FormField key={config.name} config={config} errorMsg={alerts[config.name]} />)
       }
     </div>
     <button type="submit">
@@ -159,8 +174,10 @@ export default function TablePage() {
   const { filters, filterFunc, changeFilterParams } = useFilter()
   const {formInfo, formValues, modalOpen, modal, showModalForm, closeModalForm} = useModalForm()
   const [filterShow, setFilterShow] = useState(false)
-  const [formFields, setFormFields] = useState([])
   const [page, setPage] = useState(0)
+  const FieldsToExclude = ['solvency']
+  const formFields = configArray.filter((config) =>  !FieldsToExclude.includes(config.name))
+
   const fieldsToShow = ['id', 'name', 'lastName', 'solvency']
   if (width >= 1150){
     fieldsToShow.splice(3, 0, 'email')
@@ -256,18 +273,16 @@ export default function TablePage() {
   }
 
   const OpenModal = (mode, profile = null) => {
-    const FieldsToExclude = []
     if (mode === 'register'){
-      FieldsToExclude.push('solvency')
       showModalForm({text:'Registrar Cliente',submit:'Registrar', mode, profile})
     }else if (mode === 'open'){
       showModalForm({text:'Perfil completo del cliente', mode, profile: getFullProfile(profile.id)})
     }
-    setFormFields(configArray.filter((config) =>  !FieldsToExclude.includes(config.name)))
   }
 
   const handleSubmit = async (profile) => {
     if (formInfo.mode === 'register'){
+      console.log(profile)
       await registerClient(profile)
     }else if (formInfo.mode === 'edit'){
       addProfile(profile)
@@ -373,7 +388,7 @@ export default function TablePage() {
                 title={formInfo.title} 
                 sumbitText={formInfo.submit}
                 fieldsToRender={formFields} 
-                onSubmit={handleSubmit}
+                onSubmit={(data) => handleSubmit(data)}
               />
             </div>
           : <></>

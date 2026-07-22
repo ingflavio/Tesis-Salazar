@@ -1,5 +1,10 @@
 import { useState } from "react"
 
+export function validateNotEmpty ( value, name ) {
+  if(value === '') return `Es obligatorio colocar ${name}`
+  else return true
+}
+
 export function validateNumber ({value, name, zeroAllowed = false, negativeAllowed= false}) {
   if(isNaN(value)) return `${name} debe ser un numero`
   else if (value == 0 && !zeroAllowed) return `${name} no puede ser 0`
@@ -17,12 +22,12 @@ export function validateIncrease ({value, previousValue, name, increase, increas
 
 export function validatePhone(value) {
   const regex = /^04(26|24|16|14|12|22)\d{7}$/;
-  return regex.test(value) ? true : 'teléfono inválido';
+  return regex.test(value) ? true : 'Teléfono inválido';
 }
 
 export function validateEmail(value){
   const regex = /^[\w\-.]+@([\w-]+\.)+[\w-]{2,}$/gm
-  return regex.test(value) ? true : 'correo inválido';
+  return regex.test(value) ? true : 'Correo inválido';
   
 }
 
