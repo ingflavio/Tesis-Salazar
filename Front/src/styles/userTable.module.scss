@@ -9,7 +9,7 @@ $gap-distance: clamp(2px, 6dvh, 40px);
 }
 
 .userTable_container {
-  max-width: 100dvw;
+  max-width: clamp(200px, 100dvw, 1500px);
   background-color: vars.$neutral-100;
   padding: 1dvw;
 }
@@ -38,7 +38,7 @@ $gap-distance: clamp(2px, 6dvh, 40px);
 
 .userTable {
   background-color: vars.$neutral-500;
-  grid-template-columns: repeat(5, 1fr); 
+  grid-template-columns: auto repeat(4, 1fr); 
   border: 2px solid vars.$neutral-500;
   margin: 2dvw 0;
   font-size: clamp(10px, 2.8dvw, 20px);
@@ -52,10 +52,19 @@ $gap-distance: clamp(2px, 6dvh, 40px);
   gap: 2px;
 }
 
+.userTable thead tr th div > div {
+  display: grid;
+  grid-template-columns: 1fr auto ;
+}
+
 .userTable td, .userTable th { 
   background-color: vars.$neutral-100;
   color: vars.$neutral-700;
   text-transform: capitalize;
+}
+
+.userTable td.email {
+  text-transform: none;
 }
 
 .userTable label {
@@ -64,6 +73,10 @@ $gap-distance: clamp(2px, 6dvh, 40px);
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: .5em;
+}
+
+.userTable tbody tr {
+  cursor: pointer;
 }
 
 .userTable tr:nth-child(2n) td { 
@@ -110,6 +123,11 @@ th {
   padding: 1em;
 }
 
+div:has(.adminPage) > dialog {
+  background-color: transparent;
+  border: none;
+}
+
 .dialogWraper {
   position: relative;
 }
@@ -122,7 +140,7 @@ th {
 }
 
 .profileForm {
-  width: clamp(300px, 90dvw, 700px);;
+  width: clamp(300px, 70dvw, 700px);;
 }
 
 .fieldWrapper {
@@ -152,4 +170,34 @@ td, th {
 .adminPage > button{
   margin-top: 2.5dvh;
   margin-left: 2.5dvw;
+}
+
+.pageButton {
+  border-radius: 0;
+  background-color: vars.$neutral-500;
+}
+
+.selectedPage {
+  background-color: vars.$primary-500;
+}
+
+@media screen and (min-width: 1150px) {
+  
+  .userTable {
+    grid-template-columns: auto repeat(5, 1fr); 
+  }
+}
+
+@media screen and (min-width: 1400px) {
+  
+  .userTable {
+    grid-template-columns: auto repeat(6, 1fr); 
+  }
+}
+
+@media screen and (min-width: 1600px) {
+  
+  .userTable {
+    grid-template-columns: auto repeat(7, 1fr); 
+  }
 }

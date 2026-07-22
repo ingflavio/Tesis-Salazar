@@ -1,33 +1,52 @@
-import { Outlet, Navigate, Link } from 'react-router';
-import { useEffect } from 'react';
+import { Outlet, Navigate, Link, useLocation } from 'react-router';
+// import { useEffect } from 'react';
 import { useScreen } from '../hooks/useScreen.js';
 import { useSession } from '../hooks/useSession.js';
 import Icons from '../components/Icons.jsx';
 import classes from '../styles/admin.module.scss'
+import { useEffect, useState } from 'react';
 import useUsers from '../hooks/useUsers.js';
 
 function AdminNav({ children }) {
+  const location = useLocation()
+  const [pathname, setPathname] = useState(location.pathname)
+
+  useEffect(()=>{
+    setPathname(location.pathname)
+  },[location.pathname])
+  
+  const links = [
+    {
+      text: 'inicio',
+      path: '/admin',
+      icon: 'home'
+    },
+    {
+      text: 'clientes',
+      path: '/admin/table',
+      icon: 'user'
+    },
+    {
+      text: 'finanzas',
+      path: '/admin/finance',
+      icon: 'finance'
+    },
+    {
+      text: 'Escaner de Qr',
+      path: '/admin/scan',
+      icon: 'qr'
+    }
+  ]
+
   return <nav>
-    <ul className={classes.links_list}>
-      <li className={classes.link}>
-        <Link to={'/admin'}>
-          <Icons icon='home' />
-          inicio
+    <ul className={classes.links_list}>{
+      links.map((link) => <li className={`${pathname == link.path ? classes.selected_link : ""} ${classes.link}`} key={link.path}>
+        <Link to={link.path}>
+          <Icons icon={link.icon} />
+          {link.text}
         </Link>
-      </li>
-      <li className={classes.link}>
-        <Link to={'/admin/table'}>
-          <Icons icon='user' />
-          Clientes
-        </Link>
-      </li>
-      <li className={classes.link}>
-        <Link to={'/admin/finance'}>
-          <Icons icon='finance' />
-          Finanzas
-        </Link>
-      </li>
-    </ul>
+      </li>)
+    }</ul>
     {children} 
   </nav>
 }
@@ -35,20 +54,19 @@ function AdminNav({ children }) {
 export default function AdminLayout() {
   const screen = useScreen()  
   const { session, logOut } = useSession()
-  const { user, getUser } = useUsers()
+  const { admin, getAdmin } = useUsers()
 
   useEffect( () => {
-    // console.log(session)
-    if(session) getUser(session.id)
+    if(session) getAdmin(session.id)
   }, [session]) 
+
   if (!session) {
     return <Navigate to='/login' replace />
   }
-  if (session.rol.toLowerCase() !== 'admin') return <Navigate to='/' replace />
+  if (session.rol !== 'admin') return <Navigate to='/' replace />
 
 
   const isDesktop = screen.width > 850 
-  console.log(user)
 
   return (
     <>
@@ -74,7 +92,7 @@ export default function AdminLayout() {
               </>
             }
             <div className={classes.hideWrapper}>
-              <h6> Jose Olival </h6>
+              {admin && <h6 style={{textTransform: 'capitalize'}}> {admin.name} </h6>}
               <i>Administrador</i>
               <AdminNav>
                 <button onClick={logOut}>
@@ -83,7 +101,7 @@ export default function AdminLayout() {
               </AdminNav>
             </div>
           </aside>
-        <Outlet />
+        {admin && <Outlet context={{name: admin.name}} />}
       </div>
     </>
   )

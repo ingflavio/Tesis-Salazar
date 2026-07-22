@@ -1,0 +1,113 @@
+@use './variables.scss' as vars;
+
+dialog:has(.payment_form){
+  border-radius: clamp(20px, 4dvw, 30px);
+}
+
+.payment_form {
+  width: clamp(300px, 60dvw,400px);
+}
+
+.payment_form h3 {
+  font-size: 32px;
+}
+
+.payment_form label,
+.payment_form input,
+.payment_form select, 
+.payment_form option  {
+  font-size: 16px;
+}
+
+.payment_form button {
+  font-size: 20px;
+}
+
+
+.fields_wrapper {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: .5em 1em;
+  
+  > div {
+    overflow: hidden;
+    width: 100%;
+    min-width: 0; // Importante para evitar overflow
+  }
+
+  > div:nth-child(3),
+  div:nth-child(5) {
+    grid-column: span 2;
+  }
+}
+
+// Mejor manejo del selector
+.fields_wrapper > div:has(select) {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.fields_wrapper select {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.readOnly.fields_wrapper > div {
+  grid-column: span 1;
+}
+
+.readOnly.fields_wrapper > div > input {
+  border: none;
+}
+
+.btnWrapper {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.btnWrapper:has(button:nth-child(2)) {
+  font-size: 1.2em;
+  justify-content: space-between;
+}
+
+.btnWrapper > button:nth-child(2) {
+  background-color: vars.$warn-500;
+}
+
+
+.alertBubble {
+  background-color: vars.$neutral-100;
+  font-size: calc(.8 * vars.$title-size);
+  position: absolute;
+  bottom: 15dvh;
+  padding: .5em;
+  border-radius: .8em;
+  box-shadow: 0 0 15px 1px vars.$neutral-300;
+  animation: messageAppear 3s ease forwards;
+}
+
+@keyframes messageAppear {
+  0% {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  20% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  80% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+}

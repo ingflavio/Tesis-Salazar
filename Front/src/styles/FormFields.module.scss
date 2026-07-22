@@ -1,17 +1,31 @@
 @use './variables.scss' as vars;
 
-.textField label{
-  color:  vars.$neutral-100;
+.fieldWrapper label{
+  color: vars.$neutral-900;
+  height: auto;
+}
+
+.fieldWrapper label{
+  color:  vars.$neutral-900;
   padding-left: .3em;
 }
 
-.textField input{
+.fieldWrapper input{
   border: 1px solid vars.$neutral-500;
   border-radius: .5em;
   width: 100%;
   padding: calc(0.2 * vars.$text-size);
   padding-left: calc(0.5 * vars.$text-size);
   color: vars.$neutral-900;
+}
+
+.fieldWrapper span {
+  color: vars.$warn-500;
+}
+
+.fieldWrapper select:disabled {
+  visibility: hidden;
+  position: absolute;
 }
 
 .roundField {
@@ -48,6 +62,14 @@ label.up {
   left: .6em;
 }
 
+.fieldWrapper select {
+  background-color: vars.$neutral-100;
+  border: 1px solid vars.$neutral-500;
+}
+
+.fieldWrapper:has(select) > label:last-child {
+  color: vars.$neutral-600;
+}
 
 .checkGroup {
   display: grid;
@@ -56,8 +78,14 @@ label.up {
   column-gap: .5em;
 }
 
-.checkGroup label:first-child {
-  grid-column: span 2;
+.checkGroup label {
+  color:  vars.$neutral-900;
+}
+
+
+.checkGroup  div label {
+  font-weight: 400;
+  padding-left: .5em;
 }
 
 .range_container {
@@ -71,6 +99,79 @@ label.up {
 .sliders_control {
   position: relative;
   min-height: 50px;
+}
+
+.fieldWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  label {
+    font-weight: 500;
+    color: #333;
+  }
+}
+
+.fileInputContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 12px 16px;
+  background: #f9f9f9;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: vars.$primary-500;
+    background: #f0f7ff;
+  }
+}
+
+.fileName {
+  flex: 1;
+  color: #666;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fileButton {
+  padding: 8px 20px;
+  background: vars.$primary-500;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &:hover {
+    background: darken(vars.$primary-500, 10%);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.hiddenInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }
 
 /* Ocultamos el track nativo y personalizamos */

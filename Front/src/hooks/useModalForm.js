@@ -6,8 +6,8 @@ export function useModalForm () {
   const [modalOpen, setModalOpen] = useState(false)
   const modal = useRef()
 
-  const showModalForm = (text, submit, mode, profile = null) => {
-    setFormInfo({title: text, submit: submit, mode: mode})
+  const showModalForm = ({text = '', submit = '', mode = null, profile = null, secondSubmit = null}) => {
+    setFormInfo({title: text, submit: submit, mode: mode, secondSubmit: secondSubmit})
     setFormValues(profile)
     setModalOpen(true)
     modal.current.showModal()
@@ -20,5 +20,5 @@ export function useModalForm () {
     setModalOpen(false)
   }
 
-  return {formInfo, formValues, modalOpen, modal, showModalForm, closeModalForm}
+  return { formInfo, formValues, modalOpen, modal, showModalForm, closeModalForm }
 }

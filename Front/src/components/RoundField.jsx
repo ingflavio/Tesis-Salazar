@@ -1,29 +1,40 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import classes from '../styles/FormFields.module.scss'
 
 export default function RoundField({name, type = 'text', label = name, placeholder = '', initialValue }){
   const [labelPosition, setLabelPosition] = useState(initialValue ? classes.up : '')
 
   const checkContent = (event) => {
-    setLabelPosition(event.target.value !== '' ? classes.up : '')
+    const hasValue = event.target.value !== ''
+    setLabelPosition(hasValue ? classes.up : '')
   }
 
   const handleBlur = (event) => {
-    if (event.target.value === '' && labelPosition === classes.up) setLabelPosition('')
+    // Solo mover hacia abajo si no tiene valor Y no está enfocado
+    if (event.target.value === '') {
+      setLabelPosition('')
+    }
   }
 
-  const defalutValue = initialValue ? {defaultValue: initialValue} : {}
+  const handleFocus = () => {
+    // Siempre mover hacia arriba al enfocar
+    setLabelPosition(classes.up)
+  }
+
+  const defaultValue = initialValue ? {defaultValue: initialValue} : {}
 
   return (
     <fieldset className={classes.roundField}>
       {label && <label htmlFor={name} className={labelPosition}>{label}</label>}
-      <input id={name} name={name} type={type} 
+      <input 
+        id={name} 
+        name={name} 
+        type={type} 
         placeholder={placeholder}
-        {...defalutValue}
+        {...defaultValue}
         onChange={checkContent} 
-        onClick={() => setLabelPosition('up')} 
+        onFocus={handleFocus}
         onBlur={handleBlur}
-        onFocus={() => setLabelPosition('up')}
       />
     </fieldset>
   )

@@ -2,13 +2,22 @@ import { useState } from "react"
 import classes from '../styles/home.module.scss'
 import Icons from "../components/Icons"
 
-function Recomendation({paragraphs, title}){
-  const [isChecked, setIsChecked] = useState(false);
+function Recomendation({paragraphs, title, index}){
+  const storage = JSON.parse(localStorage.getItem('checks'))
+  const data = storage ?  storage[index] : {folder: false, todo: false}
+  const [isChecked, setIsChecked] = useState(data.folder);
 
-  const handleChange = (e) => {
+  const updateLocalStorage = (key, value) => {
+    const newStorage = JSON.parse(localStorage.getItem('checks'))
+    newStorage[index][key] = value
+    localStorage.setItem('checks', JSON.stringify(newStorage))
+  }
+
+  const handleChangeFolder = (e) => {
     const checked = e.target.checked;
+    updateLocalStorage('folder', checked)
     setIsChecked(checked);
-  };
+  }; 
   
   const paragraphsFormated = Array.isArray(paragraphs) ? paragraphs : [paragraphs]
 
@@ -20,12 +29,12 @@ function Recomendation({paragraphs, title}){
           type="checkbox" 
           className={classes.unfold_checkbox} 
           checked={isChecked}
-          onChange={handleChange}
+          onChange={handleChangeFolder}
         />
       </label>
       <label className="toDo">
         <span>
-          <input type="checkbox" />
+          <input type="checkbox" defaultChecked={data.todo} onChange={(e) => updateLocalStorage('todo', e.target.checked)}/>
           <Icons icon='check' />
         </span>
         <h3 className={classes.recomendation__subtitle}>{title}</h3>
@@ -35,8 +44,7 @@ function Recomendation({paragraphs, title}){
       {
         paragraphsFormated.map((paragraph, index) => {
           let content
-          console.log(paragraph.content)
-          if(typeof paragraph.content === 'object'){
+          if (typeof paragraph.content === 'object'){
             content = <ul>
               {
                 paragraph.content.map((item, index) => {
@@ -305,13 +313,19 @@ function getNutritionTip(){
 }
 
 export function MainPage() {
-  const [recomendations, setRecomendations] = useState(null)
+  const number = Number(localStorage.getItem('days'))
+  const initialRecomendations = number !== 0 ? getRecomendation(number) : null
+  const [recomendations, setRecomendations] = useState(initialRecomendations)
 
   const nutritionFact = getNutritionTip()
 
   const handleChange = (event) => {
-    const newRecomendations = getRecomendation(Number(event.target.value))
+    const number = Number(event.target.value)
+    const newRecomendations = getRecomendation(number)
+    localStorage.removeItem('checks')
     setRecomendations(newRecomendations)
+    localStorage.setItem('days', number)
+    localStorage.setItem('checks', JSON.stringify(new Array(number).fill({folder: false, todo: false})))
   }
 
   return (
@@ -321,7 +335,7 @@ export function MainPage() {
         <p>¿No tienes una rutina de ejercicio en mente?, no hay problema si, selecciona la cantidad de dias que entranas a la semana y te recomendamos una rutina de ejercicio para cada dia.</p>
         <p>Recuerda que esto solo una recomendacion general, para rutinas mas efecientes o ayudas de como realizar los ejercicios busca a un profesional, el gimnasio no se hacer responsable de cualquier problema siguiendo las rutinas recomendadas</p>
         <label> ¿Cuantos dias entrenas por semana?
-          <select defaultValue='0' onChange={handleChange}>
+          <select defaultValue={number} onChange={handleChange}>
             <option value="0" disabled></option>
             <option value="3">3</option>
             <option value="4">4</option>
@@ -332,7 +346,9 @@ export function MainPage() {
           { 
             recomendations ? 
             recomendations.map((recomendation, index) => {
-              return <Recomendation paragraphs={recomendation.muscles} title={recomendation.name} key={index}/>
+              const checked = localStorage.getItem('check') || [false]
+              checked[index]
+              return <Recomendation paragraphs={recomendation.muscles} title={recomendation.name} initialChecked={checked} index={index} key={index}/>
             })
             : <></>
           }

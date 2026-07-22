@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useModalForm } from "../hooks/useModalForm";
-import Icons from "../components/Icons";
+import { useScreen } from "../hooks/useScreen";
 import classes from "../styles/userTable.module.scss";
 import { configArray, fieldsConfig } from "../utils/fieldsConfig";
 import useFilter from '../hooks/useFilter';
@@ -8,13 +8,9 @@ import SortingButton from "../components/SortingButtons";
 import useSorter from "../hooks/useSorter";
 import FormField from "../components/FormField";
 import useUsers from "../hooks/useUsers";
+import ProfileCard from "../components/ProfileCard";
 
 function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initialValues }) {
-  const fields = fieldsToRender.map((config) => {
-    return initialValues
-      ? <FormField key={config.name} config={config} initialValue={initialValues[config.name]} />
-      : <FormField key={config.name} config={config} />
-  })
 
   const SubmitFunc = (event) => {
     event.preventDefault()
@@ -32,24 +28,20 @@ function ProfileForm({ onSubmit, fieldsToRender = [], title, sumbitText, initial
     onSubmit(data)
   }
 
-  return (
-    <form className={classes.profileForm} onSubmit={(event) => SubmitFunc(event)}>
-      <h2>{title}</h2>
-      <div className={classes.fieldWrapper}>
-        {
-          fields
-        }
-      </div>
-      { sumbitText &&
-        <button type="submit">
-          {sumbitText}
-        </button>
+  return <form className={classes.profileForm} onSubmit={(event) => SubmitFunc(event)}>
+    <h2>{title}</h2>
+    <div className={classes.fieldWrapper}>
+      {
+        fieldsToRender.map((config) => <FormField key={config.name} config={config} />)
       }
-    </form>
-  );
+    </div>
+    <button type="submit">
+      {sumbitText}
+    </button>
+  </form>
 }
 
-function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, changeFilterParams, editCallback, deleteCallback, showCallback,tfooterCallback }) {
+function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, changeFilterParams, openCallback,tfooterCallback, first = 0, amount = null }) {
   const [sortParams, setSortParams] = useState({ field: null, direction: null })  
   const { sorter } = useSorter(sortParams)
 
@@ -68,7 +60,16 @@ function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, chan
   const reducedFields = profileColumns.filter((item) => fieldsToShow.includes(item.name))
   const sortedProfiles = sorter(reducedProfiles)
 
-  const getFullPofile = (reducedProfile) => profiles.find((profile) => profile.id === reducedProfile.id)
+  const reduce = (array, first = 0, length = null) => {
+    const lastIndex = !length ? 
+      array.length - 1 : 
+      first ? 
+        first + length:
+        length
+    
+    return [...array].slice(first, lastIndex)
+  }
+
   
   const handleClick = (field, direction) => {
     setSortParams({ field: direction !== null ? field : null, direction: direction })
@@ -85,6 +86,7 @@ function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, chan
     <table className={classes.userTable}>
       <thead>
         <tr>
+          <th>n°</th>
           {reducedFields.map((value) => <th key={value.name}>
             {value.label}
             <SortingButton 
@@ -93,9 +95,9 @@ function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, chan
             />
             </th>
           )}
-          <th>Acciones</th>
         </tr>
         <tr>
+          <th></th>
           {reducedFields.map((config) => {
             const noLabelConfig = {...config} 
             noLabelConfig['placeholder'] = config['label']
@@ -107,17 +109,21 @@ function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, chan
               />
             </th>
         })}
-          <th></th>
         </tr>
       </thead>
       <tbody>
-        {sortedProfiles.map((profile, index) => {
+        {reduce(sortedProfiles, first, amount).map((profile, index) => {
           const profileToShow = {...profile}
           delete profileToShow['password']
-          return <tr key={index}>{
+          return <tr key={index} onClick={() => openCallback(profile)}>
+            <td>{index + 1 + first}</td>
+            {
             Object.entries(profileToShow).map(([key, value]) => {
               let content 
               let className = ''
+              if (key == 'email') {
+                className = classes.email
+              }
               if(typeof value === 'boolean'){
                 [content, className] = value 
                 ? ['Solvente', classes.greenText] 
@@ -132,17 +138,6 @@ function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, chan
               return <td className={className} key={key}>{content}</td>
               })
             }
-            <td>
-              <button onClick={() => editCallback(getFullPofile(profile))}>
-                <Icons icon="edit" />
-              </button>
-              <button onClick={() => deleteCallback(getFullPofile(profile))}>
-                <Icons icon="delete" />
-              </button>
-              <button onClick={() => showCallback(getFullPofile(profile))}>
-                <Icons icon="eye"/>
-              </button>
-            </td>
           </tr>
         })}
       </tbody>
@@ -160,18 +155,31 @@ function ProfileTable({ fieldsToShow, profileColumns, profiles, filterFunc, chan
 }
 
 export default function TablePage() {
+  const {width} = useScreen()
   const { filters, filterFunc, changeFilterParams } = useFilter()
   const {formInfo, formValues, modalOpen, modal, showModalForm, closeModalForm} = useModalForm()
   const [filterShow, setFilterShow] = useState(false)
   const [formFields, setFormFields] = useState([])
+  const [page, setPage] = useState(0)
   const fieldsToShow = ['id', 'name', 'lastName', 'solvency']
+  if (width >= 1150){
+    fieldsToShow.splice(3, 0, 'email')
+  }
+  if (width >= 1400){
+    fieldsToShow.splice(3, 0, 'phone')
+  }
+  if (width >= 1600){
+    fieldsToShow.splice(5, 0, 'sex')
+  }
+
   const boleanFields = ['solvency']
   const {
     users,
     registerUser,
     addProfile,
     fetchUsers,
-    refetchUsers
+    refetchUsers,
+    AdminEdit,
   } = useUsers();
   
   useEffect(() => {
@@ -191,11 +199,10 @@ export default function TablePage() {
 
   const profiles = users ? formatProfiles(users) : []
 
-  const deleteProfile = () => {
-  }
-  
-  const editProfile = () => {
-  }
+  const length = Math.ceil(profiles.length / 20)
+  const pages = [...Array(length).keys()]
+
+  const getFullProfile = (id) => profiles.find((profile) => profile.id === id)
 
   const handleRegisterUser = async ({id, username, password}) => {
     try {
@@ -243,26 +250,27 @@ export default function TablePage() {
     await refetchUsers();
   }
 
+  const editProfile = async (data) => {
+    const response = await AdminEdit(data)
+    showModalForm({text:'Perfil completo del cliente', mode: 'open', profile: response})
+  }
+
   const OpenModal = (mode, profile = null) => {
     const FieldsToExclude = []
-    if (mode === 'registrar'){
+    if (mode === 'register'){
       FieldsToExclude.push('solvency')
-      showModalForm('Registrar cliente','Registrar', mode)
-    }else if (mode === 'editar'){
-      FieldsToExclude.push('solvency', 'password')
-      showModalForm('Editar datos de un cliente','Guardar cambios', mode, profile)
-    }else if (mode === 'mostrar'){
-      FieldsToExclude.push('password')
-      showModalForm('Perfil completo del cliente',false, mode, profile)
+      showModalForm({text:'Registrar Cliente',submit:'Registrar', mode, profile})
+    }else if (mode === 'open'){
+      showModalForm({text:'Perfil completo del cliente', mode, profile: getFullProfile(profile.id)})
     }
     setFormFields(configArray.filter((config) =>  !FieldsToExclude.includes(config.name)))
   }
 
   const handleSubmit = async (profile) => {
-    if (formInfo.mode === 'registrar'){
+    if (formInfo.mode === 'register'){
       await registerClient(profile)
-    }else if (formInfo.mode === 'editar'){
-      editProfile(profile)
+    }else if (formInfo.mode === 'edit'){
+      addProfile(profile)
     }
     closeModalForm()
   }
@@ -332,28 +340,44 @@ export default function TablePage() {
             profileColumns= {configArray}
             profiles = {profiles} 
             filterFunc = { filterFunc }
+            first={page * 20}
+            amount={20}
             changeFilterParams = { handleChangeFilter }  
-            editCallback = {(profile)=> OpenModal('editar', profile)}
-            deleteCallback = {(profile) => deleteProfile(profile)}
-            showCallback = {(profile) => OpenModal('mostrar', profile)}
-            tfooterCallback = {() => OpenModal('registrar')}
+            openCallback = {(profile) => OpenModal('open', profile)}
+            tfooterCallback = {() => OpenModal('register')}
           />
+          <div className={classes.paginationButton}>
+            <button className={classes.pageButton} 
+              onClick={() => setPage(0)}
+            >{"<"}</button>
+            {pages.map((pageNumber) =>{
+              return <button key={pageNumber} className={`${classes.pageButton} ${page === pageNumber ? classes.selectedPage : ''}`}
+                onClick={() => setPage(pageNumber)}
+              >{pageNumber+1}</button>
+            })}
+            <button className={classes.pageButton} 
+              onClick={() => setPage(pages[pages.length-1])}
+            >{">"}</button>
+          </div>
         </div>
       </main>
       <dialog ref={modal} onClose={() => closeModalForm()}>
-        <div className={classes.dialogWraper}>  
-          <button onClick={() => modal.current.close()}>X</button>
-          {
-            modalOpen &&
-            <ProfileForm 
-              title={formInfo.title} 
-              sumbitText={formInfo.submit}
-              fieldsToRender={formFields} 
-              initialValues={formValues} 
-              onSubmit={handleSubmit}
+        <button className="closeBtn" onClick={() => modal.current.close()}>X</button>
+        {modalOpen && formInfo.mode === 'open' 
+          ? <ProfileCard profile={formValues} rol={"admin"}
+              editCallback={editProfile}
             />
-          }
-        </div>
+          : formInfo.mode === 'register' 
+          ? <div className={classes.dialogWraper}>  
+              <ProfileForm 
+                title={formInfo.title} 
+                sumbitText={formInfo.submit}
+                fieldsToRender={formFields} 
+                onSubmit={handleSubmit}
+              />
+            </div>
+          : <></>
+        }
       </dialog>       
     </>
   );

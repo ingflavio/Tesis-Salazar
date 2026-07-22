@@ -1,6 +1,8 @@
-// useUsers.js
 import { useFetch } from './useFetch';
-import { usersService } from '../services/users';
+import { userService } from '../services/user';
+import { adminService } from '../services/admin';
+import { useState } from 'react';
+import { formatUser } from '../services/api';
 
 export const useUsers = () => {
   // Hook para obtener todos los usuarios
@@ -11,7 +13,7 @@ export const useUsers = () => {
     execute: fetchUsers,
     refetch: refetchUsers,
     reset: resetUsers
-  } = useFetch(usersService.getUsers);
+  } = useFetch(adminService.getUsers, [], { immediate: false });
 
   // Hook para obtener un usuario específico
   const {
@@ -21,7 +23,7 @@ export const useUsers = () => {
     execute: fetchUser,
     refetch: refetchUser,
     reset: resetUser
-  } = useFetch(usersService.getUser, [], { immediate: false });
+  } = useFetch(adminService.getUser, [], { immediate: false });
 
   // Hook para registrar un usuario
   const {
@@ -29,19 +31,59 @@ export const useUsers = () => {
     error: registerError,
     execute: registerUser,
     reset: resetRegister
-  } = useFetch(usersService.registerUser, [], { immediate: false });
+  } = useFetch(userService.registerUser, [], { immediate: false });
+
+  // Hook para obtener el perfil del usuario
+  const {
+    data: profile,
+    loading: profileLoading,
+    error: profileError,
+    execute: getProfile,
+    reset: resetProfile
+  } = useFetch(userService.getProfile, [], { immediate: false });
 
   // Hook para agregar perfil
   const {
-    loading: profileLoading,
-    error: profileError,
+    loading: sendProfileLoading,
+    error: sendProfileError,
     execute: addProfile,
-    reset: resetProfile
-  } = useFetch(usersService.addProfile, [], { immediate: false });
+    reset: resetSendProfile
+  } = useFetch(adminService.addProfile, [], { immediate: false });
+
+  // Hook para editar perfil
+  const {
+    loading: editLoading,
+    error: editError,
+    execute: editProfile,
+    reset: resetEdit
+  } = useFetch(userService.editProfile, [], { immediate: false });
+
+  // Hook para editar perfil (siendo admin)
+  const {
+    execute: AdminEdit
+  } = useFetch(adminService.editProfile, [], { immediate: false });
+  
+  // Hook para obtener a los admins
+  const {
+    data: admins,
+    loading: adminsLoading,
+    error: adminsError,
+    execute: getAdmins,
+    reset: resetAdmins
+  } = useFetch(adminService.getAdmins, [], { immediate: false });
+
+
+  // Hook para obtener el perfil del usuario
+  const [admin, setAdmin] = useState()
+  const {
+    loading: adminLoading,
+    error: adminError,
+    execute: getAdmin,
+    reset: resetAdmin
+  } = useFetch(adminService.getAdmins, [], { immediate: false });
 
   // Función para obtener un usuario por ID
   const getUser = async (id) => {
-    console.log("buscare el id "+id)
     if (!id) {
       throw new Error('ID de usuario es requerido');
     }
@@ -61,7 +103,61 @@ export const useUsers = () => {
     if (!profileData.id) {
       throw new Error('ID de usuario es requerido');
     }
-    return await addProfile(profileData);
+    const response = await addProfile(profileData);
+    return response
+  };
+
+  // Función para editar perfil a un usuario
+  const editUserProfile = async (profileData) => {
+    if (!profileData.id) {
+      throw new Error('ID de usuario es requerido');
+    }
+    const response = await editProfile(profileData);
+    if (response.status === 200){
+      return response.data
+    }
+    return false
+  };
+
+  //funcion para obtener un admin
+  const getAdminById = async (id) => {
+    if (!id) {
+      throw new Error('ID de usuario es requerido');
+    }
+    try {
+      // Primero obtén la lista completa de admins
+      const response = await getAdmins();
+      
+      if (response && response.status === 200 && response.data) {
+        // Busca el admin por ID en la lista
+        const foundAdmin = response.data.find((admin) => admin.id === id || admin.cedula === id);
+        
+        if (foundAdmin) {
+          setAdmin(foundAdmin);
+          return foundAdmin;
+        }
+      }
+      
+      setAdmin(null);
+      return null;
+    } catch (error) {
+      console.error('Error al obtener admin:', error);
+      setAdmin(null);
+      return false;
+    }
+  }
+
+
+  // Función para editar perfil a un usuario
+  const adminEditUserProfile = async (profileData) => {
+    if (!profileData.id) {
+      throw new Error('ID de usuario es requerido');
+    }
+    const response = await AdminEdit(profileData);
+    if (response.status === 200){
+      return formatUser(response.data)
+    }
+    return false
   };
 
   return {
@@ -88,20 +184,40 @@ export const useUsers = () => {
     resetRegister,
 
     // Estado de perfil
+    profile,
     profileLoading,
     profileError,
-    addProfile: addUserProfile,
+    getProfile,
     resetProfile,
 
-    // Utilidades
-    isUsersLoading: usersLoading,
-    isUserLoading: userLoading,
-    isRegisterLoading: registerLoading,
-    isProfileLoading: profileLoading,
-    hasUsersError: !!usersError,
-    hasUserError: !!userError,
-    hasRegisterError: !!registerError,
-    hasProfileError: !!profileError,
+    // estado del envio del perfil
+    sendProfileLoading,
+    sendProfileError,
+    addProfile: addUserProfile,
+    resetSendProfile,
+
+    // Estado de edicion de perfil
+    editLoading,
+    editError,
+    editProfile: editUserProfile,
+    resetEdit,
+
+    // editar usuario siendo admin
+    AdminEdit: adminEditUserProfile,
+
+    //Estado de obtener admins 
+    admin,
+    adminLoading,
+    adminsError,
+    getAdmin: getAdminById,
+    resetAdmin,
+
+    //Estado de obtener admins 
+    admins,
+    adminsLoading,
+    adminError,
+    getAdmins,
+    resetAdmins,
   };
 };
 

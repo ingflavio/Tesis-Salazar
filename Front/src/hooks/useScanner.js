@@ -58,7 +58,7 @@ export function useScanner(videoPlayer, onScanSuccess) {
       } 
       
     } catch (error) {
-      console.log(`Error durante el escaneo: ${error.message}`);
+      console.log(error);
     }
   }
 

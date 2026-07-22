@@ -1,5 +1,6 @@
 import { LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import classes from '../styles/admin.module.scss'
+import { useOutletContext } from 'react-router';
 
 function LinesGraphic({ data, xAxis, lines=[] }) {
   return(
@@ -122,12 +123,14 @@ function PieGraphic({ data }) {
 }
 
 export default function AdminPage() { 
+  const {name} = useOutletContext()
+
   const data = [
     {name: 'enero', activos: 15, inactivos: 5, totales:20},
     {name: 'febrero', activos: 13, inactivos: 11, totales:24}, 
     {name: 'marzo', activos: 20, inactivos: 11, totales:31}, 
-    {name: 'abril', activos: 27, inactivos: 8, totales:35}, 
-    {name: 'mayo', activos: 26, inactivos: 14, totales:40}, 
+    {name: 'abril', activos: 26, inactivos: 14, totales:40}, 
+    // {name: 'mayo', activos: 26, inactivos: 14, totales:40}, 
   ]
 
   const lines = [
@@ -143,7 +146,7 @@ export default function AdminPage() {
   
   return (
     <main className={classes.adminPage}>
-      <h3>Buenos dias [nombre]</h3>
+      <h3>Buenos dias <span style={{fontWeight:'400', textTransform: 'capitalize'}}>{name}</span></h3>
       <div className={classes.dashboard}>
         <section>
           <h4>Usuarios</h4>

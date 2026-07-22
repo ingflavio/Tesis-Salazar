@@ -57,14 +57,17 @@ div:has(div.route){
 }
 
 .hideWrapper {
-  height: 94.5%;
-}
-
-.hideWrapper nav {
   height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+.hideWrapper nav {
+  margin-top: 1em;
+  display: flex;
+  flex-direction: column;
   justify-content: space-between;
+  flex-grow: 1;
 }
 
 .links_list {
@@ -82,6 +85,17 @@ div:has(div.route){
 
 .link {
   color: vars.$neutral-100;
+  padding: .2em;
+}
+
+.selected_link {
+  color: vars.$primary-500;
+  background-color: vars.$neutral-100;
+  border-radius: .5em;
+}
+
+.selected_link > a > svg{
+  fill: vars.$primary-500;
 }
 
 .link a {
@@ -101,6 +115,7 @@ div:has(div.route){
   color: vars.$neutral-100;
   padding: .2em;
   align-self: center;
+  margin: .5em;
 }
 
 // pagina admin index
@@ -125,7 +140,11 @@ div:has(div.route){
   padding: 1dvw;
 }
 
-.adminPage h4, .adminPage h3{
+.adminPage h3{
+  color: vars.$neutral-600;
+}
+
+.adminPage h4 {
   color: vars.$neutral-500;
 }
 
@@ -156,6 +175,7 @@ div:has(div.route){
 
 @media screen and (max-width:850px) {
   .route {
+    grid-row: span 2;
     grid-template-columns: 50px 1fr;
   }
 
@@ -182,6 +202,15 @@ div:has(div.route){
     transform: none;
     transition-delay: 0;
     transition-duration: .4s ;
+  }
+
+}
+
+
+@media screen and (max-width:450px) {
+  .dobleGraphics {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   }
 
 }

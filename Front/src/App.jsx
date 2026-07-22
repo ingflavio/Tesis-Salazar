@@ -11,9 +11,9 @@ import './styles/index.scss'
 import AdminLayout from "./layouts/AdminLayout.jsx";
 import AdminPage from "./pages/AdminPage.jsx";
 import FinancePage from "./pages/FinancePage.jsx";
+import QrPage from "./pages/QrPage.jsx";
 
 function App() {
-
   return (
     <Routes>
       <Route element={ <UserLayout />} >
@@ -21,11 +21,13 @@ function App() {
         <Route path='chat' element={<ChatPage />} />
         <Route path='profile' element={<ProfilePage />} />
         <Route path='scan' element={<ScanPage />} />
+        <Route path='qr' element={<QrPage />} />
       </Route>
       <Route path="admin" element={<AdminLayout />} >
         <Route index element={<AdminPage />} />
         <Route path='table' element={<TablePage />} />
         <Route path='finance' element={<FinancePage />} />
+        <Route path='scan' element={<ScanPage rol="admin" />} />
       </Route>
       <Route path='login' element={<LoginPage />} />
       <Route path='*' element={<NotFOundPage />} />

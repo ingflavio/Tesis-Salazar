@@ -1,0 +1,146 @@
+@use './variables.scss' as vars;
+
+.profileCard {
+  width: clamp(300px, 80dvw, 450px);
+  display: block;
+  border-radius: 0;
+  padding: 0;
+  background-color: transparent;
+  font-size: clamp(.8rem, 3.5dvw, 1.3rem);
+  transition: width 0.5s ease, all 0.5s ease;
+  overflow: hidden;
+}
+
+.editMode {
+  width: clamp(300px, 80dvw, 550px);
+  transition: width 0.5s ease, all 0.5s ease;
+}
+
+.paymentsMode {
+  width: clamp(300px, 95dvw, 1700px);
+  transition: width 0.5s ease, all 0.5s ease;
+}
+
+.profileCard label,
+.profileCard input,
+.profileCard button {
+  font-size: inherit;
+}
+
+.profileCard button {
+  text-transform: capitalize;
+}
+
+.buttonBar {
+  background-color: transparent;
+  display: flex;
+}
+
+.buttonBar button {
+  background-color: vars.$neutral-500;
+  color: vars.$neutral-700;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  padding-bottom: .1em;
+}
+
+.buttonBar button.activeButton {
+  background-color: vars.$neutral-100;
+  color: vars.$primary-500;
+}
+
+.fields_Wrapper,
+.paymentsList {
+  width: 100%;
+  background-color: vars.$neutral-100;
+  padding: 1em;
+  border-radius: 1em;
+  border-top-left-radius: 0;
+}
+
+.fields_Wrapper {
+  display: grid;
+  grid-template-columns: minmax(auto, 40%) 1fr;
+  gap: clamp(5px, 2dvw, 10px);
+  align-items: center;
+  transition: all 0.5s ease;
+  overflow-y: hidden;
+  padding-bottom:0 ;
+  
+  // Cada campo ocupa 2 columnas (label + input)
+  > div {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: subgrid;
+    align-items: center;
+    width: 100%;
+  }
+}
+
+.fields_Wrapper > h3 {
+  grid-column: span 2;
+  text-align: center;
+}
+
+// Nuevo wrapper para el botón submit con animación
+.submitWrapper {
+  grid-column: span 2;
+  // justify-self: center;
+  margin-top: .5em;
+  overflow: hidden; // Para ocultar el botón durante la transición
+  transition: all 0.5s ease;
+  height: 0; // Altura inicial (oculto)
+  opacity: 0;
+  transform: translateY(10px); // Efecto de deslizamiento hacia arriba
+}
+
+.editMode .submitWrapper {
+  height: auto;
+  opacity: 1;
+  transform: translateY(0);
+  padding-bottom:1em ;
+}
+
+// Ocultar el botón submit cuando no está en modo edición
+button.submitBtn {
+  font-size: .8em;
+  display: inline; 
+  padding: 0.5em 1em;
+  grid-column: span 2;
+  justify-self: center;
+}
+
+.profileCard label {
+  font-weight: 500;
+}
+
+.fields_Wrapper > * > label:last-child {
+  font-weight: 400;
+}
+
+.profileCard input {
+  border-color: transparent;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, width 0.5s ease;
+}
+
+input.showInput {
+  border: 1px solid vars.$neutral-600;
+  width: 100%;
+}
+
+.fields_Wrapper span {
+  grid-column: span 2;
+  text-align: center;
+  color: vars.$warn-500;
+}
+
+dialog:has(.profileCard) > button {
+  top: 5.5%;
+}
+
+dialog:has(.paymentsMode) > button {
+  top: 15%;
+  right: 1%;
+}

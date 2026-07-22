@@ -1,13 +1,16 @@
 package com.tesis_gym.Controllers;
 
 import com.tesis_gym.Controllers.Dto.AdminUserUpdateDto;
+import com.tesis_gym.Controllers.Dto.UserDetailsDto;
 import com.tesis_gym.Controllers.Dto.PayResponseDto;
 import com.tesis_gym.Entities.PaymentStatus;
 import com.tesis_gym.Entities.UserAccount;
 import com.tesis_gym.Services.ClientUserService;
+import com.tesis_gym.Repository.UserDetailsRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.tesis_gym.Entities.UserDetails;
 
 import java.util.List;
 
@@ -16,9 +19,12 @@ import java.util.List;
 public class AdminController {
 
     private final ClientUserService userService;
+    private final UserDetailsRepository detailsRepository;
 
-    public AdminController(ClientUserService userService) {
+    public AdminController(ClientUserService userService,
+                             UserDetailsRepository detailsRepository) {
         this.userService = userService;
+        this.detailsRepository = detailsRepository;
     }
 
     @GetMapping("/users")
@@ -29,6 +35,13 @@ public class AdminController {
     @GetMapping("/users/{cedula}")
     public ResponseEntity<UserAccount> getUserById(@PathVariable Long cedula) {
         return ResponseEntity.ok(userService.getUserAccountByCedula(cedula));
+    }
+
+    @PostMapping("/users/{cedula}/details")
+    public ResponseEntity<UserDetails> completeUserDetails(
+            @PathVariable Long cedula,
+            @Valid @RequestBody UserDetailsDto dto) {
+        return ResponseEntity.ok(userService.completeDetails(cedula, dto));
     }
 
     @PutMapping("/payments/{paymentId}/verify")

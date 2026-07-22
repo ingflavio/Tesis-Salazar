@@ -1,0 +1,22 @@
+@use './variables.scss' as vars;
+
+.financePage {
+  background-color: vars.$neutral-200;
+  padding: clamp(0px, 1dvw,10px);
+}
+
+.financePage > table {
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.financePage > table tr {
+  cursor: pointer;
+}
+
+.financePage > table tr:nth-child(2n) th {
+  background-color: vars.$secondary-700;
+}
+
+.financePage > table th {
+  text-transform: none;
+}
