@@ -23,7 +23,7 @@ function TextField({id, name, label, placeholder, initialValue, onChange, readOn
   )
 }
 
-function SelectField({ id, name, label, options, initialValue, onChange, readOnly = false }){
+function SelectField({ id, name, label, options, initialValue, onChange, readOnly = false, errorMsg}){
   return <div className={classes.fieldWrapper}>
     <label htmlFor={name}>{label}</label>
     <select name={name || id} id={id} defaultValue={initialValue} 
@@ -32,6 +32,7 @@ function SelectField({ id, name, label, options, initialValue, onChange, readOnl
       {options && options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
     </select>
     { readOnly && <label>{options.find((option) => option.value === initialValue).label}</label> }
+    {errorMsg !== '' && <span>{errorMsg}</span>}
   </div>
 }
 

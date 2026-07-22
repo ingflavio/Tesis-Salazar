@@ -57,11 +57,12 @@ export default function ProfileCard({ profile, editCallback, modalCallback, rol 
     const formData = new FormData(form)
     const entries = Array.from(formData.entries()) 
     const data = Object.fromEntries(entries)
-    
-    const validations = Object.fromEntries(entries.reduce((validationArray, [key, value]) => {
+    const parsedData = parseValues(data)
+
+    const validations = Object.fromEntries(Object.entries(parsedData).reduce((validationArray, [key, value]) => {
       const validationFunc = editableFields.includes(key) ? fieldsConfig[key]?.validateFunc : null
       if (validationFunc) {
-        return [...validationArray, [key, validationFunc(value, profile[key])]]
+        return [...validationArray, [key, validationFunc(value)]]
       }
       return validationArray
     }, []))
@@ -69,7 +70,6 @@ export default function ProfileCard({ profile, editCallback, modalCallback, rol 
     const valid = validateFields(validations)
     if (valid) {
       refSavedChanges.current = true
-      const parsedData = parseValues(data)
       await editCallback(parsedData)
       setMode('profile')
     }
