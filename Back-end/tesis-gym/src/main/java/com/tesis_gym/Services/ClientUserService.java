@@ -69,6 +69,56 @@ public class ClientUserService {
 
         return detailsRepository.save(details);
     }
+    public PayResponseDto registerPaymentByAdmin(Long cedula, AdminPayDto dto) {
+        UserAccount account = accountRepository.findById(cedula)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+
+        UserDetails userDetails = getUserByCedula(cedula);
+        Date now = new Date();
+
+        // 1. Validar y autogenerar datos faltantes para pagos presenciales
+        String finalPhone = (dto.phone() == null || dto.phone().isBlank()) ? "PRESENCIAL" : dto.phone();
+
+        // Si no mandan referencia (ej. Efectivo), generamos una única (Ej: CAJA-A1B2C3D4)
+        String finalReference = (dto.Reference_number() == null || dto.Reference_number().isBlank())
+                ? "CAJA-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase()
+                : dto.Reference_number();
+
+        // 2. Crear el pago como APROBADO y sin imagen
+        Pay payment = Pay.builder()
+                .user(account)
+                .bank(dto.bank())
+                .phone(finalPhone)
+                .Reference_number(finalReference)
+                .amount(dto.amount())
+                .image(null) // No hay comprobante para pagos por taquilla
+                .status(PaymentStatus.ACCEPTED) // Pasa directo a aprobado
+                .build();
+
+        payRepository.save(payment);
+
+        // 3. Actualizar la solvencia del usuario de inmediato (Sumamos 30 días)
+        Calendar cal = Calendar.getInstance();
+        if (userDetails.getExpiration_date() != null && userDetails.getExpiration_date().after(now)) {
+            cal.setTime(userDetails.getExpiration_date());
+        } else {
+            cal.setTime(now);
+            userDetails.setRegistration_date(now);
+        }
+
+        cal.add(Calendar.DAY_OF_YEAR, 30); // 30 días de mensualidad (Ajusta si son más o menos días)
+
+        userDetails.setExpiration_date(cal.getTime());
+        userDetails.setSolvent(true);
+        detailsRepository.save(userDetails);
+
+        // Retornamos el pago usando el mapper que ya tenías
+        return mapToPayResponseDto(payment);
+    }
+
+
+
+
 
     public UserDetails getUserByCedula(Long cedula) {
         return detailsRepository.findById(cedula)

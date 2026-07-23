@@ -1,5 +1,6 @@
 package com.tesis_gym.Controllers;
 
+import com.tesis_gym.Controllers.Dto.AdminPayDto;
 import com.tesis_gym.Controllers.Dto.AdminUserUpdateDto;
 import com.tesis_gym.Controllers.Dto.UserDetailsDto;
 import com.tesis_gym.Controllers.Dto.PayResponseDto;
@@ -80,4 +81,13 @@ public class AdminController {
             return ResponseEntity.ok(userService.getAllPayments());
         }
     }
+
+    @PostMapping("/users/{cedula}/payments")
+    public ResponseEntity<PayResponseDto> registerPaymentByAdmin(
+            @PathVariable Long cedula,
+            @Valid @RequestBody AdminPayDto dto) {
+
+        return ResponseEntity.ok(userService.registerPaymentByAdmin(cedula, dto));
+    }
+
 }
