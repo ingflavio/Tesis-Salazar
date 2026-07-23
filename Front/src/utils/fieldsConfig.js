@@ -1,4 +1,4 @@
-import { validateIncrease, validatePhone, validateEmail, validateNumber } from '../hooks/useValidateForm'
+import { validateNotEmpty, validateIncrease, validatePhone, validateEmail, validateNumber } from '../hooks/useValidateForm'
 
 const capitalize = (value) => value[0].toUpperCase() + value.slice(1)
 
@@ -12,7 +12,7 @@ export const fieldsConfig = {
     type: 'text',
     placeholder: '',   
     parseValue: (value) => Number(value),
-    validateFunc: (value) => validateNumber(value) 
+    validateFunc: (value) => validateNumber({value, name:'La cedula'}) 
   },
   name: {
     name: 'name',
@@ -20,6 +20,7 @@ export const fieldsConfig = {
     type: 'text', 
     placeholder: '',      
     parseValue: (value) => value.toLowerCase(),
+    validateFunc: (value) => validateNotEmpty(value, 'el nombre'),
     formatValue: capitalize
   },
   lastName: {
@@ -28,6 +29,7 @@ export const fieldsConfig = {
     type: 'text',  
     placeholder: '',  
     parseValue: (value) => value.toLowerCase(),
+    validateFunc: (value) => validateNotEmpty(value, 'el apellido'),
     formatValue: capitalize
   },
   password: {
@@ -35,6 +37,7 @@ export const fieldsConfig = {
     label: 'contraseña',
     type: 'text',  
     placeholder: '',  
+    validateFunc: (value) => validateNotEmpty(value, 'la contraseña'),
   },
   age: {
     name: 'age',
@@ -42,6 +45,7 @@ export const fieldsConfig = {
     type: 'text', 
     placeholder: '',
     parseValue: (value) => Number(value),
+    validateFunc: (value) => validateNumber({value, name: 'La edad'}),
     // validateFunc: (value, previousValue) => validateIncrease({value, previousValue, increase: 1}),
   },
   phone: {
@@ -65,7 +69,7 @@ export const fieldsConfig = {
     placeholder: '', 
     parseValue: (value) => value.toUpperCase(),
     formatValue: (value) => value.toLowerCase(),
-    validateFunc: (value) =>  (value === 'f' || value === 'm') ? true : 'Debes elije un sexo', 
+    validateFunc: (value) =>  (value === 'F' || value === 'M') ? true : 'Debes elije un sexo', 
     options: [{ label: '', value: null },{ label: 'femenino', value: 'f' }, { label: 'masculino', value: 'm' }],
   },
   height: {
@@ -75,7 +79,7 @@ export const fieldsConfig = {
     placeholder: '',
     parseValue: (value) => Number(value.replace(',','')),
     formatValue: (value) => `${String(value)[0]},${String(value).slice(1)}`,
-    validateFunc: (value, previousValue) => validateIncrease({value, previousValue, increase: 5, increaseAdjust: 100, increaseMasure: 'm'}), 
+    validateFunc: (value) => validateNumber({value, name: 'La altura'}), 
   },
   weight: {
     name: 'weight',
@@ -84,7 +88,7 @@ export const fieldsConfig = {
     placeholder: '',
     parseValue: (value) => Number(value.replace(',','.')),
     formatValue: (value) => String(value).replace('.',','),
-    // validateFunc: (value, previousValue) => validateIncrease({value, previousValue, increase: 5, increaseAdjust: 100, increaseMasure: 'kg'}), 
+    validateFunc: (value) => validateNumber({value, name: 'El peso'}), 
   },
   fat: {
     name: 'fat',
@@ -92,12 +96,13 @@ export const fieldsConfig = {
     type: 'text',  
     parseValue: (value) => Number(value.replace('%','')),
     formatValue: (value) => String(value) + '%',
-    validateFunc: (value, previousValue) => validateIncrease({value: value.replace('%',''), previousValue, increase: 5, increaseMasure: '%'}), 
+    validateFunc: (value) => validateNumber({value, name: 'El porcentaje de grasa'}), 
   },
   condition: {
     name: 'condition',
     label: 'Condición',
     type: 'text',  
+    parseValue: (value) => value === '' ? 'Ninguna' : value,
     placeholder: '',  
   },
   solvency: {
